@@ -16,9 +16,11 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
     RegionGrabber::closeEvent(event);
 
     if(hasDragged && !dragging) {
-        screenshot->Crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
+        int x = std::min(dragX, mouseX);
+        int y = std::min(dragY, mouseY);
+        screenshot->Crop(x, y, std::abs(mouseX - dragX), std::abs(mouseY - dragY));
 
-        auto* pinnedArea = new PinnedArea(screenshot->Image());
+        auto* pinnedArea = new PinnedArea(x, y, screenshot->Image());
         pinnedArea->show();
     }
 }

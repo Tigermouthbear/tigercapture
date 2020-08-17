@@ -11,7 +11,9 @@
 #include <QMouseEvent>
 #include "../Utils.h"
 
-PinnedArea::PinnedArea(QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
+PinnedArea::PinnedArea(int x, int y, QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
+    this->x = x;
+    this->y = y;
     this->image = std::move(image);
 
     // set transparent
@@ -19,8 +21,9 @@ PinnedArea::PinnedArea(QImage image): QWidget(nullptr, Qt::X11BypassWindowManage
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
 
-    // set fullscreen
+    // set size and position
     resize(this->image.width(), this->image.height());
+    move(x, y);
 
     // set window size for position clamping
     QScreen* screen = QGuiApplication::primaryScreen();

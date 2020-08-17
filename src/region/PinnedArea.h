@@ -12,8 +12,8 @@ Q_OBJECT
 private:
     QImage image;
 
-    int dragX;
-    int dragY;
+    int dragX{};
+    int dragY{};
     bool dragging = false;
     int x = 0;
     int y = 0;
@@ -21,7 +21,7 @@ private:
     int screenHeight;
 
 public:
-    explicit PinnedArea(QImage image);
+    explicit PinnedArea(int x, int y, QImage image);
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
