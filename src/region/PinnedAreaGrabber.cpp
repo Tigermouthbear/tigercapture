@@ -22,6 +22,8 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
 
         auto* pinnedArea = new PinnedArea(x, y, screenshot->Image());
         pinnedArea->show();
+
+        delete screenshot;
     }
 }
 

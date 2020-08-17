@@ -57,9 +57,10 @@ void MainWindow::handleFullScreenshot() {
 
 // take screenshot then set window back to active
 void MainWindow::fullScreenShot() {
-    Screenshot screenshot;
-    screenshot.Take();
-    screenshot.Save();
+    auto* screenshot = new Screenshot();
+    screenshot->Take();
+    screenshot->Save();
+    delete screenshot;
     setWindowState(Qt::WindowState::WindowActive);
 }
 

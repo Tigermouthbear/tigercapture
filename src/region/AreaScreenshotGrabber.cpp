@@ -18,6 +18,7 @@ void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
     if(hasDragged && !dragging) {
         screenshot->Crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
         screenshot->Save();
+        delete screenshot;
     }
 }
 
