@@ -22,7 +22,7 @@ void Screenshot::Crop(int x, int y, int width, int height) {
 
 void Screenshot::Save() {
     // TODO: make this configurable
-    Uploader uploader("POSTURL", "SECRET", "https://i.example.com/$RES");
+    Uploader uploader("url", "token", "https://i.example.com/$RES");
 
     // save file
     std::string loc = FileUtils::genNewImageLocation();

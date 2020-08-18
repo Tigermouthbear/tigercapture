@@ -8,6 +8,7 @@
 #include <QScreen>
 #include <QPainter>
 #include "../Utils.h"
+#include <QApplication>
 
 RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     // set transparent
@@ -29,6 +30,8 @@ RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint 
 void RegionGrabber::closeEvent(QCloseEvent* event) {
     releaseKeyboard();
     releaseMouse();
+
+    if(quit) QApplication::quit();
 }
 
 void RegionGrabber::keyPressEvent(QKeyEvent* event) {
@@ -69,4 +72,8 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
     if(dragging) {
         Utils::drawOutlineBox(&painter, dragX, dragY, mouseX - dragX, mouseY - dragY);
     }
+}
+
+void RegionGrabber::quitOnClose(bool value) {
+    quit = value;
 }

@@ -11,8 +11,13 @@
 
 class RegionGrabber: public QWidget {
 Q_OBJECT
+private:
+    bool quit = false;
+
 public:
     RegionGrabber();
+
+    void quitOnClose(bool value);
 
 protected:
     bool dragging = false;

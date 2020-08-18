@@ -28,9 +28,11 @@ std::string Uploader::Upload(std::string& path) {
     if(curl) {
         // create then add to form
         form = curl_mime_init(curl);
+
         field = curl_mime_addpart(form);
         curl_mime_name(field, "file");
         curl_mime_filedata(field, path.c_str());
+
         field = curl_mime_addpart(form);
         curl_mime_name(field, "token");
         curl_mime_data(field, token.c_str(), CURL_ZERO_TERMINATED);

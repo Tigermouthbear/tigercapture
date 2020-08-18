@@ -3,28 +3,20 @@
 //
 
 #include "MainWindow.h"
-#include "Screenshot.h"
-#include "region/AreaScreenshotGrabber.h"
-#include "region/PinnedAreaGrabber.h"
 
+#include "ConfigWidget.h"
 #include <QTimer>
 #include <QLayout>
 
-// creates the window
-void MainWindow::Create() {
-    // set window details
-    resize(250, 150);
+MainWindow::MainWindow(Config* config): QMainWindow() {
+    this->config = config;
+
     setWindowTitle("TigerCapture");
 
     // create layout
     auto* widget = new QWidget(this);
     setCentralWidget(widget);
     auto* layout = new QGridLayout(widget);
-
-    // initialize checkbox
-    shouldMinimizeButton = new QCheckBox("Close window on capture", this);
-    shouldMinimizeButton->setChecked(true);
-    layout->addWidget(shouldMinimizeButton, 0, 0, 2, 0, Qt::AlignHCenter);
 
     // initialize buttons
     fullButton = new QPushButton("Full Screenshot", this);
@@ -42,52 +34,68 @@ void MainWindow::Create() {
     layout->addWidget(pinButton, 2, 0);
     connect(pinButton, SIGNAL (released()), this, SLOT (handlePinArea()));
 
-    // show window
-    show();
+    configButton = new QPushButton("Config", this);
+    configButton->setDown(false);
+    layout->addWidget(configButton, 3, 0, 1, 2, Qt::AlignHCenter);
+    connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
+}
+
+void MainWindow::activateWindow() {
+    setWindowState(Qt::WindowState::WindowActive);
 }
 
 // minimize, delay then actually take screenshot
 void MainWindow::handleFullScreenshot() {
-    if(isActiveWindow() && shouldMinimizeButton->isChecked()) {
+    if(isActiveWindow() && config->shouldMinimize()) {
         setWindowState(Qt::WindowState::WindowMinimized);
-        QTimer::singleShot(500, this, SLOT(fullScreenShot()));
-    } else fullScreenShot();
+        QTimer::singleShot(500, this, SLOT(fullScreenshot()));
+        QTimer::singleShot(501, this, SLOT(activateWindow()));
+    } else fullScreenshot();
     fullButton->setDown(false);
 }
 
-// take screenshot then set window back to active
-void MainWindow::fullScreenShot() {
+void MainWindow::fullScreenshot() {
     auto* screenshot = new Screenshot();
     screenshot->Take();
     screenshot->Save();
     delete screenshot;
-    setWindowState(Qt::WindowState::WindowActive);
 }
 
 void MainWindow::handleAreaScreenshot() {
-    if(isActiveWindow() && shouldMinimizeButton->isChecked()) {
+    if(isActiveWindow() && config->shouldMinimize()) {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
+        QTimer::singleShot(501, this, SLOT(activateWindow()));
     } else areaScreenshot();
     areaButton->setDown(false);
 }
 
-void MainWindow::areaScreenshot() {
+AreaScreenshotGrabber* MainWindow::areaScreenshot() {
     auto* areaScreenshotGrabber = new AreaScreenshotGrabber();
     areaScreenshotGrabber->show();
-    setWindowState(Qt::WindowState::WindowActive);
+    return areaScreenshotGrabber;
 }
 
 void MainWindow::handlePinArea() {
-    if(isActiveWindow() && shouldMinimizeButton->isChecked()) {
+    if(isActiveWindow() && config->shouldMinimize()) {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(pinArea()));
+        QTimer::singleShot(501, this, SLOT(activateWindow()));
     } else pinArea();
     pinButton->setDown(false);
 }
 
-void MainWindow::pinArea() {
+PinnedAreaGrabber* MainWindow::pinArea() {
     auto* pinnedAreaGrabber = new PinnedAreaGrabber();
     pinnedAreaGrabber->show();
-    setWindowState(Qt::WindowState::WindowActive);
+    return pinnedAreaGrabber;
+}
+
+void MainWindow::handleConfig() {
+    auto* configWidget = new ConfigWidget(config);
+    configWidget->show();
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+    config->Write();
 }

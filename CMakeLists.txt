@@ -19,7 +19,19 @@ set(CLIP_TESTS OFF CACHE BOOL "Compile clip tests")
 # Add clip subdirectory to compile the library
 add_subdirectory(clip)
 
-add_executable(tigercapture src/main.cpp src/MainWindow.cpp src/MainWindow.h src/Screenshot.cpp src/Screenshot.h src/region/RegionGrabber.cpp src/region/RegionGrabber.h src/region/AreaScreenshotGrabber.cpp src/region/AreaScreenshotGrabber.h src/region/PinnedAreaGrabber.cpp src/region/PinnedAreaGrabber.h src/region/PinnedArea.cpp src/region/PinnedArea.h src/FileUtils.h src/Utils.h src/Uploader.cpp src/Uploader.h)
+add_executable(tigercapture
+        src/main.cpp
+        src/widgets/MainWindow.cpp src/widgets/MainWindow.h
+        src/Screenshot.cpp src/Screenshot.h
+        src/region/RegionGrabber.cpp src/region/RegionGrabber.h
+        src/region/AreaScreenshotGrabber.cpp src/region/AreaScreenshotGrabber.h
+        src/region/PinnedAreaGrabber.cpp src/region/PinnedAreaGrabber.h
+        src/widgets/PinnedArea.cpp src/widgets/PinnedArea.h
+        src/FileUtils.h
+        src/Utils.h
+        src/Uploader.cpp src/Uploader.h
+        src/json.hpp
+        src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h src/Config.cpp src/Config.h)
 
 # Link the library to the executable
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)

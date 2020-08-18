@@ -8,28 +8,37 @@
 #include <QMainWindow>
 #include <QCheckBox>
 #include <QPushButton>
+#include "../region/AreaScreenshotGrabber.h"
+#include "../region/PinnedAreaGrabber.h"
+#include "../Config.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT
 private:
-    QCheckBox* shouldMinimizeButton;
+    Config* config;
 
     QPushButton* fullButton;
     QPushButton* areaButton;
     QPushButton* pinButton;
+    QPushButton* configButton;
 
 public:
-    void Create();
+    MainWindow(Config* config);
+
+public slots:
+    static void fullScreenshot();
+    static AreaScreenshotGrabber* areaScreenshot();
+    static PinnedAreaGrabber* pinArea();
 
 private slots:
+    void activateWindow();
     void handleFullScreenshot();
-    void fullScreenShot();
-
     void handleAreaScreenshot();
-    void areaScreenshot();
-
     void handlePinArea();
-    void pinArea();
+    void handleConfig();
+
+protected:
+    void closeEvent(QCloseEvent* event) override;
 };
 
 

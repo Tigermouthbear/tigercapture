@@ -4,7 +4,7 @@
 
 #include "PinnedAreaGrabber.h"
 
-#include "PinnedArea.h"
+#include "../widgets/PinnedArea.h"
 
 PinnedAreaGrabber::PinnedAreaGrabber(): RegionGrabber() {
     screenshot = new Screenshot();
