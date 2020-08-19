@@ -2,6 +2,7 @@
 // Created by Tigermouthbear on 8/16/20.
 //
 
+#include <future>
 #include <QtGui/QGuiApplication>
 #include <QtGui/QScreen>
 #include <QtGui/QPainter>
@@ -39,6 +40,13 @@ void Screenshot::fullscreen() {
 
 void Screenshot::crop(int x, int y, int width, int height) {
     pixmap = pixmap.copy(x, y, width, height);
+}
+
+std::future<void> Screenshot::save(std::function<void()> callback) {
+    return std::async([&] {
+        this->save();
+        callback();
+    });
 }
 
 void Screenshot::save() {

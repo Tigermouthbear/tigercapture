@@ -6,12 +6,14 @@
 #define TIGERCAPTURE_AREASCREENSHOTGRABBER_H
 
 
+#include <future>
 #include "RegionGrabber.h"
 #include "../Screenshot.h"
 
 class AreaScreenshotGrabber: public RegionGrabber {
 private:
     Screenshot* screenshot;
+    std::future<void> callback;
 
 public:
     AreaScreenshotGrabber(Config* config);
