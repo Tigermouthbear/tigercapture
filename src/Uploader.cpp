@@ -50,8 +50,11 @@ std::string Uploader::Upload(std::string& path) {
         QString qString = responseRegex.c_str();
         qString.replace("$response$", responseBuffer.c_str());
         out = qString.toStdString();
-    }
 
+        printf("Uploaded: %s\n", out.c_str());
+    } else {
+        printf("ERROR uploading screenshot to %s (%d)", url.c_str(), curLcode);
+    }
     return out;
 }
 

@@ -42,7 +42,7 @@ void MainWindow::activateWindow() {
     setWindowState(Qt::WindowState::WindowActive);
 }
 
-// minimize, delay then actually take screenshot
+// minimize, delay then actually fullscreen screenshot
 void MainWindow::handleFullScreenshot() {
     if(isActiveWindow() && config->shouldMinimize()) {
         setWindowState(Qt::WindowState::WindowMinimized);
@@ -54,7 +54,7 @@ void MainWindow::handleFullScreenshot() {
 
 void MainWindow::fullScreenshot(Config* config) {
     auto* screenshot = new Screenshot(config);
-    screenshot->take();
+    screenshot->fullscreen();
     screenshot->save();
     delete screenshot;
 }

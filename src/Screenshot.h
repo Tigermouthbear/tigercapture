@@ -21,8 +21,7 @@ public:
     Screenshot(Config* config);
     ~Screenshot();
 
-    void take();
-    void take(int x, int y, int width, int height);
+    void fullscreen();
     void crop(int x, int y, int width, int height);
     void save();
     QImage image();
