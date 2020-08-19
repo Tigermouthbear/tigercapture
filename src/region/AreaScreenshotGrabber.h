@@ -17,6 +17,7 @@ private:
 
 public:
     AreaScreenshotGrabber(Config* config);
+    std::future<void>* getCallback();
 
 protected:
     void closeEvent(QCloseEvent* event) override;

@@ -7,6 +7,7 @@
 #include "ConfigWidget.h"
 #include <QTimer>
 #include <QLayout>
+#include <zconf.h>
 
 MainWindow::MainWindow(Config* config): QMainWindow() {
     this->config = config;
@@ -55,7 +56,7 @@ void MainWindow::handleFullScreenshot() {
 void MainWindow::fullScreenshot(Config* config) {
     Screenshot screenshot = {config};
     screenshot.fullscreen();
-    screenshot.save();
+    screenshot.save(); // save sync
 }
 
 void MainWindow::handleAreaScreenshot() {
@@ -70,6 +71,7 @@ void MainWindow::handleAreaScreenshot() {
 AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
     auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
     areaScreenshotGrabber->show();
+    areaScreenshotGrabber->getCallback()->wait(); // sync wait for screenshot to be taken
     return areaScreenshotGrabber;
 }
 
@@ -96,6 +98,9 @@ void MainWindow::handleConfig() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     config->write();
+    while (dontCloseYet) {
+        usleep(0);
+    }
 }
 
 void MainWindow::fullScreenshot() {

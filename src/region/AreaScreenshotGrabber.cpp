@@ -30,3 +30,7 @@ void AreaScreenshotGrabber::paintEvent(QPaintEvent* event) {
     painter.drawImage(0, 0, screenshot->image());
     RegionGrabber::paintEvent(event);
 }
+
+std::future<void>* AreaScreenshotGrabber::getCallback() {
+    return &callback;
+}
