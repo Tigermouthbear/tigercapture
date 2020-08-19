@@ -22,6 +22,8 @@ private:
     QPushButton* pinButton;
     QPushButton* configButton;
 
+    bool dontCloseYet = false;
+
 public:
     MainWindow(Config* config);
 
