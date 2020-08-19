@@ -53,10 +53,9 @@ void MainWindow::handleFullScreenshot() {
 }
 
 void MainWindow::fullScreenshot(Config* config) {
-    auto* screenshot = new Screenshot(config);
-    screenshot->fullscreen();
-    screenshot->save();
-    delete screenshot;
+    Screenshot screenshot = {config};
+    screenshot.fullscreen();
+    screenshot.save();
 }
 
 void MainWindow::handleAreaScreenshot() {

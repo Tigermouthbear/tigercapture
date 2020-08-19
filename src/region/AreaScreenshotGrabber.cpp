@@ -14,13 +14,13 @@ AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
 
 // on close, crop and save screenshot
 void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
-    RegionGrabber::closeEvent(event);
-
     if(hasDragged && !dragging) {
         screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
-        screenshot->save();
-        delete screenshot;
-        screenshot = nullptr;
+        callback = screenshot->save([&] {
+            delete screenshot;
+            screenshot = nullptr;
+            RegionGrabber::closeEvent(event);
+        });
     }
 }
 

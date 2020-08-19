@@ -5,6 +5,7 @@
 #ifndef TIGERCAPTURE_SCREENSHOT_H
 #define TIGERCAPTURE_SCREENSHOT_H
 
+#include <future>
 #include <ctime>
 #include <string>
 #include <QPixmap>
@@ -23,6 +24,7 @@ public:
 
     void fullscreen();
     void crop(int x, int y, int width, int height);
+    std::future<void> save(std::function<void()> callback);
     void save();
     QImage image();
 };
