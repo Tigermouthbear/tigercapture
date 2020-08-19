@@ -11,26 +11,20 @@ Config::Config(const std::string& file) {
 
     json = {
             { "minimize", true },
-            { "upload", true }
+            { "uploader", "" }
     };
-    try {
-        nlohmann::json read = FileUtils::readJSON(file);
-        if(read != nullptr) json = read;
-    } catch(nlohmann::json::parse_error ignored) {
-    }
-
-    std::cout << json["upload"] << std::endl;
+    nlohmann::json read = FileUtils::readJSON(file);
+    if(read != nullptr) json.merge_patch(read);
 }
 
-void Config::Read() {
+void Config::read() {
     minimize = json["minimize"];
-    upload = json["upload"];
-    uploader = Uploader::createFromJSON(FileUtils::getApplicationDirectory() + "/uploader.json");
+    setUploader(json["uploader"]);
 }
 
-void Config::Write() {
+void Config::write() {
     json["minimize"] = minimize;
-    json["upload"] = upload;
+    json["uploader"] = uploaderLoc;
 
     FileUtils::writeJSON(file, json);
 }
@@ -43,14 +37,26 @@ void Config::setShouldMinimize(bool value) {
     minimize = value;
 }
 
-bool Config::shouldUpload() const {
-    return upload;
-}
-
-void Config::setShouldUpload(bool value) {
-    upload = value;
-}
-
 Uploader* Config::getUploader() {
     return uploader;
+}
+
+bool Config::setUploader(const std::string& value) {
+    if(value == "None" || value.empty()) {
+        uploaderLoc = "";
+        uploader = nullptr;
+        return true;
+    }
+
+    Uploader* newUploader = Uploader::createFromJSON(FileUtils::getUploadersDirectory() + "/" + value);
+    if(newUploader == nullptr) return false;
+
+    uploaderLoc = value;
+    delete uploader;
+    uploader = newUploader;
+    return true;
+}
+
+std::string Config::getUploaderLoc() {
+    return uploaderLoc;
 }

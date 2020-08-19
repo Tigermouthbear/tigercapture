@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.17)
 project(tigercapture)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 -lcurl")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -lcurl")
 
 # Tell cmake where Qt is located
 set(Qt5_DIR "/usr/lib/cmake/Qt5/")

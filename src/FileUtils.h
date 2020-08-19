@@ -44,6 +44,10 @@ public:
         return createDirectoryIfNonexistant(getHomeDirectory() + "/TigerCapture");
     }
 
+    static std::string getUploadersDirectory() {
+        return createDirectoryIfNonexistant(getApplicationDirectory() + "/Uploaders");
+    }
+
     static std::string getCurrentScreenshotDirectory() {
         time_t time = std::time(nullptr);
         tm* date = localtime(&time);
@@ -69,8 +73,11 @@ public:
 
     static nlohmann::json readJSON(const char* file) {
         if(exists(file)) {
-            std::ifstream ifs(file);
-            return nlohmann::json::parse(ifs);
+            try {
+                std::ifstream ifs(file);
+                return nlohmann::json::parse(ifs);
+            } catch(nlohmann::json::parse_error) {
+            }
         }
         return nullptr;
     }

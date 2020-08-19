@@ -45,14 +45,12 @@ std::string Uploader::Upload(std::string& path) {
     CURLcode curLcode = curl_easy_perform(curl);
     curl_easy_reset(curl);
 
-    std::cout << responseBuffer << std::endl;
     std::string out = "ERROR";
     if(curLcode == CURLE_OK) {
         QString qString = responseRegex.c_str();
         qString.replace("$response$", responseBuffer.c_str());
         out = qString.toStdString();
     }
-    std::cout << out << std::endl;
 
     return out;
 }
@@ -65,12 +63,22 @@ size_t Uploader::WriteCallback(void* contents, size_t size, size_t nmemb, void* 
 
 Uploader *Uploader::createFromJSON(const std::string& file) {
     nlohmann::json json = FileUtils::readJSON(file);
+    if(json == nullptr) return nullptr;
+
+    std::string requestURL;
     std::vector<Uploader::Data> formData;
-    for(auto it = json["Arguments"].begin(); it != json["Arguments"].end(); ++it) formData.emplace_back(std::string(it.key()), std::string(it.value()));
+    std::string fileFormName;
+    std::string URL;
+    try {
+        requestURL = json["RequestURL"];
+        for(auto it = json["Arguments"].begin(); it != json["Arguments"].end(); ++it) formData.emplace_back(std::string(it.key()), std::string(it.value()));
+        fileFormName = json["FileFormName"];
+        URL = json["URL"];
+    } catch(nlohmann::json::parse_error error) {
+        return nullptr;
+    }
 
-    std::cout << json["RequestURL"] << " " << json["FileFormName"] << " " << json["URL"] << std::endl;
-
-    return new Uploader(json["RequestURL"], formData, json["FileFormName"], json["URL"]);
+    return new Uploader(requestURL, formData, fileFormName, URL);
 }
 
 Uploader::~Uploader() {

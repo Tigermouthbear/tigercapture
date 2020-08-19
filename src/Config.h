@@ -15,22 +15,22 @@ private:
     nlohmann::json json;
 
     bool minimize{};
-    bool upload{};
+
+    std::string uploaderLoc ="";
     Uploader* uploader{};
 
 public:
     Config(const std::string& file);
 
-    void Read();
-    void Write();
+    void read();
+    void write();
 
     bool shouldMinimize() const;
     void setShouldMinimize(bool value);
 
-    bool shouldUpload() const;
-    void setShouldUpload(bool value);
-
     Uploader* getUploader();
+    bool setUploader(const std::string& file);
+    std::string getUploaderLoc();
 };
 
 

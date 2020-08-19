@@ -8,7 +8,7 @@
 
 PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
     screenshot = new Screenshot(config);
-    screenshot->Take();
+    screenshot->take();
 }
 
 // crop then pin image to screen on close
@@ -18,9 +18,9 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
     if(hasDragged && !dragging) {
         int x = std::min(dragX, mouseX);
         int y = std::min(dragY, mouseY);
-        screenshot->Crop(x, y, std::abs(mouseX - dragX), std::abs(mouseY - dragY));
+        screenshot->crop(x, y, std::abs(mouseX - dragX), std::abs(mouseY - dragY));
 
-        auto* pinnedArea = new PinnedArea(x, y, screenshot->Image());
+        auto* pinnedArea = new PinnedArea(x, y, screenshot->image());
         pinnedArea->show();
 
         delete screenshot;
@@ -30,6 +30,6 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
 // draw pre cropped screenshot
 void PinnedAreaGrabber::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
-    painter.drawImage(0, 0, screenshot->Image());
+    painter.drawImage(0, 0, screenshot->image());
     RegionGrabber::paintEvent(event);
 }

@@ -12,7 +12,7 @@ int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
     auto* config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
-    config->Read();
+    config->read();
 
     if(argc == 2) {
         std::string arg = std::string(argv[1]);

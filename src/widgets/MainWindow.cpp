@@ -20,22 +20,18 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
 
     // initialize buttons
     fullButton = new QPushButton("Full Screenshot", this);
-    fullButton->setDown(false);
     layout->addWidget(fullButton, 1, 0);
     connect(fullButton, SIGNAL (released()), this, SLOT (handleFullScreenshot()));
 
     areaButton = new QPushButton("Area Screenshot", this);
-    areaButton->setDown(false);
     layout->addWidget(areaButton, 1, 1);
     connect(areaButton, SIGNAL (released()), this, SLOT (handleAreaScreenshot()));
 
     pinButton = new QPushButton("Pin Area", this);
-    pinButton->setDown(false);
     layout->addWidget(pinButton, 2, 0);
     connect(pinButton, SIGNAL (released()), this, SLOT (handlePinArea()));
 
     configButton = new QPushButton("Config", this);
-    configButton->setDown(false);
     layout->addWidget(configButton, 3, 0, 1, 2, Qt::AlignHCenter);
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
 }
@@ -56,8 +52,8 @@ void MainWindow::handleFullScreenshot() {
 
 void MainWindow::fullScreenshot(Config* config) {
     auto* screenshot = new Screenshot(config);
-    screenshot->Take();
-    screenshot->Save();
+    screenshot->take();
+    screenshot->save();
     delete screenshot;
 }
 
@@ -93,11 +89,12 @@ PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
 
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(config);
+    configWidget->move(x() + width() / 2, y() + height() / 2);
     configWidget->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    config->Write();
+    config->write();
 }
 
 void MainWindow::fullScreenshot() {

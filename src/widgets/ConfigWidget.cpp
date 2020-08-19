@@ -5,20 +5,19 @@
 #include "ConfigWidget.h"
 
 #include <QtWidgets/QGridLayout>
+#include <iostream>
+#include <filesystem>
+#include "../FileUtils.h"
 
 ConfigWidget::ConfigWidget(Config* config): QWidget() {
     this->config = config;
 
-    setWindowTitle("TigerCapture - Config");
+    setWindowTitle("Config");
 
     // create layout
     auto* layout = new QGridLayout(this);
 
     // add elements
-    shouldUpload = new QCheckBox("Upload", this);
-    shouldUpload->setChecked(config->shouldUpload());
-    layout->addWidget(shouldUpload, 0, 0, 1, 2, Qt::AlignHCenter);
-
     shouldMinimizeCheckbox = new QCheckBox("Close window on capture", this);
     shouldMinimizeCheckbox->setChecked(config->shouldMinimize());
     layout->addWidget(shouldMinimizeCheckbox, 1, 0, 1, 2, Qt::AlignHCenter);
@@ -28,12 +27,20 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
 
     uploadersDropdown = new QComboBox(this);
     uploadersDropdown->addItem("None");
-    uploadersDropdown->addItem("kinda epic");
-    uploadersDropdown->addItem("very epic");
+    uploadersDropdown->setCurrentText("None");
+    for(const auto& entry: std::filesystem::directory_iterator(FileUtils::getUploadersDirectory())) {
+        std::string filename = entry.path().filename();
+        uploadersDropdown->addItem(filename.c_str());
+        if(config->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
+    }
     layout->addWidget(uploadersDropdown, 2, 1);
+
+    saveButton = new QPushButton("Save", this);
+    layout->addWidget(saveButton, 3, 0, 1, 2, Qt::AlignHCenter);
+    connect(saveButton, SIGNAL (released()), this, SLOT (save()));
 }
 
-void ConfigWidget::closeEvent(QCloseEvent *event) {
-    config->setShouldUpload(shouldUpload->isChecked());
+void ConfigWidget::save() {
     config->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
+    if(!config->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
 }

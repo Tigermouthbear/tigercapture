@@ -21,12 +21,11 @@ public:
     Screenshot(Config* config);
     ~Screenshot();
 
-    void Take();
-    void Take(int x, int y, int width, int height);
-    void Crop(int x, int y, int width, int height);
-    void Save();
-
-    QImage Image();
+    void take();
+    void take(int x, int y, int width, int height);
+    void crop(int x, int y, int width, int height);
+    void save();
+    QImage image();
 };
 
 

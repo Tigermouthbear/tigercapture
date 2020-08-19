@@ -10,6 +10,7 @@
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QCheckBox>
+#include <QtWidgets/QPushButton>
 #include "../Config.h"
 
 class ConfigWidget: public QWidget {
@@ -17,16 +18,16 @@ Q_OBJECT
 private:
     Config* config;
 
-    QCheckBox* shouldUpload;
     QCheckBox* shouldMinimizeCheckbox;
     QLabel* uploadersLabel;
     QComboBox* uploadersDropdown;
+    QPushButton* saveButton;
 
 public:
     ConfigWidget(Config* config);
 
-protected:
-    void closeEvent(QCloseEvent* event) override;
+public slots:
+    void save();
 };
 
 
