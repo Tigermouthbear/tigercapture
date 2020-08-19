@@ -7,13 +7,16 @@
 
 #include <string>
 #include "json.hpp"
+#include "Uploader.h"
 
 class Config {
 private:
     std::string file;
     nlohmann::json json;
 
-    bool minimize;
+    bool minimize{};
+    bool upload{};
+    Uploader* uploader{};
 
 public:
     Config(const std::string& file);
@@ -23,6 +26,11 @@ public:
 
     bool shouldMinimize() const;
     void setShouldMinimize(bool value);
+
+    bool shouldUpload() const;
+    void setShouldUpload(bool value);
+
+    Uploader* getUploader();
 };
 
 

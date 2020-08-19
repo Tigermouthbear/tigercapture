@@ -50,12 +50,12 @@ void MainWindow::handleFullScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else fullScreenshot();
+    } else fullScreenshot(config);
     fullButton->setDown(false);
 }
 
-void MainWindow::fullScreenshot() {
-    auto* screenshot = new Screenshot();
+void MainWindow::fullScreenshot(Config* config) {
+    auto* screenshot = new Screenshot(config);
     screenshot->Take();
     screenshot->Save();
     delete screenshot;
@@ -66,12 +66,12 @@ void MainWindow::handleAreaScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else areaScreenshot();
+    } else areaScreenshot(config);
     areaButton->setDown(false);
 }
 
-AreaScreenshotGrabber* MainWindow::areaScreenshot() {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber();
+AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
     areaScreenshotGrabber->show();
     return areaScreenshotGrabber;
 }
@@ -81,12 +81,12 @@ void MainWindow::handlePinArea() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else pinArea();
+    } else pinArea(config);
     pinButton->setDown(false);
 }
 
-PinnedAreaGrabber* MainWindow::pinArea() {
-    auto* pinnedAreaGrabber = new PinnedAreaGrabber();
+PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
+    auto* pinnedAreaGrabber = new PinnedAreaGrabber(config);
     pinnedAreaGrabber->show();
     return pinnedAreaGrabber;
 }
@@ -98,4 +98,17 @@ void MainWindow::handleConfig() {
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     config->Write();
+}
+
+void MainWindow::fullScreenshot() {
+    fullScreenshot(config);
+}
+
+
+void MainWindow::areaScreenshot() {
+    areaScreenshot(config);
+}
+
+void MainWindow::pinArea() {
+    pinArea(config);
 }

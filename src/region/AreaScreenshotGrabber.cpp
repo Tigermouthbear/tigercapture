@@ -3,11 +3,12 @@
 //
 
 #include "AreaScreenshotGrabber.h"
+
 #include <iostream>
 
 // take screenshot right when this is opened
-AreaScreenshotGrabber::AreaScreenshotGrabber(): RegionGrabber() {
-    screenshot = new Screenshot();
+AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
+    screenshot = new Screenshot(config);
     screenshot->Take();
 }
 

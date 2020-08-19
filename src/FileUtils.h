@@ -67,31 +67,26 @@ public:
         return path;
     }
 
-    static nlohmann::json readJSON(const char* file, nlohmann::json defaulT) {
+    static nlohmann::json readJSON(const char* file) {
         if(exists(file)) {
-            try {
-                std::ifstream ifs(file);
-                return nlohmann::json::parse(ifs);
-            } catch(nlohmann::json::parse_error error) {
-                std::cout << error.what() << std::endl;
-            }
+            std::ifstream ifs(file);
+            return nlohmann::json::parse(ifs);
         }
-
-        return defaulT;
+        return nullptr;
     }
 
-    static inline nlohmann::json readJSON(const std::string& file, nlohmann::json defaulT) {
-        return readJSON(file.c_str(), std::move(defaulT));
+    static inline nlohmann::json readJSON(const std::string& file) {
+        return readJSON(file.c_str());
     }
 
-    static void writeJSON(const char* file, nlohmann::json json) {
+    static void writeJSON(const char* file, const nlohmann::json& json) {
         std::ofstream ofstream(file);
         ofstream << json;
         ofstream.close();
     }
 
-    static inline void writeJSON(const std::string& file, nlohmann::json json) {
-        writeJSON(file.c_str(), std::move(json));
+    static inline void writeJSON(const std::string& file, const nlohmann::json& json) {
+        writeJSON(file.c_str(), json);
     }
 };
 

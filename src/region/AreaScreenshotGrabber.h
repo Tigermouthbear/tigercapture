@@ -14,7 +14,7 @@ private:
     Screenshot* screenshot;
 
 public:
-    AreaScreenshotGrabber();
+    AreaScreenshotGrabber(Config* config);
 
 protected:
     void closeEvent(QCloseEvent* event) override;

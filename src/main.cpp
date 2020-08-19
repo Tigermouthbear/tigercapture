@@ -17,10 +17,10 @@ int main(int argc, char* argv[]) {
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
         if(arg == "full") {
-            MainWindow::fullScreenshot();
+            MainWindow::fullScreenshot(config);
             return 0;
         } else if(arg == "area") {
-            MainWindow::areaScreenshot()->quitOnClose(true);
+            MainWindow::areaScreenshot(config)->quitOnClose(true);
         } else {
             std::cout << "Argument not found!" << std::endl;
             return 1;

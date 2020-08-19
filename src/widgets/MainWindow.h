@@ -25,10 +25,14 @@ private:
 public:
     MainWindow(Config* config);
 
+    static void fullScreenshot(Config* config);
+    static AreaScreenshotGrabber* areaScreenshot(Config* config);
+    static PinnedAreaGrabber* pinArea(Config* config);
+
 public slots:
-    static void fullScreenshot();
-    static AreaScreenshotGrabber* areaScreenshot();
-    static PinnedAreaGrabber* pinArea();
+    void fullScreenshot();
+    void areaScreenshot();
+    void pinArea();
 
 private slots:
     void activateWindow();

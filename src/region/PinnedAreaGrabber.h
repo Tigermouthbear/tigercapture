@@ -13,7 +13,7 @@ private:
     Screenshot* screenshot;
 
 public:
-    PinnedAreaGrabber();
+    PinnedAreaGrabber(Config* config);
 
 protected:
     void closeEvent(QCloseEvent* event) override;

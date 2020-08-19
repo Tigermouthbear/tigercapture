@@ -5,8 +5,11 @@
 #include "Screenshot.h"
 
 #include "FileUtils.h"
-#include "Uploader.h"
 #include "../clip/clip.h"
+
+Screenshot::Screenshot(Config *config) {
+    this->config = config;
+}
 
 void Screenshot::Take() {
     pixmap = QPixmap::grabWindow(0);
@@ -21,16 +24,15 @@ void Screenshot::Crop(int x, int y, int width, int height) {
 }
 
 void Screenshot::Save() {
-    // TODO: make this configurable
-    Uploader uploader("url", "token", "https://i.example.com/$RES");
-
     // save file
     std::string loc = FileUtils::genNewImageLocation();
     pixmap.save(QString::fromStdString(loc));
 
     // upload then copy url to clipboard
-    std::string res = uploader.Upload(loc);
-    clip::set_text(res);
+    if(config->shouldUpload()) {
+        std::string res = config->getUploader()->Upload(loc);
+        clip::set_text(res);
+    }
 }
 
 QImage Screenshot::Image() {

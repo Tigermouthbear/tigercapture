@@ -8,12 +8,17 @@
 #include <ctime>
 #include <string>
 #include <QPixmap>
+#include "Config.h"
+#include "Uploader.h"
 
 class Screenshot {
 private:
+    Config* config;
+
     QPixmap pixmap;
 
 public:
+    Screenshot(Config* config);
     ~Screenshot();
 
     void Take();

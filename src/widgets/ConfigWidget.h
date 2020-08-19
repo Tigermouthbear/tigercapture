@@ -17,6 +17,7 @@ Q_OBJECT
 private:
     Config* config;
 
+    QCheckBox* shouldUpload;
     QCheckBox* shouldMinimizeCheckbox;
     QLabel* uploadersLabel;
     QComboBox* uploadersDropdown;
