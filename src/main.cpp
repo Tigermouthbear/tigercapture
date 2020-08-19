@@ -22,7 +22,13 @@ int main(int argc, char* argv[]) {
         } else if(arg == "area") {
             MainWindow::areaScreenshot(config)->quitOnClose(true);
         } else {
-            std::cout << "Argument not found!" << std::endl;
+            printf(
+                    "Usage:\n"
+                    "    no commands    open gui\n"
+                    "    --full         make fullscreen screenshot, upload, then close\n"
+                    "    --area         make area screenshot, upload, then close\n"
+                    "    --help         show this text"
+                );
             return 1;
         }
     }

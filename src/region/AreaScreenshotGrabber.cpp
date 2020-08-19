@@ -20,6 +20,7 @@ void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
         screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
         screenshot->save();
         delete screenshot;
+        screenshot = nullptr;
     }
 }
 
