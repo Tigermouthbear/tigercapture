@@ -8,7 +8,7 @@
 
 PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
     screenshot = new Screenshot(config);
-    screenshot->take();
+    screenshot->fullscreen();
 }
 
 // crop then pin image to screen on close

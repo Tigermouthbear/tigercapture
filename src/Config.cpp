@@ -3,7 +3,6 @@
 //
 
 #include "Config.h"
-
 #include "FileUtils.h"
 
 Config::Config(const std::string& file) {

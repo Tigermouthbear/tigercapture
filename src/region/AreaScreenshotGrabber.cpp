@@ -6,10 +6,10 @@
 
 #include <iostream>
 
-// take screenshot right when this is opened
+// fullscreen screenshot right when this is opened
 AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
     screenshot = new Screenshot(config);
-    screenshot->take();
+    screenshot->fullscreen();
 }
 
 // on close, crop and save screenshot

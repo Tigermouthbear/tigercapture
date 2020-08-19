@@ -16,11 +16,12 @@ int main(int argc, char* argv[]) {
 
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
-        if(arg == "full") {
+        if(arg == "--full") {
             MainWindow::fullScreenshot(config);
             return 0;
-        } else if(arg == "area") {
+        } else if(arg == "--area") {
             MainWindow::areaScreenshot(config)->quitOnClose(true);
+            return QApplication::exec();
         } else {
             printf(
                     "Usage:\n"
@@ -29,7 +30,7 @@ int main(int argc, char* argv[]) {
                     "    --area         make area screenshot, upload, then close\n"
                     "    --help         show this text"
                 );
-            return 1;
+            return 0;
         }
     }
 
