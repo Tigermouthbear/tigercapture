@@ -34,6 +34,8 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     configButton = new QPushButton("Config", this);
     layout->addWidget(configButton, 3, 0, 1, 2, Qt::AlignHCenter);
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
+
+    move(config->getX() - x(), config->getY() - y());
 }
 
 void MainWindow::activateWindow() {

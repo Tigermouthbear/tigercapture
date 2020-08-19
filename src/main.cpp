@@ -30,5 +30,11 @@ int main(int argc, char* argv[]) {
     MainWindow mainWindow(config);
     mainWindow.show();
 
-    return QApplication::exec();
+    int out = QApplication::exec();
+
+    config->setX(mainWindow.x());
+    config->setY(mainWindow.y());
+    config->write();
+
+    return out;
 }

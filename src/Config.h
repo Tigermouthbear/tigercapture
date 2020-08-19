@@ -19,6 +19,9 @@ private:
     std::string uploaderLoc ="";
     Uploader* uploader{};
 
+    int x;
+    int y;
+
 public:
     Config(const std::string& file);
 
@@ -31,6 +34,11 @@ public:
     Uploader* getUploader();
     bool setUploader(const std::string& file);
     std::string getUploaderLoc();
+
+    int getX() const;
+    void setX(int x);
+    int getY() const;
+    void setY(int y);
 };
 
 
