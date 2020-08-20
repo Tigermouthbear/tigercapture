@@ -25,6 +25,9 @@ public:
     void quitOnClose(bool value);
     QRect* getSelection();
 
+public slots:
+    void grabInputs();
+
 protected:
     bool dragging = false;
     bool hasDragged = false;

@@ -10,6 +10,7 @@
 #include "../Utils.h"
 #include <QApplication>
 #include <QtGui/QPainterPath>
+#include <QTimer>
 
 RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     // set transparent
@@ -35,6 +36,10 @@ RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint 
 
     // grab inputs
     setMouseTracking(true);
+    QTimer::singleShot(200, this, SLOT(grabInputs()));
+}
+
+void RegionGrabber::grabInputs() {
     grabKeyboard();
     grabMouse();
 }
