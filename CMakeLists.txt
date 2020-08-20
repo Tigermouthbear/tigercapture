@@ -16,6 +16,8 @@ set(CMAKE_AUTOMOC ON)
 set(CLIP_EXAMPLES OFF CACHE BOOL "Compile clip examples")
 set(CLIP_TESTS OFF CACHE BOOL "Compile clip tests")
 
+set(CMAKE_INSTALL_PREFIX /usr/local)
+
 # Add clip subdirectory to compile the library
 add_subdirectory(clip)
 
@@ -33,7 +35,9 @@ add_executable(tigercapture
         src/json.hpp
         src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h
         src/Config.cpp src/Config.h
-    )
+        src/region/RectangleGrabber.cpp src/region/RectangleGrabber.h)
+install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 # Link the library to the executable
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
+
