@@ -72,7 +72,6 @@ void MainWindow::handleAreaScreenshot() {
 AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
     auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
     areaScreenshotGrabber->show();
-    areaScreenshotGrabber->getCallback()->wait(); // sync wait for screenshot to be taken
     return areaScreenshotGrabber;
 }
 

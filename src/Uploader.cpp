@@ -53,7 +53,7 @@ std::string Uploader::Upload(std::string& path) {
 
         printf("Uploaded: %s\n", out.c_str());
     } else {
-        printf("ERROR uploading screenshot to %s (%d)", url.c_str(), curLcode);
+        printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
     }
     return out;
 }

@@ -17,8 +17,6 @@ private:
     bool dragging = false;
     int x = 0;
     int y = 0;
-    int screenWidth;
-    int screenHeight;
 
 public:
     explicit PinnedArea(int x, int y, QImage image);
