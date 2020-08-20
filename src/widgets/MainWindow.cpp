@@ -13,6 +13,7 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     this->config = config;
 
     setWindowTitle("TigerCapture");
+    setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // create layout
     auto* widget = new QWidget(this);
