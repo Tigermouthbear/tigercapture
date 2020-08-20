@@ -15,11 +15,22 @@ RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint 
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
+    setAttribute(Qt::WA_OpaquePaintEvent, false);
 
     // set fullscreen
-    QScreen* screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->geometry();
-    resize(screenGeometry.width(), screenGeometry.height());
+    QRect total;
+    for (auto scr : QGuiApplication::screens()) {
+        auto g = scr->geometry();
+
+        int right = g.x() + g.width();
+        int bottom = g.y() + g.height();
+        total.setWidth(qMax(total.width(), right - total.x()));
+        total.setHeight(qMax(total.height(), bottom - total.y()));
+        total.setX(qMin(total.x(), g.x()));
+        total.setY(qMin(total.y(), g.y()));
+    }
+    resize(total.width() - total.x(), total.height() - total.y());
+    move(total.x() - x(), total.y() - y());
 
     // grab inputs
     setMouseTracking(true);

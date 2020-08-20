@@ -9,7 +9,7 @@
 // fullscreen screenshot right when this is opened
 AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
     screenshot = new Screenshot(config);
-    screenshot->fullscreen();
+    screenshot->take();
 }
 
 // on close, crop and save screenshot

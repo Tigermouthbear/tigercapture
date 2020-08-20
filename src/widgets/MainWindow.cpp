@@ -56,7 +56,7 @@ void MainWindow::handleFullScreenshot() {
 
 void MainWindow::fullScreenshot(Config* config) {
     Screenshot screenshot = {config};
-    screenshot.fullscreen();
+    screenshot.take();
     screenshot.save(); // save sync
 }
 

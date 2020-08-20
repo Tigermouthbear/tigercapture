@@ -22,7 +22,7 @@ public:
     Screenshot(Config* config);
     ~Screenshot();
 
-    void fullscreen();
+    void take();
     void crop(int x, int y, int width, int height);
     std::future<void> save(std::function<void()> callback);
     void save();

@@ -15,7 +15,7 @@ Screenshot::Screenshot(Config *config) {
     this->config = config;
 }
 
-void Screenshot::fullscreen() {
+void Screenshot::take() {
     // First pass: Find combined screen size
     QRect total;
     for (auto scr : QGuiApplication::screens()) {
@@ -30,8 +30,8 @@ void Screenshot::fullscreen() {
     }
 
     pixmap = {total.width() - total.x(), total.height() - total.y()};
+    pixmap.fill(Qt::transparent);
     QPainter painter(&pixmap);
-    pixmap.fill(Qt::magenta); // if any part is magenta something went wrong!!
 
     // Second pass, paint onto end screenshot
     int x = 0;
@@ -70,7 +70,7 @@ void Screenshot::save() {
         std::ofstream log(FileUtils::getApplicationDirectory() + "/uploads.txt", std::ios_base::app | std::ios_base::out);
         log << loc << "," << res << "\n";
         log.close();
-        printf("Saved to %s\n", loc.c_str());
+        printf("Saved to: %s\n", loc.c_str());
     }
 }
 
