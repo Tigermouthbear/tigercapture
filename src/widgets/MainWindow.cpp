@@ -5,6 +5,7 @@
 #include "MainWindow.h"
 
 #include "ConfigWidget.h"
+#include "DragUploadWidget.h"
 #include <QTimer>
 #include <QLayout>
 #include <QApplication>
@@ -32,6 +33,10 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     pinButton = new QPushButton("Pin Area", this);
     layout->addWidget(pinButton, 2, 0);
     connect(pinButton, SIGNAL (released()), this, SLOT (handlePinArea()));
+
+    dragUploadButton = new QPushButton("Drag and Drop");
+    layout->addWidget(dragUploadButton, 2, 1);
+    connect(dragUploadButton, SIGNAL (released()), this, SLOT (dragUpload()));
 
     configButton = new QPushButton("Config", this);
     layout->addWidget(configButton, 3, 0, 1, 2, Qt::AlignHCenter);
@@ -90,6 +95,11 @@ PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
     return pinnedAreaGrabber;
 }
 
+void MainWindow::dragUpload(Config *config) {
+    auto* dragUploadWidget = new DragUploadWidget(config);
+    dragUploadWidget->show();
+}
+
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(config);
     configWidget->move(x() + width(), y());
@@ -107,11 +117,14 @@ void MainWindow::fullScreenshot() {
     fullScreenshot(config);
 }
 
-
 void MainWindow::areaScreenshot() {
     areaScreenshot(config);
 }
 
 void MainWindow::pinArea() {
     pinArea(config);
+}
+
+void MainWindow::dragUpload() {
+    dragUpload(config);
 }

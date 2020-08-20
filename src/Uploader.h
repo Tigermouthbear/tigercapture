@@ -20,7 +20,7 @@ public:
     Uploader(std::string url, const std::vector<Uploader::Data>& formData, std::string fileFormName, std::string responseRegex);
     ~Uploader();
 
-    std::string Upload(std::string& path);
+    std::string Upload(const std::string& path);
 
     static Uploader* createFromJSON(const std::string& file);
 
