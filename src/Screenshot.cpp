@@ -47,23 +47,23 @@ void Screenshot::crop(int x, int y, int width, int height) {
 }
 
 /// make sure parameter is valid after screenshot is uploaded, i.e dont create a future from a stack allocated lambda
-std::future<void> Screenshot::save(std::function<void()> callback) {
+std::future<void> Screenshot::save(QSystemTrayIcon* icon, std::function<void()> callback) {
     return std::async([&] {
-        this->save();
+        this->save(icon);
         if (callback) {
             callback();
         }
     });
 }
 
-void Screenshot::save() {
+void Screenshot::save(QSystemTrayIcon* icon) {
     // save file
     std::string loc = FileUtils::genNewImageLocation();
     pixmap.save(QString::fromStdString(loc));
 
     // upload then copy url to clipboard
     if(config->getUploader() != nullptr) {
-        std::string res = config->getUploader()->Upload(loc);
+        std::string res = config->getUploader()->Upload(loc, icon);
         clip::set_text(res);
 
         // save entry to log file

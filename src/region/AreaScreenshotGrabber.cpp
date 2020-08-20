@@ -7,16 +7,17 @@
 #include <iostream>
 
 // fullscreen screenshot right when this is opened
-AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
+AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config, QSystemTrayIcon* iconIn): RegionGrabber() {
     screenshot = new Screenshot(config);
     screenshot->take();
+    icon = iconIn;
 }
 
 // on close, crop and save screenshot
 void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
     if(hasDragged && !dragging) {
         screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
-        screenshot->save();
+        screenshot->save(icon);
         delete screenshot;
         screenshot = nullptr;
         RegionGrabber::closeEvent(event);

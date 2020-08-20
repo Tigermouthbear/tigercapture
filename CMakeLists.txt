@@ -31,7 +31,9 @@ add_executable(tigercapture
         src/Utils.h
         src/Uploader.cpp src/Uploader.h
         src/json.hpp
-        src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h src/Config.cpp src/Config.h)
+        src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h
+        src/Config.cpp src/Config.h
+    )
 
 # Link the library to the executable
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
