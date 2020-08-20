@@ -8,6 +8,7 @@
 #include <QMainWindow>
 #include <QCheckBox>
 #include <QPushButton>
+#include <QtWidgets/QSystemTrayIcon>
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
 #include "../Config.h"
@@ -24,17 +25,21 @@ private:
 
     bool dontCloseYet = false;
 
-public:
-    MainWindow(Config* config);
+    QSystemTrayIcon* icon;
 
-    static void fullScreenshot(Config* config);
-    static AreaScreenshotGrabber* areaScreenshot(Config* config);
+public:
+    MainWindow(QSystemTrayIcon* icon, Config* config);
+
+    static void fullScreenshot(QSystemTrayIcon* icon, Config* config);
+    static AreaScreenshotGrabber* areaScreenshot(QSystemTrayIcon* icon, Config* config);
     static PinnedAreaGrabber* pinArea(Config* config);
 
 public slots:
     void fullScreenshot();
     void areaScreenshot();
     void pinArea();
+
+    QSystemTrayIcon* getIcon();
 
 private slots:
     void activateWindow();

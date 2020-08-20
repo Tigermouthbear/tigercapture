@@ -9,11 +9,13 @@
 #include <QLayout>
 #include <zconf.h>
 
-MainWindow::MainWindow(Config* config): QMainWindow() {
+MainWindow::MainWindow(QSystemTrayIcon* icon, Config* config): QMainWindow() {
     this->config = config;
+    this->icon = icon;
 
     setWindowTitle("TigerCapture");
     setWindowFlags(Qt::WindowStaysOnTopHint);
+
 
     // create layout
     auto* widget = new QWidget(this);
@@ -50,14 +52,14 @@ void MainWindow::handleFullScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else fullScreenshot(config);
+    } else fullScreenshot(icon, config);
     fullButton->setDown(false);
 }
 
-void MainWindow::fullScreenshot(Config* config) {
+void MainWindow::fullScreenshot(QSystemTrayIcon* icon, Config* config) {
     Screenshot screenshot = {config};
     screenshot.take();
-    screenshot.save(); // save sync
+    screenshot.save(icon); // save sync
 }
 
 void MainWindow::handleAreaScreenshot() {
@@ -65,12 +67,12 @@ void MainWindow::handleAreaScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else areaScreenshot(config);
+    } else areaScreenshot(icon, config);
     areaButton->setDown(false);
 }
 
-AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
+AreaScreenshotGrabber* MainWindow::areaScreenshot(QSystemTrayIcon* icon, Config* config) {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config, icon);
     areaScreenshotGrabber->show();
     return areaScreenshotGrabber;
 }
@@ -104,14 +106,18 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::fullScreenshot() {
-    fullScreenshot(config);
+    fullScreenshot(icon, config);
 }
 
 
 void MainWindow::areaScreenshot() {
-    areaScreenshot(config);
+    areaScreenshot(icon, config);
 }
 
 void MainWindow::pinArea() {
     pinArea(config);
+}
+
+QSystemTrayIcon* MainWindow::getIcon() {
+    return icon;
 }

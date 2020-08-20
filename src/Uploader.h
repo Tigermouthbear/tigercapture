@@ -8,6 +8,7 @@
 #include <string>
 #include <curl/curl.h>
 #include <vector>
+#include <QtWidgets/QSystemTrayIcon>
 
 class Uploader {
 public:
@@ -20,7 +21,7 @@ public:
     Uploader(std::string url, const std::vector<Uploader::Data>& formData, std::string fileFormName, std::string responseRegex);
     ~Uploader();
 
-    std::string Upload(std::string& path);
+    std::string Upload(std::string& path, QSystemTrayIcon* icon);
 
     static Uploader* createFromJSON(const std::string& file);
 

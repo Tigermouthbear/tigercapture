@@ -14,9 +14,10 @@ class AreaScreenshotGrabber: public RegionGrabber {
 private:
     Screenshot* screenshot;
     std::future<void> callback;
+    QSystemTrayIcon* icon;
 
 public:
-    AreaScreenshotGrabber(Config* config);
+    AreaScreenshotGrabber(Config* config, QSystemTrayIcon* icon);
     std::future<void>* getCallback();
 
 protected:
