@@ -6,6 +6,7 @@
 #define TIGERCAPTURE_CONFIG_H
 
 #include <string>
+#include <QtWidgets/QSystemTrayIcon>
 #include "json.hpp"
 #include "Uploader.h"
 
@@ -16,11 +17,13 @@ private:
 
     bool minimize{};
 
-    std::string uploaderLoc ="";
+    std::string uploaderLoc;
     Uploader* uploader{};
 
     int x;
     int y;
+
+    QSystemTrayIcon* systemTrayIcon;
 
 public:
     Config(const std::string& file);
@@ -39,6 +42,8 @@ public:
     void setX(int x);
     int getY() const;
     void setY(int y);
+
+    QSystemTrayIcon* getSystemTrayIcon();
 };
 
 

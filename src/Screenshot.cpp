@@ -2,14 +2,15 @@
 // Created by Tigermouthbear on 8/16/20.
 //
 
-#include <future>
-#include <QtGui/QGuiApplication>
-#include <QtGui/QScreen>
-#include <QtGui/QPainter>
 #include "Screenshot.h"
 
+#include <future>
+#include <QApplication>
+#include <QtGui/QScreen>
+#include <QtGui/QPainter>
+#include <QClipboard>
+#include <QSystemTrayIcon>
 #include "FileUtils.h"
-#include "../clip/clip.h"
 
 Screenshot::Screenshot(Config *config) {
     this->config = config;
@@ -46,22 +47,30 @@ void Screenshot::crop(int x, int y, int width, int height) {
 }
 
 /// make sure parameter is valid after screenshot is uploaded, i.e dont create a future from a stack allocated lambda
-std::future<void> Screenshot::save(QSystemTrayIcon* icon, std::function<void()> callback) {
+std::future<void> Screenshot::save(std::function<void()> callback) {
     return std::async([&] {
-        this->save(icon);
+        this->save();
         if(callback) callback();
     });
 }
 
-void Screenshot::save(QSystemTrayIcon* icon) {
+void Screenshot::save() {
     // save file
     std::string loc = FileUtils::genNewImageLocation();
     pixmap.save(QString::fromStdString(loc));
 
     // upload then copy url to clipboard
     if(config->getUploader() != nullptr) {
-        std::string res = config->getUploader()->Upload(loc, icon);
-        clip::set_text(res);
+        // upload, if response is empty break
+        std::string res = config->getUploader()->Upload(loc);
+        if(res.empty()) return;
+
+        // copy response
+        auto clip = QApplication::clipboard();
+        clip->setText(res.c_str());
+
+        // display notification
+        config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 
         // save entry to log file
         std::ofstream log(FileUtils::getApplicationDirectory() + "/uploads.txt", std::ios_base::app | std::ios_base::out);

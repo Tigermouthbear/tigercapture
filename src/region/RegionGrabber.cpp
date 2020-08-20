@@ -83,7 +83,7 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
     QColor backgroundColor = palette().light().color();
     backgroundColor.setAlpha(100);
 
-    if (dragging) {
+    if(dragging) {
         QPainterPath totalPath;
         totalPath.addRect(total);
         QPainterPath exclude;

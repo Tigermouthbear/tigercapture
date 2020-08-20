@@ -24,8 +24,8 @@ public:
 
     void take();
     void crop(int x, int y, int width, int height);
-    std::future<void> save(QSystemTrayIcon* icon, std::function<void()> callback);
-    void save(QSystemTrayIcon* icon);
+    std::future<void> save(std::function<void()> callback);
+    void save();
     QImage image();
 };
 

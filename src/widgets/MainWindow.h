@@ -23,23 +23,17 @@ private:
     QPushButton* pinButton;
     QPushButton* configButton;
 
-    bool dontCloseYet = false;
-
-    QSystemTrayIcon* icon;
-
 public:
-    MainWindow(QSystemTrayIcon* icon, Config* config);
+    MainWindow(Config* config);
 
-    static void fullScreenshot(QSystemTrayIcon* icon, Config* config);
-    static AreaScreenshotGrabber* areaScreenshot(QSystemTrayIcon* icon, Config* config);
+    static void fullScreenshot(Config* config);
+    static AreaScreenshotGrabber* areaScreenshot(Config* config);
     static PinnedAreaGrabber* pinArea(Config* config);
 
 public slots:
     void fullScreenshot();
     void areaScreenshot();
     void pinArea();
-
-    QSystemTrayIcon* getIcon();
 
 private slots:
     void activateWindow();

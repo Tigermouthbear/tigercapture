@@ -21,7 +21,7 @@ Uploader::Uploader(std::string url, const std::vector<Uploader::Data>& formData,
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-std::string Uploader::Upload(std::string& path, QSystemTrayIcon* icon) {
+std::string Uploader::Upload(std::string& path) {
     curl_mime* form = curl_mime_init(curl);
     curl_mimepart* field = curl_mime_addpart(form);
     std::string responseBuffer;
@@ -46,18 +46,14 @@ std::string Uploader::Upload(std::string& path, QSystemTrayIcon* icon) {
     CURLcode curLcode = curl_easy_perform(curl);
     curl_easy_reset(curl);
 
-    std::string out = "ERROR";
+    std::string out = "";
     if(curLcode == CURLE_OK) {
         QString qString = responseRegex.c_str();
         qString.replace("$response$", responseBuffer.c_str());
         out = qString.toStdString();
-
         printf("Uploaded: %s\n", out.c_str());
+    } else printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
 
-        icon->showMessage("Uploaded image", out.c_str());
-    } else {
-        printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
-    }
     return out;
 }
 

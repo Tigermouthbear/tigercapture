@@ -11,19 +11,16 @@
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
 
-    QSystemTrayIcon icon;
-    // icon->setIcon(QIcon{}); TODO: icon
-    icon.show();
     auto* config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
     config->read();
 
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
         if(arg == "--full") {
-            MainWindow::fullScreenshot(&icon, config);
+            MainWindow::fullScreenshot(config);
             return 0;
         } else if(arg == "--area") {
-            MainWindow::areaScreenshot(&icon, config)->quitOnClose(true);
+            MainWindow::areaScreenshot(config)->quitOnClose(true);
             return QApplication::exec();
         } else {
             printf(
@@ -37,14 +34,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    MainWindow mainWindow(&icon, config);
+    MainWindow mainWindow(config);
     mainWindow.show();
 
-    int out = QApplication::exec();
-
-    config->setX(mainWindow.x());
-    config->setY(mainWindow.y());
-    config->write();
-
-    return out;
+    return QApplication::exec();
 }

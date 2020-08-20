@@ -7,15 +7,13 @@
 #include "ConfigWidget.h"
 #include <QTimer>
 #include <QLayout>
-#include <zconf.h>
+#include <QApplication>
 
-MainWindow::MainWindow(QSystemTrayIcon* icon, Config* config): QMainWindow() {
+MainWindow::MainWindow(Config* config): QMainWindow() {
     this->config = config;
-    this->icon = icon;
 
     setWindowTitle("TigerCapture");
     setWindowFlags(Qt::WindowStaysOnTopHint);
-
 
     // create layout
     auto* widget = new QWidget(this);
@@ -52,14 +50,14 @@ void MainWindow::handleFullScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else fullScreenshot(icon, config);
+    } else fullScreenshot(config);
     fullButton->setDown(false);
 }
 
-void MainWindow::fullScreenshot(QSystemTrayIcon* icon, Config* config) {
+void MainWindow::fullScreenshot(Config* config) {
     Screenshot screenshot = {config};
     screenshot.take();
-    screenshot.save(icon); // save sync
+    screenshot.save(); // save sync
 }
 
 void MainWindow::handleAreaScreenshot() {
@@ -67,12 +65,12 @@ void MainWindow::handleAreaScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else areaScreenshot(icon, config);
+    } else areaScreenshot(config);
     areaButton->setDown(false);
 }
 
-AreaScreenshotGrabber* MainWindow::areaScreenshot(QSystemTrayIcon* icon, Config* config) {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config, icon);
+AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
     areaScreenshotGrabber->show();
     return areaScreenshotGrabber;
 }
@@ -94,30 +92,26 @@ PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
 
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(config);
-    configWidget->move(x() + width() / 2, y() + height() / 2);
+    configWidget->move(x() + width(), y());
     configWidget->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
+    config->setX(x());
+    config->setY(y());
     config->write();
-    while (dontCloseYet) {
-        usleep(0);
-    }
+    QApplication::quit();
 }
 
 void MainWindow::fullScreenshot() {
-    fullScreenshot(icon, config);
+    fullScreenshot(config);
 }
 
 
 void MainWindow::areaScreenshot() {
-    areaScreenshot(icon, config);
+    areaScreenshot(config);
 }
 
 void MainWindow::pinArea() {
     pinArea(config);
-}
-
-QSystemTrayIcon* MainWindow::getIcon() {
-    return icon;
 }

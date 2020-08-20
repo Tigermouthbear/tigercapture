@@ -13,12 +13,9 @@
 class AreaScreenshotGrabber: public RegionGrabber {
 private:
     Screenshot* screenshot;
-    std::future<void> callback;
-    QSystemTrayIcon* icon;
 
 public:
-    AreaScreenshotGrabber(Config* config, QSystemTrayIcon* icon);
-    std::future<void>* getCallback();
+    AreaScreenshotGrabber(Config* config);
 
 protected:
     void closeEvent(QCloseEvent* event) override;

@@ -16,6 +16,13 @@ Config::Config(const std::string& file) {
     };
     nlohmann::json read = FileUtils::readJSON(file);
     if(read != nullptr) json.merge_patch(read);
+
+    // set system try icon
+    QPixmap pixmap(10, 10);
+    pixmap.fill(Qt::white);
+    systemTrayIcon = new QSystemTrayIcon();
+    systemTrayIcon->setIcon(QIcon(pixmap));
+    systemTrayIcon->show();
 }
 
 void Config::read() {
@@ -78,4 +85,8 @@ int Config::getY() const {
 }
 void Config::setY(int yIn) {
     y = yIn;
+}
+
+QSystemTrayIcon* Config::getSystemTrayIcon() {
+    return systemTrayIcon;
 }
