@@ -22,6 +22,13 @@ public:
         painter->drawLine(x, y + height, x, y);
     }
 
+    static inline void drawOutlineBox(QPainter* painter, QRect box) {
+        painter->drawLine(box.x(), box.y(), box.x() + box.width(), box.y());
+        painter->drawLine(box.x() + box.width(), box.y(), box.x() + box.width(), box.y() + box.height());
+        painter->drawLine(box.x() + box.width(), box.y() + box.height(), box.x(), box.y() + box.height());
+        painter->drawLine(box.x(), box.y() + box.height(), box.x(), box.y());
+    }
+
     static inline void drawOutlineBox(QPainter* painter, int x, int y, int width, int height, const char* color) {
         QPen penHText((QColor(color)));
         painter->setPen(penHText);
