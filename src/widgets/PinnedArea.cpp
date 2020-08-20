@@ -24,12 +24,6 @@ PinnedArea::PinnedArea(int x, int y, QImage image): QWidget(nullptr, Qt::X11Bypa
     // set size and position
     resize(this->image.width(), this->image.height());
     move(x, y);
-
-    // set window size for position clamping
-    QScreen* screen = QGuiApplication::primaryScreen();
-    QRect screenGeometry = screen->geometry();
-    screenWidth = screenGeometry.width();
-    screenHeight = screenGeometry.height();
 }
 
 // start drag on click
@@ -41,11 +35,11 @@ void PinnedArea::mousePressEvent(QMouseEvent* event) {
     } else if(event->button() == Qt::RightButton) close();
 }
 
-// move widget with mouse while dragging (also clamp to keep it on screen)
+// move widget with mouse while dragging
 void PinnedArea::mouseMoveEvent(QMouseEvent* event) {
     if(dragging) {
-        x = Utils::clamp(event->globalX() - dragX, 0, screenWidth - image.width());
-        y = Utils::clamp(event->globalY() - dragY, 0, screenHeight - image.height());
+        x = event->globalX() - dragX;
+        y = event->globalY() - dragY;
         move(x, y);
     }
 }

@@ -17,24 +17,28 @@ Screenshot::Screenshot(Config *config) {
 
 void Screenshot::fullscreen() {
     // First pass: Find combined screen size
-    int w = 0;
-    int h = 0;
+    QRect total;
     for (auto scr : QGuiApplication::screens()) {
         auto g = scr->geometry();
-        w += g.width();
-        h = qMax(h, g.height());
+
+        int right = g.x() + g.width();
+        int bottom = g.y() + g.height();
+        total.setWidth(qMax(total.width(), right - total.x()));
+        total.setHeight(qMax(total.height(), bottom - total.y()));
+        total.setX(qMin(total.x(), g.x()));
+        total.setY(qMin(total.y(), g.y()));
     }
 
-    pixmap = {w, h};
+    pixmap = {total.width() - total.x(), total.height() - total.y()};
     QPainter painter(&pixmap);
     pixmap.fill(Qt::magenta); // if any part is magenta something went wrong!!
 
     // Second pass, paint onto end screenshot
     int x = 0;
     for (auto scr : QGuiApplication::screens()) {
+        auto g = scr->geometry();
         auto pix = scr->grabWindow(0);
-        painter.drawPixmap(x, 0, pix);
-        x += pix.width();
+        painter.drawPixmap(g.x(), g.y(), g.width(), g.height(), pix);
     }
 }
 
