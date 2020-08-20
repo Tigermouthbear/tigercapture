@@ -10,7 +10,9 @@ Config::Config(const std::string& file) {
 
     json = {
             { "minimize", true },
-            { "uploader", "" }
+            { "uploader", "" },
+            { "x", 0 },
+            { "y", 0 }
     };
     nlohmann::json read = FileUtils::readJSON(file);
     if(read != nullptr) json.merge_patch(read);
@@ -19,10 +21,8 @@ Config::Config(const std::string& file) {
 void Config::read() {
     minimize = json["minimize"];
     setUploader(json["uploader"]);
-    if (json.contains("x")) {
-        x = json["x"];
-        y = json["y"];
-    }
+    x = json["x"];
+    y = json["y"];
 }
 
 void Config::write() {

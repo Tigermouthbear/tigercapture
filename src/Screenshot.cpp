@@ -34,7 +34,6 @@ void Screenshot::take() {
     QPainter painter(&pixmap);
 
     // Second pass, paint onto end screenshot
-    int x = 0;
     for (auto scr : QGuiApplication::screens()) {
         auto g = scr->geometry();
         auto pix = scr->grabWindow(0);
@@ -50,9 +49,7 @@ void Screenshot::crop(int x, int y, int width, int height) {
 std::future<void> Screenshot::save(QSystemTrayIcon* icon, std::function<void()> callback) {
     return std::async([&] {
         this->save(icon);
-        if (callback) {
-            callback();
-        }
+        if(callback) callback();
     });
 }
 

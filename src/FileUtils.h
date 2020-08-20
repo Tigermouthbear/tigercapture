@@ -46,8 +46,12 @@ public:
         return createDirectoryIfNonexistant(getHomeDirectory() + "/.config/TigerCapture");
     }
 
+    static std::string getLocalPicturesDirectory() {
+        return createDirectoryIfNonexistant(getHomeDirectory() + "/Pictures");
+    }
+
     static std::string getPicturesDirectory() {
-        return createDirectoryIfNonexistant(getHomeDirectory() + "/Pictures/TigerCapture");
+        return createDirectoryIfNonexistant(getLocalPicturesDirectory() + "/TigerCapture");
     }
 
     static std::string getUploadersDirectory() {
