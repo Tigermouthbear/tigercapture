@@ -16,8 +16,10 @@ AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
 void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
     RegionGrabber::closeEvent(event);
 
-    if(hasDragged && !dragging) {
-        screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
+    auto selection = getSelection();
+    if(hasDragged && !dragging && selection != nullptr) {
+        //screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
+        screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
         screenshot->save();
         delete screenshot;
         screenshot = nullptr;

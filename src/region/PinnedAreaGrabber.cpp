@@ -15,12 +15,11 @@ PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
 void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
     RegionGrabber::closeEvent(event);
 
-    if(hasDragged && !dragging) {
-        int x = std::min(dragX, mouseX);
-        int y = std::min(dragY, mouseY);
-        screenshot->crop(x, y, std::abs(mouseX - dragX), std::abs(mouseY - dragY));
+    auto selection = getSelection();
+    if(hasDragged && !dragging && selection != nullptr) {
+        screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
 
-        auto* pinnedArea = new PinnedArea(x, y, screenshot->image());
+        auto* pinnedArea = new PinnedArea(selection->x(), selection->y(), screenshot->image());
         pinnedArea->show();
 
         delete screenshot;
