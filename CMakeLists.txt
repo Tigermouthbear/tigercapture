@@ -16,7 +16,7 @@ set(CMAKE_AUTOMOC ON)
 set(CLIP_EXAMPLES OFF CACHE BOOL "Compile clip examples")
 set(CLIP_TESTS OFF CACHE BOOL "Compile clip tests")
 
-set(CMAKE_INSTALL_PREFIX /usr/local)
+set(CMAKE_INSTALL_PREFIX /usr/bin)
 
 # Add clip subdirectory to compile the library
 add_subdirectory(clip)
