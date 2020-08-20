@@ -35,7 +35,7 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
     }
     layout->addWidget(uploadersDropdown, 2, 1);
 
-    saveButton = new QPushButton("Save", this);
+    saveButton = new QPushButton("Save and Close", this);
     layout->addWidget(saveButton, 3, 0, 1, 2, Qt::AlignHCenter);
     connect(saveButton, SIGNAL (released()), this, SLOT (save()));
 }
@@ -43,4 +43,5 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
 void ConfigWidget::save() {
     config->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
     if(!config->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
+    close();
 }
