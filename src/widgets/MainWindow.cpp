@@ -7,6 +7,7 @@
 #include "ConfigWidget.h"
 #include <QTimer>
 #include <QLayout>
+#include <QApplication>
 #include <zconf.h>
 
 MainWindow::MainWindow(QSystemTrayIcon* icon, Config* config): QMainWindow() {
@@ -103,6 +104,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     while (dontCloseYet) {
         usleep(0);
     }
+    QApplication::exit();
 }
 
 void MainWindow::fullScreenshot() {
