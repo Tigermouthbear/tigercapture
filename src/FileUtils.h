@@ -7,13 +7,15 @@
 
 #include <string>
 #include <iostream>
+#include <chrono>
 #include <unistd.h>
 #include <pwd.h>
+#include <ctime>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <ctime>
 #include <fstream>
 #include <utility>
+#include <QtCore/QDateTime>
 #include "json.hpp"
 
 class FileUtils {
@@ -44,31 +46,33 @@ public:
         return createDirectoryIfNonexistant(getHomeDirectory() + "/.config/TigerCapture");
     }
 
+    static std::string getPicturesDirectory() {
+        return createDirectoryIfNonexistant(getHomeDirectory() + "/Pictures/TigerCapture");
+    }
+
     static std::string getUploadersDirectory() {
         return createDirectoryIfNonexistant(getApplicationDirectory() + "/Uploaders");
     }
 
-    static std::string getCurrentScreenshotDirectory() {
-        time_t time = std::time(nullptr);
-        tm* date = localtime(&time);
-        std::string month = (date->tm_mon < 10 ? "0" : "") + std::to_string(date->tm_mon + 1);
-        std::string directory = getApplicationDirectory().append("/").append(std::to_string(1900 + date->tm_year)).append("-").append(month);
-        return createDirectoryIfNonexistant(directory);
+    static std::string isoTime() {
+        QDateTime dt = QDateTime::currentDateTime();
+        dt.setTimeSpec(Qt::LocalTime);
+        return QDateTime::currentDateTime().toString(Qt::ISODate).toStdString();
     }
 
     static std::string genNewImageLocation() {
-        std::string directory = getCurrentScreenshotDirectory();
-        std::string path;
+        std::string path = getPicturesDirectory().append("/").append(isoTime());
+        std::string final = path;
+        final.append(".png");
 
-        gen:
-        char tmpname[40];
-        tmpnam(tmpname);
-        std::string name = std::string(tmpname).substr(9);
-        path = directory.append("/").append(name).append(".png");
+        // If the file already exists append an incremental value
+        int i = 1;
+        while (exists(final)) {
+            final = path;
+            final.append("_").append(std::to_string(i++)).append(".png");
+        }
 
-        if(exists(path)) goto gen;
-
-        return path;
+        return final;
     }
 
     static nlohmann::json readJSON(const char* file) {
