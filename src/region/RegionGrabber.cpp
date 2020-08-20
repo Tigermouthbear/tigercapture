@@ -50,26 +50,31 @@ void RegionGrabber::keyPressEvent(QKeyEvent* event) {
     if(event->key() == Qt::Key_Escape) close();
 }
 
+void RegionGrabber::updateSelection(QMouseEvent *event) {
+
+    setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
+}
+
 void RegionGrabber::mousePressEvent(QMouseEvent* event) {
     if(event->button() == Qt::LeftButton) {
         dragX = event->x();
         dragY = event->y();
         dragging = true;
         hasDragged = true;
-        setSelection(new QRect(dragX, dragY, 0, 0));
+        updateSelection(event);
     }
     update();
 }
 
 void RegionGrabber::mouseMoveEvent(QMouseEvent* event) {
-    setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
+    updateSelection(event);
     update();
 }
 
 void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
     if(event->button() == Qt::LeftButton) {
         dragging = false;
-        setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
+        updateSelection(event);
         close();
     }
     update();

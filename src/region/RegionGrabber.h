@@ -17,6 +17,8 @@ private:
 
     QRect* setSelection(QRect* selectionIn);
 
+    void updateSelection(QMouseEvent* event);
+
 public:
     RegionGrabber();
 
