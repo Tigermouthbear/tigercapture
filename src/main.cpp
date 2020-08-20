@@ -28,7 +28,7 @@ int main(int argc, char* argv[]) {
                     "    no commands    open gui\n"
                     "    --full         make fullscreen screenshot, upload, then close\n"
                     "    --area         make area screenshot, upload, then close\n"
-                    "    --help         show this text"
+                    "    --help         show this text\n"
                 );
             return 0;
         }

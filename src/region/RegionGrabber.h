@@ -19,6 +19,9 @@ public:
 
     void quitOnClose(bool value);
 
+public slots:
+    void grabInputs();
+
 protected:
     bool dragging = false;
     bool hasDragged = false;
