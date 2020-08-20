@@ -9,6 +9,7 @@
 #include <QPainter>
 #include "../Utils.h"
 #include <QApplication>
+#include <QtGui/QPainterPath>
 
 RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     // set transparent
@@ -74,14 +75,26 @@ void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void RegionGrabber::paintEvent(QPaintEvent* event) {
+    QPainter painter(this);
+    QRect box = {dragX, dragY, mouseX - dragX, mouseY - dragY};
+    QRect total = rect();
+
     // draw semi-transparent background
     QColor backgroundColor = palette().light().color();
     backgroundColor.setAlpha(100);
-    QPainter painter(this);
-    painter.fillRect(rect(), backgroundColor);
 
-    if(dragging) {
-        Utils::drawOutlineBox(&painter, dragX, dragY, mouseX - dragX, mouseY - dragY);
+    if (dragging) {
+        QPainterPath totalPath;
+        totalPath.addRect(total);
+        QPainterPath exclude;
+        exclude.addRect(box);
+        auto path = (totalPath - exclude);
+
+        painter.fillPath(path, backgroundColor);
+        painter.fillRect(box, Qt::transparent);
+        Utils::drawOutlineBox(&painter, box);
+    } else {
+        painter.fillRect(total, backgroundColor);
     }
 }
 
