@@ -76,12 +76,6 @@ void Screenshot::save() {
 
         // display notification
         config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
-
-        // save entry to log file
-        std::ofstream log(FileUtils::getApplicationDirectory() + "/uploads.txt", std::ios_base::app | std::ios_base::out);
-        log << loc << "," << res << "\n";
-        log.close();
-        printf("Saved to: %s\n", loc.c_str());
     }
 }
 

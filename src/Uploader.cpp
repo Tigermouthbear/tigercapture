@@ -21,7 +21,7 @@ Uploader::Uploader(std::string url, const std::vector<Uploader::Data>& formData,
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-std::string Uploader::Upload(std::string& path) {
+std::string Uploader::Upload(const std::string& path) {
     curl_mime* form = curl_mime_init(curl);
     curl_mimepart* field = curl_mime_addpart(form);
     std::string responseBuffer;
@@ -46,13 +46,19 @@ std::string Uploader::Upload(std::string& path) {
     CURLcode curLcode = curl_easy_perform(curl);
     curl_easy_reset(curl);
 
-    std::string out = "";
+    std::string out;
     if(curLcode == CURLE_OK) {
         QString qString = responseRegex.c_str();
         qString.replace("$response$", responseBuffer.c_str());
         out = qString.toStdString();
         printf("Uploaded: %s\n", out.c_str());
     } else printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
+
+    // save entry to log file
+    std::ofstream log(FileUtils::getApplicationDirectory() + "/uploads.txt", std::ios_base::app | std::ios_base::out);
+    log << path << "," << out << "\n";
+    log.close();
+    printf("Saved to: %s\n", path.c_str());
 
     return out;
 }

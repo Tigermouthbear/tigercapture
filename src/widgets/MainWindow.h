@@ -22,6 +22,7 @@ private:
     QPushButton* fullButton;
     QPushButton* areaButton;
     QPushButton* pinButton;
+    QPushButton* dragUploadButton;
     QPushButton* configButton;
 
 public:
@@ -30,11 +31,13 @@ public:
     static void fullScreenshotImpl(Config* config);
     static AreaScreenshotGrabber* areaScreenshotImpl(Config* config);
     static PinnedAreaGrabber* pinArea(Config* config);
+    static void dragUpload(Config* config);
 
 public slots:
     void fullScreenshot();
     void areaScreenshot();
     void pinArea();
+    void dragUpload();
 
 private slots:
     void activateWindow();
