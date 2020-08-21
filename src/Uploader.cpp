@@ -17,11 +17,17 @@ Uploader::Uploader(std::string url, const std::vector<Uploader::Data>& formData,
     this->fileFormName = std::move(fileFormName);
     this->responseRegex = std::move(responseRegex);
 
-    curl = curl_easy_init();
     curl_global_init(CURL_GLOBAL_ALL);
+}
+std::future<void> Uploader::Upload(const std::string &path, std::function<void(std::string res)> callback) {
+    return std::async([&]() {
+        std::string res = Upload(path);
+        if(callback) callback(res);
+    });
 }
 
 std::string Uploader::Upload(const std::string& path) {
+    CURL* curl = curl_easy_init();
     curl_mime* form = curl_mime_init(curl);
     curl_mimepart* field = curl_mime_addpart(form);
     std::string responseBuffer;
@@ -44,7 +50,7 @@ std::string Uploader::Upload(const std::string& path) {
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
 
     CURLcode curLcode = curl_easy_perform(curl);
-    curl_easy_reset(curl);
+    curl_easy_cleanup(curl);
 
     std::string out;
     if(curLcode == CURLE_OK) {
@@ -87,10 +93,6 @@ Uploader *Uploader::createFromJSON(const std::string& file) {
     }
 
     return new Uploader(requestURL, formData, fileFormName, URL);
-}
-
-Uploader::~Uploader() {
-    curl_easy_cleanup(curl);
 }
 
 Uploader::Data::Data(std::string key, std::string value) {

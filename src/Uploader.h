@@ -8,6 +8,7 @@
 #include <string>
 #include <curl/curl.h>
 #include <vector>
+#include <future>
 
 class Uploader {
 public:
@@ -18,9 +19,8 @@ public:
     };
 
     Uploader(std::string url, const std::vector<Uploader::Data>& formData, std::string fileFormName, std::string responseRegex);
-    ~Uploader();
 
-    std::string Upload(const std::string& path);
+    std::future<void> Upload(const std::string& path, std::function<void(std::string res)> callback);
 
     static Uploader* createFromJSON(const std::string& file);
 
@@ -30,8 +30,7 @@ private:
     std::string fileFormName;
     std::string responseRegex;
 
-    CURL* curl;
-
+    std::string Upload(const std::string& path);
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
 };
 

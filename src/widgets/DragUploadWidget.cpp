@@ -66,15 +66,16 @@ void DragUploadWidget::dropEvent(QDropEvent *event) {
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
         if(config->getUploader() != nullptr && url.isLocalFile()) {
-            std::string res = config->getUploader()->Upload(url.toLocalFile().toStdString());
-            if(res.empty()) return;
+            auto upload = config->getUploader()->Upload(url.toLocalFile().toStdString(), [&](const std::string& res) {
+                if(res.empty()) return;
 
-            // copy response
-            auto clip = QApplication::clipboard();
-            clip->setText(res.c_str());
+                // copy response
+                auto clip = QApplication::clipboard();
+                clip->setText(res.c_str());
 
-            // display notification
-            config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+                // display notification
+                config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+            });
         }
     }
 }

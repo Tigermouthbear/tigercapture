@@ -4,7 +4,7 @@
 
 #include "AreaScreenshotGrabber.h"
 
-#include <iostream>
+#include <future>
 
 // fullscreen screenshot right when this is opened
 AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
@@ -21,8 +21,6 @@ void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
         //screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
         screenshot->save();
-        delete screenshot;
-        screenshot = nullptr;
     }
 }
 

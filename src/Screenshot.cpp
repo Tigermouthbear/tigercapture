@@ -51,14 +51,6 @@ void Screenshot::crop(int x, int y, int width, int height) {
     pixmap = pixmap.copy(x, y, width, height);
 }
 
-/// make sure parameter is valid after screenshot is uploaded, i.e dont create a future from a stack allocated lambda
-std::future<void> Screenshot::save(std::function<void()> callback) {
-    return std::async([&] {
-        this->save();
-        if(callback) callback();
-    });
-}
-
 void Screenshot::save() {
     // save file
     std::string loc = FileUtils::genNewImageLocation();
@@ -66,16 +58,17 @@ void Screenshot::save() {
 
     // upload then copy url to clipboard
     if(config->getUploader() != nullptr) {
-        // upload, if response is empty break
-        std::string res = config->getUploader()->Upload(loc);
-        if(res.empty()) return;
+        // upload async, if response is empty break
+        auto upload = config->getUploader()->Upload(loc, [&](const std::string& res) {
+            if(res.empty()) return;
 
-        // copy response
-        auto clip = QApplication::clipboard();
-        clip->setText(res.c_str());
+            // copy response
+            auto clip = QApplication::clipboard();
+            clip->setText(res.c_str());
 
-        // display notification
-        config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+            // display notification
+            config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+        });
     }
 }
 
