@@ -18,12 +18,25 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
     auto* layout = new QGridLayout(this);
 
     // add elements
-    shouldMinimizeCheckbox = new QCheckBox("Close window on capture", this);
+
+    uploadersLabel = new QLabel("Close window on capture", this);
+    layout->addWidget(uploadersLabel, 1, 0);
+
+    shouldMinimizeCheckbox = new QCheckBox(this);
     shouldMinimizeCheckbox->setChecked(config->shouldMinimize());
-    layout->addWidget(shouldMinimizeCheckbox, 1, 0, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(shouldMinimizeCheckbox, 1, 1, 1, 1, Qt::AlignHCenter);
+
+
+    uploadersLabel = new QLabel("Delay (ms)", this);
+    layout->addWidget(uploadersLabel, 2, 0);
+
+    delayInput = new QLineEdit(this);
+    delayInput->setText(std::to_string(config->getDelay()).c_str());
+    delayInput->setValidator(new QIntValidator(0, 20000, this));
+    layout->addWidget(delayInput, 2, 1, 1, 1, Qt::AlignHCenter);
 
     uploadersLabel = new QLabel("File Uploader", this);
-    layout->addWidget(uploadersLabel, 2, 0);
+    layout->addWidget(uploadersLabel, 3, 0);
 
     uploadersDropdown = new QComboBox(this);
     uploadersDropdown->addItem("None");
@@ -33,14 +46,15 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
         uploadersDropdown->addItem(filename.c_str());
         if(config->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
     }
-    layout->addWidget(uploadersDropdown, 2, 1);
+    layout->addWidget(uploadersDropdown, 3, 1);
 
     saveButton = new QPushButton("Save", this);
-    layout->addWidget(saveButton, 3, 0, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(saveButton, 4, 0, 1, 2, Qt::AlignHCenter);
     connect(saveButton, SIGNAL (released()), this, SLOT (save()));
 }
 
 void ConfigWidget::save() {
+    config->setDelay(std::stoi(delayInput->text().toStdString()));
     config->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
     if(!config->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
 }

@@ -23,6 +23,8 @@ private:
     int x;
     int y;
 
+    int delay;
+
     QSystemTrayIcon* systemTrayIcon;
 
 public:
@@ -42,6 +44,9 @@ public:
     void setX(int x);
     int getY() const;
     void setY(int y);
+
+    int getDelay() const;
+    void setDelay(int delayIn);
 
     QSystemTrayIcon* getSystemTrayIcon();
 };

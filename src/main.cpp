@@ -17,10 +17,14 @@ int main(int argc, char* argv[]) {
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
         if(arg == "--full") {
-            MainWindow::fullScreenshot(config);
-            return 0;
+            Screenshot screenshot = {config};
+            screenshot.take();
+            screenshot.save();
+            return QApplication::exec();
         } else if(arg == "--area") {
-            MainWindow::areaScreenshot(config)->quitOnClose(true);
+            auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
+            areaScreenshotGrabber->quitOnClose(true);
+            areaScreenshotGrabber->show();
             return QApplication::exec();
         } else {
             printf(

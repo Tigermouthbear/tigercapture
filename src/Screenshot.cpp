@@ -17,6 +17,11 @@ Screenshot::Screenshot(Config *config) {
 }
 
 void Screenshot::take() {
+    auto delay = config->getDelay();
+    if (delay > 0) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+
     // First pass: Find combined screen size
     QRect total;
     for (auto scr : QGuiApplication::screens()) {

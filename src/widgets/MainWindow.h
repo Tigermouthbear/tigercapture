@@ -9,6 +9,7 @@
 #include <QCheckBox>
 #include <QPushButton>
 #include <QtWidgets/QSystemTrayIcon>
+#include <QtWidgets/QLineEdit>
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
 #include "../Config.h"
@@ -26,8 +27,8 @@ private:
 public:
     MainWindow(Config* config);
 
-    static void fullScreenshot(Config* config);
-    static AreaScreenshotGrabber* areaScreenshot(Config* config);
+    static void fullScreenshotImpl(Config* config);
+    static AreaScreenshotGrabber* areaScreenshotImpl(Config* config);
     static PinnedAreaGrabber* pinArea(Config* config);
 
 public slots:
