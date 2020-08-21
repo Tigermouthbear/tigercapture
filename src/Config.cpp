@@ -12,7 +12,8 @@ Config::Config(const std::string& file) {
             { "minimize", true },
             { "uploader", "" },
             { "x", 0 },
-            { "y", 0 }
+            { "y", 0 },
+            { "delay", 0 }
     };
     nlohmann::json read = FileUtils::readJSON(file);
     if(read != nullptr) json.merge_patch(read);
@@ -30,6 +31,7 @@ void Config::read() {
     setUploader(json["uploader"]);
     x = json["x"];
     y = json["y"];
+    delay = json["delay"];
 }
 
 void Config::write() {
@@ -37,6 +39,7 @@ void Config::write() {
     json["uploader"] = uploaderLoc;
     json["x"] = x;
     json["y"] = y;
+    json["delay"] = delay;
 
     FileUtils::writeJSON(file, json);
 }
@@ -89,4 +92,12 @@ void Config::setY(int yIn) {
 
 QSystemTrayIcon* Config::getSystemTrayIcon() {
     return systemTrayIcon;
+}
+
+int Config::getDelay() const {
+    return delay;
+}
+
+void Config::setDelay(int delayIn) {
+    this->delay = delayIn;
 }

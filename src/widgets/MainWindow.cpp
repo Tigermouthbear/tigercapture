@@ -55,14 +55,8 @@ void MainWindow::handleFullScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else fullScreenshot(config);
+    } else fullScreenshot();
     fullButton->setDown(false);
-}
-
-void MainWindow::fullScreenshot(Config* config) {
-    Screenshot screenshot = {config};
-    screenshot.take();
-    screenshot.save(); // save sync
 }
 
 void MainWindow::handleAreaScreenshot() {
@@ -70,14 +64,8 @@ void MainWindow::handleAreaScreenshot() {
         setWindowState(Qt::WindowState::WindowMinimized);
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else areaScreenshot(config);
+    } else areaScreenshot();
     areaButton->setDown(false);
-}
-
-AreaScreenshotGrabber* MainWindow::areaScreenshot(Config* config) {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
-    areaScreenshotGrabber->show();
-    return areaScreenshotGrabber;
 }
 
 void MainWindow::handlePinArea() {
@@ -114,11 +102,23 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::fullScreenshot() {
-    fullScreenshot(config);
+    fullScreenshotImpl(config);
 }
 
 void MainWindow::areaScreenshot() {
-    areaScreenshot(config);
+    areaScreenshotImpl(config);
+}
+
+void MainWindow::fullScreenshotImpl(Config* config) {
+    Screenshot screenshot = {config};
+    screenshot.take();
+    screenshot.save(); // save sync
+}
+
+AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(Config* config) {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
+    areaScreenshotGrabber->show();
+    return areaScreenshotGrabber;
 }
 
 void MainWindow::pinArea() {

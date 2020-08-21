@@ -55,25 +55,31 @@ void RegionGrabber::keyPressEvent(QKeyEvent* event) {
     if(event->key() == Qt::Key_Escape) close();
 }
 
+void RegionGrabber::updateSelection(QMouseEvent *event) {
+
+    setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
+}
+
 void RegionGrabber::mousePressEvent(QMouseEvent* event) {
     if(event->button() == Qt::LeftButton) {
         dragX = event->x();
         dragY = event->y();
         dragging = true;
         hasDragged = true;
+        updateSelection(event);
     }
     update();
 }
 
 void RegionGrabber::mouseMoveEvent(QMouseEvent* event) {
-    mouseX = event->x();
-    mouseY = event->y();
+    updateSelection(event);
     update();
 }
 
 void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
     if(event->button() == Qt::LeftButton) {
         dragging = false;
+        updateSelection(event);
         close();
     }
     update();
@@ -81,7 +87,6 @@ void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
 
 void RegionGrabber::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
-    QRect box = {dragX, dragY, mouseX - dragX, mouseY - dragY};
     QRect total = rect();
 
     // draw semi-transparent background
@@ -92,12 +97,12 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
         QPainterPath totalPath;
         totalPath.addRect(total);
         QPainterPath exclude;
-        exclude.addRect(box);
+        exclude.addRect(*selection);
         auto path = (totalPath - exclude);
 
         painter.fillPath(path, backgroundColor);
-        painter.fillRect(box, Qt::transparent);
-        Utils::drawOutlineBox(&painter, box);
+        painter.fillRect(*selection, Qt::transparent);
+        Utils::drawOutlineBox(&painter, *selection);
     } else {
         painter.fillRect(total, backgroundColor);
     }
@@ -105,4 +110,21 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
 
 void RegionGrabber::quitOnClose(bool value) {
     quit = value;
+}
+
+QRect* RegionGrabber::setSelection(QRect* selectionIn) {
+    QRect old = {selectionIn->x(), selectionIn->y(), selectionIn->width(), selectionIn->height()};
+
+    selectionIn->setX(qMin(old.x(), old.right()));
+    selectionIn->setY(qMin(old.y(), old.bottom()));
+    selectionIn->setRight(qMax(old.x(), old.right()));
+    selectionIn->setBottom(qMax(old.y(), old.bottom()));
+
+    delete this->selection;
+    this->selection = selectionIn;
+    return selectionIn;
+}
+
+QRect *RegionGrabber::getSelection() {
+    return selection;
 }

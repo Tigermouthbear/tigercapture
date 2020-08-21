@@ -13,11 +13,17 @@ class RegionGrabber: public QWidget {
 Q_OBJECT
 private:
     bool quit = false;
+    QRect* selection = nullptr;
+
+    QRect* setSelection(QRect* selectionIn);
+
+    void updateSelection(QMouseEvent* event);
 
 public:
     RegionGrabber();
 
     void quitOnClose(bool value);
+    QRect* getSelection();
 
 public slots:
     void grabInputs();
@@ -27,8 +33,6 @@ protected:
     bool hasDragged = false;
     int dragX = 0;
     int dragY = 0;
-    int mouseX = 0;
-    int mouseY = 0;
 
     void closeEvent(QCloseEvent* event) override;
     void keyPressEvent(QKeyEvent* event) override;

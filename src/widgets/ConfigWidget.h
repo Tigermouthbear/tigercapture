@@ -11,6 +11,7 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QLineEdit>
 #include "../Config.h"
 
 class ConfigWidget: public QWidget {
@@ -18,6 +19,7 @@ Q_OBJECT
 private:
     Config* config;
 
+    QLineEdit* delayInput;
     QCheckBox* shouldMinimizeCheckbox;
     QLabel* uploadersLabel;
     QComboBox* uploadersDropdown;
