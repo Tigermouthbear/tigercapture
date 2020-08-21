@@ -28,9 +28,6 @@ public:
 public slots:
     void grabInputs();
 
-public slots:
-    void grabInputs();
-
 protected:
     bool dragging = false;
     bool hasDragged = false;
