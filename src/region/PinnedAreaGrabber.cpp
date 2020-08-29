@@ -4,7 +4,7 @@
 
 #include "PinnedAreaGrabber.h"
 
-#include "../widgets/PinnedArea.h"
+#include "../widgets/PinnedAreaWindow.h"
 
 PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
     screenshot = new Screenshot(config);
@@ -19,7 +19,7 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
     if(hasDragged && !dragging && selection != nullptr) {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
 
-        auto* pinnedArea = new PinnedArea(selection->x(), selection->y(), screenshot->image());
+        auto* pinnedArea = new PinnedAreaWindow(selection->x(), selection->y(), screenshot->image());
         pinnedArea->show();
 
         delete screenshot;
