@@ -8,11 +8,8 @@
 #include "QMainWindow"
 
 class PinnedAreaWindow: public QMainWindow {
-private:
-    int x = 0;
-    int y = 0;
 public:
-    PinnedAreaWindow(int x, int y, QImage image);
+    PinnedAreaWindow(int x, int y, QImage image, QMainWindow* parent);
     class PinnedAreaWidget: public QWidget {
     private:
         QImage image;
