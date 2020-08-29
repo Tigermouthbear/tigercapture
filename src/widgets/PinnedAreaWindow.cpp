@@ -4,15 +4,14 @@
 
 #include "PinnedAreaWindow.h"
 
-#include <QtGui/QGuiApplication>
-#include <QScreen>
 #include <QPainter>
 #include <utility>
 #include <QMouseEvent>
 #include "../Utils.h"
 
-PinnedAreaWindow::PinnedAreaWindow(int x, int y, QImage image): QMainWindow() {
+PinnedAreaWindow::PinnedAreaWindow(int x, int y, QImage image, QMainWindow* parent): QMainWindow(parent) {
     setWindowFlag(Qt::FramelessWindowHint);
+    setWindowFlag(Qt::Dialog);
 
     // make the image widget
     auto* widget = new PinnedAreaWidget(image);
@@ -24,7 +23,11 @@ PinnedAreaWindow::PinnedAreaWindow(int x, int y, QImage image): QMainWindow() {
 }
 
 void PinnedAreaWindow::mousePressEvent(QMouseEvent* event) {
-    if(event->button() == Qt::RightButton) close();
+    if(event->button() == Qt::RightButton) {
+        // close the 1px window and this one
+        parentWidget()->close();
+        close();
+    }
 }
 
 PinnedAreaWindow::PinnedAreaWidget::PinnedAreaWidget(QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
