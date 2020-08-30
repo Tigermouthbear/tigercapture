@@ -12,12 +12,17 @@
 #include <QtGui/QPainterPath>
 #include <QTimer>
 
-RegionGrabber::RegionGrabber(): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
-    // set transparent
+RegionGrabber::RegionGrabber(): QWidget() {
+    setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_TransparentForMouseEvents);
     setAttribute(Qt::WA_OpaquePaintEvent, false);
+
+    setWindowFlag(Qt::X11BypassWindowManagerHint);
+    setWindowFlag(Qt::WindowStaysOnTopHint);
+    setWindowFlag(Qt::FramelessWindowHint);
+    setWindowFlag(Qt::Tool);
 
     // set fullscreen
     QRect total;
@@ -56,7 +61,6 @@ void RegionGrabber::keyPressEvent(QKeyEvent* event) {
 }
 
 void RegionGrabber::updateSelection(QMouseEvent *event) {
-
     setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
 }
 
@@ -72,8 +76,24 @@ void RegionGrabber::mousePressEvent(QMouseEvent* event) {
 }
 
 void RegionGrabber::mouseMoveEvent(QMouseEvent* event) {
-    updateSelection(event);
-    update();
+    if (selection != nullptr) {
+        auto newSelection = new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY);
+        auto a = *newSelection;
+        auto b = *selection;
+
+        auto combined = QRect(
+                a.x() == b.x() ? a.x() : a.x() < b.x() ? a.x() - 1 : b.x() + 1,
+                a.y() == b.y() ? a.y() : a.y() < b.y() ? a.y() - 1 : b.y() + 1,
+                a.width() == b.width() ? a.width() : a.width() > b.width() ? a.width() + 1 : b.width() - 1,
+                a.height() == b.height() ? a.height() : a.height() > b.height() ? a.height() + 1 : b.height() - 1
+        ).adjusted(-1, -1, 2, 2);
+        auto c = a.intersected(b);
+        updateSelection(event);
+        update(combined);
+    } else {
+        updateSelection(event);
+        update();
+    }
 }
 
 void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
