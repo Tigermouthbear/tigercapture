@@ -27,7 +27,7 @@ add_executable(tigercapture
         src/Utils.h
         src/FileUtils.h
         src/json.hpp
-        src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
+        src/widgets/DragUploadWidget.cpp
         src/widgets/PinnedAreaWindow.h
         src/widgets/PinnedAreaWindow.cpp)
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
