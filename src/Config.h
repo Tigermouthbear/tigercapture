@@ -17,6 +17,8 @@ private:
 
     bool minimize{};
 
+    bool clipboard{};
+
     std::string uploaderLoc;
     Uploader* uploader{};
 
@@ -35,6 +37,9 @@ public:
 
     bool shouldMinimize() const;
     void setShouldMinimize(bool value);
+
+    bool shouldClipboard() const;
+    void setShouldClipboard(bool value);
 
     Uploader* getUploader();
     bool setUploader(const std::string& file);
