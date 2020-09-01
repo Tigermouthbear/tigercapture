@@ -19,10 +19,8 @@ Config::Config(const std::string& file) {
     if(read != nullptr) json.merge_patch(read);
 
     // set system try icon
-    QPixmap pixmap(10, 10);
-    pixmap.fill(Qt::white);
     systemTrayIcon = new QSystemTrayIcon();
-    systemTrayIcon->setIcon(QIcon(pixmap));
+    systemTrayIcon->setIcon(QIcon("../icons/icon.ico"));
     systemTrayIcon->show();
 }
 

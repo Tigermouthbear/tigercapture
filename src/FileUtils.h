@@ -79,6 +79,21 @@ public:
         return final;
     }
 
+    static std::string getUploadLogsFolder() {
+        return createDirectoryIfNonexistant(getApplicationDirectory() + "/Uploads");
+    }
+
+    static std::string getMonthFormatted() {
+        time_t time = std::time(nullptr);
+        tm* date = localtime(&time);
+        std::string month = (date->tm_mon < 10 ? "0" : "") + std::to_string(date->tm_mon + 1);
+        return std::to_string(1900 + date->tm_year).append("-").append(month);
+    }
+
+    static std::string getUploadsLogFile() {
+        return getUploadLogsFolder() + "/" + getMonthFormatted() + ".csv";
+    }
+
     static nlohmann::json readJSON(const char* file) {
         if(exists(file)) {
             try {

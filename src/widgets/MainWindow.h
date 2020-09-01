@@ -13,6 +13,7 @@
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
 #include "../Config.h"
+#include "UploadsExplorerWidget.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT
@@ -24,6 +25,7 @@ private:
     QPushButton* pinButton;
     QPushButton* dragUploadButton;
     QPushButton* configButton;
+    UploadsExplorerWidget* uploadsExplorerWidget;
 
 public:
     MainWindow(Config* config);

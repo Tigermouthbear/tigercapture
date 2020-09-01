@@ -12,13 +12,7 @@
 
 class Uploader {
 public:
-    struct Data {
-        Data(std::string key, std::string value);
-        std::string key;
-        std::string value;
-    };
-
-    Uploader(std::string url, const std::vector<Uploader::Data>& formData, std::string fileFormName, std::string responseRegex);
+    Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData, std::string fileFormName, std::string responseRegex);
 
     std::future<void> Upload(const std::string& path, std::function<void(std::string res)> callback);
 
@@ -26,7 +20,7 @@ public:
 
 private:
     std::string url;
-    std::vector<Uploader::Data> formData;
+    std::vector<std::pair<std::string, std::string>> formData;
     std::string fileFormName;
     std::string responseRegex;
 

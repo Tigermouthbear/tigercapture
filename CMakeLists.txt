@@ -28,7 +28,9 @@ add_executable(tigercapture
         src/Utils.h
         src/FileUtils.h
         src/json.hpp
-        src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h)
+        src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
+        src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
+        src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h)
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl)

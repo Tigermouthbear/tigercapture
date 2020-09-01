@@ -11,7 +11,7 @@
 #include "json.hpp"
 #include "FileUtils.h"
 
-Uploader::Uploader(std::string url, const std::vector<Uploader::Data>& formData, std::string fileFormName, std::string responseRegex) {
+Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData, std::string fileFormName, std::string responseRegex) {
     this->url = std::move(url);
     this->formData = formData;
     this->fileFormName = std::move(fileFormName);
@@ -37,10 +37,10 @@ std::string Uploader::Upload(const std::string& path) {
     curl_mime_filedata(field, path.c_str());
 
     // put other data
-    for(const Uploader::Data& data: formData) {
+    for(const std::pair<std::string, std::string>& data: formData) {
         field = curl_mime_addpart(form);
-        curl_mime_name(field, data.key.c_str());
-        curl_mime_data(field, data.value.c_str(), CURL_ZERO_TERMINATED);
+        curl_mime_name(field, data.first.c_str());
+        curl_mime_data(field, data.second.c_str(), CURL_ZERO_TERMINATED);
     }
 
     // set post info
@@ -61,7 +61,7 @@ std::string Uploader::Upload(const std::string& path) {
     } else printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
 
     // save entry to log file
-    std::ofstream log(FileUtils::getApplicationDirectory() + "/uploads.txt", std::ios_base::app | std::ios_base::out);
+    std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
     log << path << "," << out << "\n";
     log.close();
     printf("Saved to: %s\n", path.c_str());
@@ -80,7 +80,7 @@ Uploader *Uploader::createFromJSON(const std::string& file) {
     if(json == nullptr) return nullptr;
 
     std::string requestURL;
-    std::vector<Uploader::Data> formData;
+    std::vector<std::pair<std::string, std::string>> formData;
     std::string fileFormName;
     std::string URL;
     try {
@@ -93,9 +93,4 @@ Uploader *Uploader::createFromJSON(const std::string& file) {
     }
 
     return new Uploader(requestURL, formData, fileFormName, URL);
-}
-
-Uploader::Data::Data(std::string key, std::string value) {
-    this->key = std::move(key);
-    this->value = std::move(value);
 }

@@ -6,6 +6,7 @@
 #define TIGERCAPTURE_UTILS_H
 
 #include <QPainter>
+#include <vector>
 
 class Utils {
 public:
