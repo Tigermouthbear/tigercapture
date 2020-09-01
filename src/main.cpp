@@ -10,6 +10,7 @@
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
+    app.setWindowIcon(QIcon("../icons/icon.ico"));
 
     auto* config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
     config->read();

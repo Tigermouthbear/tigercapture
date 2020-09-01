@@ -23,11 +23,11 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
 
     // initialize buttons
     fullButton = new QPushButton("Full Screenshot", this);
-    layout->addWidget(fullButton, 1, 0);
+    layout->addWidget(fullButton, 0, 0);
     connect(fullButton, SIGNAL (released()), this, SLOT (handleFullScreenshot()));
 
     areaButton = new QPushButton("Area Screenshot", this);
-    layout->addWidget(areaButton, 1, 1);
+    layout->addWidget(areaButton, 1, 0);
     connect(areaButton, SIGNAL (released()), this, SLOT (handleAreaScreenshot()));
 
     pinButton = new QPushButton("Pin Area", this);
@@ -35,12 +35,16 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     connect(pinButton, SIGNAL (released()), this, SLOT (handlePinArea()));
 
     dragUploadButton = new QPushButton("Drag and Drop");
-    layout->addWidget(dragUploadButton, 2, 1);
+    layout->addWidget(dragUploadButton, 3, 0);
     connect(dragUploadButton, SIGNAL (released()), this, SLOT (dragUpload()));
 
     configButton = new QPushButton("Config", this);
-    layout->addWidget(configButton, 3, 0, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(configButton, 4, 0);
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
+
+    layout->setColumnMinimumWidth(1, 300);
+    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1), layout->minimumSize().height() - 12);
+    layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
 
     move(config->getX() - x(), config->getY() - y());
 }
@@ -91,7 +95,7 @@ void MainWindow::dragUpload(Config *config) {
 
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(config);
-    configWidget->move(x() + width(), y());
+    configWidget->move(x() + width() + 20, y());
     configWidget->show();
 }
 
@@ -104,16 +108,18 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::fullScreenshot() {
     fullScreenshotImpl(config);
+    uploadsExplorerWidget->updateUploads();
 }
 
 void MainWindow::areaScreenshot() {
     areaScreenshotImpl(config);
+    uploadsExplorerWidget->updateUploads();
 }
 
 void MainWindow::fullScreenshotImpl(Config* config) {
     Screenshot screenshot = {config};
     screenshot.take();
-    screenshot.save(); // save sync
+    screenshot.save();
 }
 
 AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(Config* config) {
