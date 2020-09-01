@@ -21,16 +21,16 @@ add_executable(tigercapture
         src/region/RegionGrabber.cpp src/region/RegionGrabber.h
         src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h
         src/widgets/MainWindow.cpp src/widgets/MainWindow.h
-        src/widgets/PinnedArea.cpp src/widgets/PinnedArea.h
+        src/widgets/PinnedAreaWindow.h src/widgets/PinnedAreaWindow.cpp
+        src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
+        src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
+        src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h
         src/Config.cpp src/Config.h
         src/Screenshot.cpp src/Screenshot.h
         src/Uploader.cpp src/Uploader.h
         src/Utils.h
         src/FileUtils.h
-        src/json.hpp
-        src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
-        src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
-        src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h)
+        src/json.hpp)
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl)

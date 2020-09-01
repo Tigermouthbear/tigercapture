@@ -56,6 +56,11 @@ void Screenshot::save() {
     std::string loc = FileUtils::genNewImageLocation();
     pixmap.save(QString::fromStdString(loc));
 
+    if (config->shouldClipboard()) {
+        auto clip = QApplication::clipboard();
+        clip->setImage(image());
+    }
+
     // upload then copy url to clipboard
     if(config->getUploader() != nullptr) {
         // upload async, if response is empty break

@@ -51,12 +51,13 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
 
 void MainWindow::activateWindow() {
     setWindowState(Qt::WindowState::WindowActive);
+    show();
 }
 
 // minimize, delay then actually fullscreen screenshot
 void MainWindow::handleFullScreenshot() {
     if(isActiveWindow() && config->shouldMinimize()) {
-        setWindowState(Qt::WindowState::WindowMinimized);
+        hide();
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
     } else fullScreenshot();
@@ -65,7 +66,7 @@ void MainWindow::handleFullScreenshot() {
 
 void MainWindow::handleAreaScreenshot() {
     if(isActiveWindow() && config->shouldMinimize()) {
-        setWindowState(Qt::WindowState::WindowMinimized);
+        hide();
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
     } else areaScreenshot();
@@ -74,7 +75,7 @@ void MainWindow::handleAreaScreenshot() {
 
 void MainWindow::handlePinArea() {
     if(isActiveWindow() && config->shouldMinimize()) {
-        setWindowState(Qt::WindowState::WindowMinimized);
+        hide();
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
     } else pinArea(config);

@@ -10,6 +10,7 @@ Config::Config(const std::string& file) {
 
     json = {
             { "minimize", true },
+            { "clipboard", true },
             { "uploader", "" },
             { "x", 0 },
             { "y", 0 },
@@ -26,6 +27,7 @@ Config::Config(const std::string& file) {
 
 void Config::read() {
     minimize = json["minimize"];
+    clipboard = json["clipboard"];
     setUploader(json["uploader"]);
     x = json["x"];
     y = json["y"];
@@ -34,6 +36,7 @@ void Config::read() {
 
 void Config::write() {
     json["minimize"] = minimize;
+    json["clipboard"] = clipboard;
     json["uploader"] = uploaderLoc;
     json["x"] = x;
     json["y"] = y;
@@ -48,6 +51,14 @@ bool Config::shouldMinimize() const {
 
 void Config::setShouldMinimize(bool value) {
     minimize = value;
+}
+
+bool Config::shouldClipboard() const {
+    return clipboard;
+}
+
+void Config::setShouldClipboard(bool value) {
+    clipboard = value;
 }
 
 Uploader* Config::getUploader() {

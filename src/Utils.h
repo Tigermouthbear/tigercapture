@@ -24,10 +24,7 @@ public:
     }
 
     static inline void drawOutlineBox(QPainter* painter, QRect box) {
-        painter->drawLine(box.x(), box.y(), box.x() + box.width(), box.y());
-        painter->drawLine(box.x() + box.width(), box.y(), box.x() + box.width(), box.y() + box.height());
-        painter->drawLine(box.x() + box.width(), box.y() + box.height(), box.x(), box.y() + box.height());
-        painter->drawLine(box.x(), box.y() + box.height(), box.x(), box.y());
+        drawOutlineBox(painter, box.x(), box.y(), box.width(), box.height());
     }
 
     static inline void drawOutlineBox(QPainter* painter, int x, int y, int width, int height, const char* color) {

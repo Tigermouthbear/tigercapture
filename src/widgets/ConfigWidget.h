@@ -21,7 +21,9 @@ private:
 
     QLineEdit* delayInput;
     QCheckBox* shouldMinimizeCheckbox;
+    QCheckBox* shouldClipboardCheckbox;
     QLabel* uploadersLabel;
+    QLabel* clipboardLabel;
     QComboBox* uploadersDropdown;
     QPushButton* saveButton;
 
