@@ -54,9 +54,7 @@ std::string Uploader::Upload(const std::string& path) {
 
     std::string out;
     if(curLcode == CURLE_OK) {
-        QString qString = responseRegex.c_str();
-        qString.replace("$response$", responseBuffer.c_str());
-        out = qString.toStdString();
+        out = parseVariables(responseRegex, responseBuffer);
         printf("Uploaded: %s\n", out.c_str());
     } else printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
 
@@ -67,6 +65,42 @@ std::string Uploader::Upload(const std::string& path) {
     printf("Saved to: %s\n", path.c_str());
 
     return out;
+}
+std::string Uploader::findVariable(const std::string &var, const nlohmann::json &json) {
+    int idx;
+    if (json.contains(var)) {
+        return json[var];
+    } else if ((idx = var.find('.')) != std::string::npos) {
+        if (json.contains(var.substr(0, idx))) {
+            return findVariable(var.substr(idx + 1, var.size()), json[var.substr(0, idx)]);
+        } else {
+            return "";
+        }
+    } else {
+        return "";
+    }
+}
+
+std::string Uploader::parseVariables(std::string expression, const std::string &response) {
+    int idx = expression.size();
+    while (idx != -1 && (idx = expression.rfind('$', idx)) != std::string::npos) {
+        int end = idx;
+        int begin = (idx = expression.rfind('$', idx - 1)) + 1;
+        end -= begin;
+        std::string var = expression.substr(begin, end);
+        std::string res;
+        if (var == "response") {
+            res = response;
+        } else if (var.size() > 5 && var.substr(0, 5) == "json:") {
+            res = findVariable(var.substr(5, var.size()), nlohmann::json::parse(response));
+        } else {
+            res = "<UNKNOWN>";
+        }
+        expression.erase(begin - 1, end + 2);
+        expression.insert(begin - 1, res);
+        --idx;
+    }
+    return expression;
 }
 
 // https://stackoverflow.com/questions/9786150/save-curl-content-result-into-a-string-in-c/9786295

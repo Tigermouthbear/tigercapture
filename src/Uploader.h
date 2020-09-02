@@ -9,6 +9,7 @@
 #include <curl/curl.h>
 #include <vector>
 #include <future>
+#include "json.hpp"
 
 class Uploader {
 public:
@@ -17,7 +18,8 @@ public:
     std::future<void> Upload(const std::string& path, std::function<void(std::string res)> callback);
 
     static Uploader* createFromJSON(const std::string& file);
-
+    static std::string findVariable(const std::string &var, const nlohmann::json &json);
+    static std::string parseVariables(std::string expression, const std::string &response);
 private:
     std::string url;
     std::vector<std::pair<std::string, std::string>> formData;
