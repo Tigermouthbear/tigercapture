@@ -1,9 +1,12 @@
+#pragma once
 //
 // Created by Tigermouthbear on 8/18/20.
 //
 
 #ifndef TIGERCAPTURE_CONFIG_H
 #define TIGERCAPTURE_CONFIG_H
+
+class Config;
 
 #include <string>
 #include <QtWidgets/QSystemTrayIcon>

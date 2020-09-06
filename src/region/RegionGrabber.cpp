@@ -50,14 +50,11 @@ void RegionGrabber::grabInputs() {
 }
 
 void RegionGrabber::closeEvent(QCloseEvent* event) {
-    releaseKeyboard();
-    releaseMouse();
-
     if(quit) QApplication::quit();
 }
 
 void RegionGrabber::keyPressEvent(QKeyEvent* event) {
-    if(event->key() == Qt::Key_Escape) close();
+    if(event->key() == Qt::Key_Escape) onFinish();
 }
 
 void RegionGrabber::updateSelection(QMouseEvent *event) {
@@ -100,7 +97,7 @@ void RegionGrabber::mouseReleaseEvent(QMouseEvent* event) {
     if(event->button() == Qt::LeftButton) {
         dragging = false;
         updateSelection(event);
-        close();
+        onFinish();
     }
     update();
 }
@@ -147,4 +144,11 @@ QRect* RegionGrabber::setSelection(QRect* selectionIn) {
 
 QRect *RegionGrabber::getSelection() {
     return selection;
+}
+
+void RegionGrabber::onFinish() {
+    releaseKeyboard();
+    releaseMouse();
+    hide();
+    close();
 }

@@ -1,3 +1,4 @@
+#pragma once
 //
 // Created by Tigermouthbear on 8/17/20.
 //
@@ -15,7 +16,7 @@ class Uploader {
 public:
     Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData, std::string fileFormName, std::string responseRegex);
 
-    std::future<void> Upload(const std::string& path, std::function<void(std::string res)> callback);
+    std::future<void>* Upload(std::string path, void* extraData, void (*callback) (void*, const std::string &));
 
     static Uploader* createFromJSON(const std::string& file);
     static std::string findVariable(const std::string &var, const nlohmann::json &json);
@@ -26,7 +27,7 @@ private:
     std::string fileFormName;
     std::string responseRegex;
 
-    std::string Upload(const std::string& path);
+    std::string Upload(const std::string* path);
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
 };
 

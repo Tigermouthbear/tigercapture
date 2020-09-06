@@ -16,7 +16,7 @@ public:
     PinnedAreaGrabber(Config* config);
 
 protected:
-    void closeEvent(QCloseEvent* event) override;
+    void onFinish() override;
     void paintEvent(QPaintEvent* event) override;
 };
 

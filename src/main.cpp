@@ -20,7 +20,8 @@ int main(int argc, char* argv[]) {
         if(arg == "--full") {
             Screenshot screenshot = {config};
             screenshot.take();
-            screenshot.save();
+            auto future = screenshot.save();
+            if (future != nullptr) future->wait();
             return QApplication::exec();
         } else if(arg == "--area") {
             auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);

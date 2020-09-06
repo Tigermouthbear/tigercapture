@@ -12,7 +12,6 @@
 class RegionGrabber: public QWidget {
 Q_OBJECT
 private:
-    bool quit = false;
     QRect* selection = nullptr;
 
     QRect* setSelection(QRect* selectionIn);
@@ -40,6 +39,10 @@ protected:
     void mouseMoveEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
     void paintEvent(QPaintEvent* event) override;
+
+    virtual void onFinish();
+
+    bool quit = false;
 };
 
 

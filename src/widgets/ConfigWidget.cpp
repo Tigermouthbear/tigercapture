@@ -13,6 +13,7 @@ ConfigWidget::ConfigWidget(Config* config): QWidget() {
     this->config = config;
 
     setWindowTitle("Config");
+    setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // create layout
     auto* layout = new QGridLayout(this);

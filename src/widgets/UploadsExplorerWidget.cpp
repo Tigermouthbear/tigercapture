@@ -24,7 +24,7 @@ void UploadsExplorerWidget::updateUploads() {
     std::ifstream file;
     file.open(FileUtils::getUploadsLogFile());
     for(std::pair<std::string, std::string> pair; std::getline(file, pair.first, ',') && std::getline(file, pair.second); ) {
-        printf("%s", pair.first.c_str());
+        printf("%s\n", pair.first.c_str());
         map[pair] = new UploadedFileWidget(this, pair);
     }
     file.close();

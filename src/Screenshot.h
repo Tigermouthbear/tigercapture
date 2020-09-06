@@ -24,7 +24,7 @@ public:
 
     void take();
     void crop(int x, int y, int width, int height);
-    void save();
+    std::future<void>* save();
     QImage image();
 };
 

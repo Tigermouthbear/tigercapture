@@ -1,10 +1,6 @@
 //
 // Created by Tigermouthbear on 8/20/20.
 //
-
-#include "DragUploadWidget.h"
-#include "../Utils.h"
-
 #include <QtGui/QGuiApplication>
 #include <QScreen>
 #include <QMouseEvent>
@@ -12,6 +8,10 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QPainter>
+
+#include "DragUploadWidget.h"
+#include "../Utils.h"
+#include "../clipboard.h"
 
 DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->config = config;
@@ -60,22 +60,24 @@ void DragUploadWidget::dragEnterEvent(QDragEnterEvent *event) {
     if(event->mimeData()->hasUrls()) event->acceptProposedAction();
 }
 
+void uploadCallback(void* config, const std::string& res) {
+    if(res.empty()) return;
+
+    // copy response
+    Clipboard::copyToClipboard(res);
+
+    // display notification
+    ((Config*)config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+}
+
 void DragUploadWidget::dropEvent(QDropEvent *event) {
     const QMimeData* mimeData = event->mimeData();
 
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
         if(config->getUploader() != nullptr && url.isLocalFile()) {
-            auto upload = config->getUploader()->Upload(url.toLocalFile().toStdString(), [&](const std::string& res) {
-                if(res.empty()) return;
-
-                // copy response
-                auto clip = QApplication::clipboard();
-                clip->setText(res.c_str());
-
-                // display notification
-                config->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
-            });
+            auto upload = config->getUploader()->Upload(url.toLocalFile().toStdString(), config, uploadCallback);
+            // discard future, just let this run in the background
         }
     }
 }

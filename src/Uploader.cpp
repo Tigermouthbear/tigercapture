@@ -10,6 +10,7 @@
 #include <utility>
 #include "json.hpp"
 #include "FileUtils.h"
+#include "Config.h"
 
 Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData, std::string fileFormName, std::string responseRegex) {
     this->url = std::move(url);
@@ -19,22 +20,29 @@ Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std
 
     curl_global_init(CURL_GLOBAL_ALL);
 }
-std::future<void> Uploader::Upload(const std::string &path, std::function<void(std::string res)> callback) {
-    return std::async([&]() {
-        std::string res = Upload(path);
-        if(callback) callback(res);
+
+std::future<void> *Uploader::Upload(std::string path, void* extraData, void (*callback) (void*, const std::string &)) {
+    auto* out = new std::future<void>;
+    *out = std::async([=]() {
+        std::string res = Upload(&path);
+        if(callback != nullptr) {
+            callback(extraData, res);
+        }
     });
+    return out;
 }
 
-std::string Uploader::Upload(const std::string& path) {
+std::string Uploader::Upload(const std::string* path) {
     CURL* curl = curl_easy_init();
     curl_mime* form = curl_mime_init(curl);
     curl_mimepart* field = curl_mime_addpart(form);
     std::string responseBuffer;
+    char errbuf[CURL_ERROR_SIZE];
+    errbuf[0] = 0;
 
     // put file
     curl_mime_name(field, fileFormName.c_str());
-    curl_mime_filedata(field, path.c_str());
+    curl_mime_filedata(field, path->c_str());
 
     // put other data
     for(const std::pair<std::string, std::string>& data: formData) {
@@ -48,22 +56,26 @@ std::string Uploader::Upload(const std::string& path) {
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
+    curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
 
     CURLcode curLcode = curl_easy_perform(curl);
-    curl_easy_cleanup(curl);
 
     std::string out;
     if(curLcode == CURLE_OK) {
         out = parseVariables(responseRegex, responseBuffer);
         printf("Uploaded: %s\n", out.c_str());
-    } else printf("ERROR uploading screenshot to %s (%d)\n", url.c_str(), curLcode);
 
-    // save entry to log file
-    std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
-    log << path << "," << out << "\n";
-    log.close();
-    printf("Saved to: %s\n", path.c_str());
+        // save entry to log file
+        std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
+        log << *path << "," << out << "\n";
+        log.close();
+        printf("Saved to: %s\n", path->c_str());
+    } else {
+        out = std::string();
+        printf("ERROR uploading screenshot to %s (%d: %s) (Response: %s)\n", url.c_str(), curLcode, errbuf, responseBuffer.c_str());
+    }
 
+    curl_easy_cleanup(curl);
     return out;
 }
 std::string Uploader::findVariable(const std::string &var, const nlohmann::json &json) {

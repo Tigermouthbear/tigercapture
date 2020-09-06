@@ -4,6 +4,8 @@
 
 #include "AreaScreenshotGrabber.h"
 
+#include <QApplication>
+#include <QThread>
 #include <future>
 
 // fullscreen screenshot right when this is opened
@@ -12,21 +14,27 @@ AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
     screenshot->take();
 }
 
-// on close, crop and save screenshot
-void AreaScreenshotGrabber::closeEvent(QCloseEvent* event) {
-    RegionGrabber::closeEvent(event);
-
-    auto selection = getSelection();
-    if(hasDragged && !dragging && selection != nullptr) {
-        //screenshot->crop(std::min(dragX, mouseX), std::min(dragY, mouseY), std::abs(mouseX - dragX), std::abs(mouseY - dragY));
-        screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
-        screenshot->save();
-    }
-}
-
 // draw pre cropped screenshot
 void AreaScreenshotGrabber::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.drawImage(0, 0, screenshot->image());
     RegionGrabber::paintEvent(event);
+}
+
+// on close, crop and save screenshot
+void AreaScreenshotGrabber::onFinish() {
+    releaseKeyboard();
+    releaseMouse();
+    hide();
+
+    auto selection = getSelection();
+    if(hasDragged && selection != nullptr) {
+        screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
+        auto future = screenshot->save();
+        if (future != nullptr) {
+            // Wait until uploading is finished to properly quit
+            future->wait();
+        }
+    }
+    close();
 }

@@ -11,9 +11,17 @@ PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
     screenshot->take();
 }
 
-// crop then pin image to screen on close
-void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
-    RegionGrabber::closeEvent(event);
+// draw pre cropped screenshot
+void PinnedAreaGrabber::paintEvent(QPaintEvent* event) {
+    QPainter painter(this);
+    painter.drawImage(0, 0, screenshot->image());
+    RegionGrabber::paintEvent(event);
+}
+
+void PinnedAreaGrabber::onFinish() {
+    releaseKeyboard();
+    releaseMouse();
+    hide();
 
     auto selection = getSelection();
     if(hasDragged && !dragging && selection != nullptr) {
@@ -26,16 +34,13 @@ void PinnedAreaGrabber::closeEvent(QCloseEvent* event) {
         window->setWindowFlag(Qt::Tool);
         window->resize(1, 1); // No one will notice this pixel... I hope
         window->show();
+
+        // This is big memory leak tiger lol
         auto* pinnedArea = new PinnedAreaWindow(selection->x(), selection->y(), screenshot->image(), window);
         pinnedArea->show();
 
         delete screenshot;
     }
-}
 
-// draw pre cropped screenshot
-void PinnedAreaGrabber::paintEvent(QPaintEvent* event) {
-    QPainter painter(this);
-    painter.drawImage(0, 0, screenshot->image());
-    RegionGrabber::paintEvent(event);
+    close();
 }

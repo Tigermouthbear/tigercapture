@@ -14,6 +14,13 @@ find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 # automoc!
 set(CMAKE_AUTOMOC ON)
 
+# Disable clip examples and tests
+set(CLIP_EXAMPLES OFF CACHE BOOL "Compile clip examples")
+set(CLIP_TESTS OFF CACHE BOOL "Compile clip tests")
+
+# Add clip subdirectory to compile the library
+add_subdirectory(clip)
+
 add_executable(tigercapture
         src/main.cpp
         src/region/AreaScreenshotGrabber.cpp src/region/AreaScreenshotGrabber.h
@@ -30,9 +37,10 @@ add_executable(tigercapture
         src/Uploader.cpp src/Uploader.h
         src/Utils.h
         src/FileUtils.h
-        src/json.hpp)
+        src/json.hpp
+        src/clipboard.cpp src/clipboard.h)
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
-target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl)
+target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
 
 #include_directories("/usr/x86_64-w64-mingw32/include/")
