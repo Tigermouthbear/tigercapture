@@ -36,24 +36,33 @@ public:
     Config(const std::string& file);
 
     void read();
+
     void write();
 
     bool shouldMinimize() const;
+
     void setShouldMinimize(bool value);
 
     bool shouldClipboard() const;
+
     void setShouldClipboard(bool value);
 
     Uploader* getUploader();
+
     bool setUploader(const std::string& file);
+
     std::string getUploaderLoc();
 
     int getX() const;
+
     void setX(int x);
+
     int getY() const;
+
     void setY(int y);
 
     int getDelay() const;
+
     void setDelay(int delayIn);
 
     QSystemTrayIcon* getSystemTrayIcon();

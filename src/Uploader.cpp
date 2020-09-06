@@ -12,7 +12,8 @@
 #include "FileUtils.h"
 #include "Config.h"
 
-Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData, std::string fileFormName, std::string responseRegex) {
+Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
+                   std::string fileFormName, std::string responseRegex) {
     this->url = std::move(url);
     this->formData = formData;
     this->fileFormName = std::move(fileFormName);
@@ -21,7 +22,7 @@ Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-std::future<void> *Uploader::Upload(std::string path, void* extraData, void (*callback) (void*, const std::string &)) {
+std::future<void>* Uploader::Upload(std::string path, void* extraData, void (* callback)(void*, const std::string&)) {
     auto* out = new std::future<void>;
     *out = std::async([=]() {
         std::string res = Upload(&path);
@@ -72,18 +73,20 @@ std::string Uploader::Upload(const std::string* path) {
         printf("Saved to: %s\n", path->c_str());
     } else {
         out = std::string();
-        printf("ERROR uploading screenshot to %s (%d: %s) (Response: %s)\n", url.c_str(), curLcode, errbuf, responseBuffer.c_str());
+        printf("ERROR uploading screenshot to %s (%d: %s) (Response: %s)\n", url.c_str(), curLcode, errbuf,
+               responseBuffer.c_str());
     }
 
     curl_easy_cleanup(curl);
     return out;
 }
-std::string Uploader::findVariable(const std::string &var, const nlohmann::json &json) {
+
+std::string Uploader::findVariable(const std::string& var, const nlohmann::json& json) {
     int idx;
-    if (json.contains(var)) {
+    if(json.contains(var)) {
         return json[var];
-    } else if ((idx = var.find('.')) != std::string::npos) {
-        if (json.contains(var.substr(0, idx))) {
+    } else if((idx = var.find('.')) != std::string::npos) {
+        if(json.contains(var.substr(0, idx))) {
             return findVariable(var.substr(idx + 1, var.size()), json[var.substr(0, idx)]);
         } else {
             return "";
@@ -93,17 +96,17 @@ std::string Uploader::findVariable(const std::string &var, const nlohmann::json 
     }
 }
 
-std::string Uploader::parseVariables(std::string expression, const std::string &response) {
+std::string Uploader::parseVariables(std::string expression, const std::string& response) {
     int idx = expression.size();
-    while (idx != -1 && (idx = expression.rfind('$', idx)) != std::string::npos) {
+    while(idx != -1 && (idx = expression.rfind('$', idx)) != std::string::npos) {
         int end = idx;
         int begin = (idx = expression.rfind('$', idx - 1)) + 1;
         end -= begin;
         std::string var = expression.substr(begin, end);
         std::string res;
-        if (var == "response") {
+        if(var == "response") {
             res = response;
-        } else if (var.size() > 5 && var.substr(0, 5) == "json:") {
+        } else if(var.size() > 5 && var.substr(0, 5) == "json:") {
             res = findVariable(var.substr(5, var.size()), nlohmann::json::parse(response));
         } else {
             res = "<UNKNOWN>";
@@ -117,11 +120,11 @@ std::string Uploader::parseVariables(std::string expression, const std::string &
 
 // https://stackoverflow.com/questions/9786150/save-curl-content-result-into-a-string-in-c/9786295
 size_t Uploader::WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
-    ((std::string*)userp)->append((char*)contents, size * nmemb);
+    ((std::string*) userp)->append((char*) contents, size * nmemb);
     return size * nmemb;
 }
 
-Uploader *Uploader::createFromJSON(const std::string& file) {
+Uploader* Uploader::createFromJSON(const std::string& file) {
     nlohmann::json json = FileUtils::readJSON(file);
     if(json == nullptr) return nullptr;
 
@@ -131,7 +134,8 @@ Uploader *Uploader::createFromJSON(const std::string& file) {
     std::string URL;
     try {
         requestURL = json["RequestURL"];
-        for(auto it = json["Arguments"].begin(); it != json["Arguments"].end(); ++it) formData.emplace_back(std::string(it.key()), std::string(it.value()));
+        for(auto it = json["Arguments"].begin(); it != json["Arguments"].end(); ++it)
+            formData.emplace_back(std::string(it.key()), std::string(it.value()));
         fileFormName = json["FileFormName"];
         URL = json["URL"];
     } catch(nlohmann::json::parse_error error) {

@@ -22,17 +22,17 @@ class FileUtils {
 public:
     static bool exists(const std::string& path) {
         struct stat buffer{};
-        return (stat (path.c_str(), &buffer) == 0);
+        return (stat(path.c_str(), &buffer) == 0);
     }
 
     static std::string createDirectoryIfNonexistant(const std::string& directory) {
         if(!exists(directory)) {
             mode_t nMode = 0733;
-            #if defined(_WIN32)
+#if defined(_WIN32)
             _mkdir(directory.c_str());
-            #else
+#else
             mkdir(directory.c_str(), nMode);
-            #endif
+#endif
         }
         return directory;
     }
@@ -71,7 +71,7 @@ public:
 
         // If the file already exists append an incremental value
         int i = 1;
-        while (exists(final)) {
+        while(exists(final)) {
             final = path;
             final.append("_").append(std::to_string(i++)).append(".png");
         }

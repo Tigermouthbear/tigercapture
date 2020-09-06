@@ -4,7 +4,8 @@
 
 #include "UploadedFileWidget.h"
 
-UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, std::string> pair): QToolButton(widget) {
+UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, std::string> pair): QToolButton(
+        widget) {
     menu = new QMenu();
     //menu->addAction("item 1");
     //menu->addAction("item 2");

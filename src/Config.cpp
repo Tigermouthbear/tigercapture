@@ -9,12 +9,12 @@ Config::Config(const std::string& file) {
     this->file = file;
 
     json = {
-            { "minimize", true },
-            { "clipboard", true },
-            { "uploader", "" },
-            { "x", 0 },
-            { "y", 0 },
-            { "delay", 0 }
+            {"minimize",  true},
+            {"clipboard", true},
+            {"uploader",  ""},
+            {"x",         0},
+            {"y",         0},
+            {"delay",     0}
     };
     nlohmann::json read = FileUtils::readJSON(file);
     if(read != nullptr) json.merge_patch(read);
@@ -88,6 +88,7 @@ std::string Config::getUploaderLoc() {
 int Config::getX() const {
     return x;
 }
+
 void Config::setX(int xIn) {
     x = xIn;
 }
@@ -95,6 +96,7 @@ void Config::setX(int xIn) {
 int Config::getY() const {
     return y;
 }
+
 void Config::setY(int yIn) {
     y = yIn;
 }

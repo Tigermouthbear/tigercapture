@@ -38,7 +38,7 @@ add_executable(tigercapture
         src/Utils.h
         src/FileUtils.h
         src/json.hpp
-        src/clipboard.cpp src/clipboard.h)
+        src/Clipboard.cpp src/Clipboard.h)
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)

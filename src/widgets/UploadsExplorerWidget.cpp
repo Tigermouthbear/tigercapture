@@ -6,7 +6,7 @@
 
 #include "../FileUtils.h"
 
-UploadsExplorerWidget::UploadsExplorerWidget(QWidget *parent, int width, int height): QWidget(parent) {
+UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int height): QWidget(parent) {
     scrollArea = new QScrollArea(this);
     central = new QWidget(this);
     layout = new QGridLayout(central);
@@ -23,7 +23,8 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget *parent, int width, int hei
 void UploadsExplorerWidget::updateUploads() {
     std::ifstream file;
     file.open(FileUtils::getUploadsLogFile());
-    for(std::pair<std::string, std::string> pair; std::getline(file, pair.first, ',') && std::getline(file, pair.second); ) {
+    for(std::pair<std::string, std::string> pair;
+        std::getline(file, pair.first, ',') && std::getline(file, pair.second);) {
         printf("%s\n", pair.first.c_str());
         map[pair] = new UploadedFileWidget(this, pair);
     }
@@ -31,7 +32,7 @@ void UploadsExplorerWidget::updateUploads() {
 
     // remove all previous elements
     QLayoutItem* item;
-    while((item = layout->takeAt( 0 ) ) != nullptr) {
+    while((item = layout->takeAt(0)) != nullptr) {
         delete item->widget();
         delete item;
     }

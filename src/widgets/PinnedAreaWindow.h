@@ -10,6 +10,7 @@
 class PinnedAreaWindow: public QMainWindow {
 public:
     PinnedAreaWindow(int x, int y, QImage image, QMainWindow* parent);
+
     class PinnedAreaWidget: public QWidget {
     private:
         QImage image;
@@ -18,6 +19,7 @@ public:
     protected:
         void paintEvent(QPaintEvent* event) override;
     };
+
 protected:
     void mousePressEvent(QMouseEvent* event) override;
 };

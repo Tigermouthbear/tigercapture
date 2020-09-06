@@ -31,21 +31,33 @@ public:
     MainWindow(Config* config);
 
     static void fullScreenshotImpl(Config* config);
+
     static AreaScreenshotGrabber* areaScreenshotImpl(Config* config);
+
     static PinnedAreaGrabber* pinArea(Config* config);
+
     static void dragUpload(Config* config);
 
 public slots:
+
     void fullScreenshot();
+
     void areaScreenshot();
+
     void pinArea();
+
     void dragUpload();
 
 private slots:
+
     void activateWindow();
+
     void handleFullScreenshot();
+
     void handleAreaScreenshot();
+
     void handlePinArea();
+
     void handleConfig();
 
 protected:

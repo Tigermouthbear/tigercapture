@@ -12,7 +12,9 @@
 class Clipboard {
 public:
     static void copyToClipboard(const std::string& text);
+
     static void copyToClipboard(const QPixmap& pixmap);
+
     static void clearClipboard();
 };
 

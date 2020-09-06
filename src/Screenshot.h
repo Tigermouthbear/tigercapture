@@ -20,11 +20,15 @@ private:
 
 public:
     Screenshot(Config* config);
+
     ~Screenshot();
 
     void take();
+
     void crop(int x, int y, int width, int height);
+
     std::future<void>* save();
+
     QImage image();
 };
 

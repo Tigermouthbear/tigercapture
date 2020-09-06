@@ -26,7 +26,7 @@ RegionGrabber::RegionGrabber(): QWidget() {
 
     // set fullscreen
     QRect total;
-    for (auto scr : QGuiApplication::screens()) {
+    for(auto scr : QGuiApplication::screens()) {
         auto g = scr->geometry();
 
         int right = g.x() + g.width();
@@ -57,7 +57,7 @@ void RegionGrabber::keyPressEvent(QKeyEvent* event) {
     if(event->key() == Qt::Key_Escape) onFinish();
 }
 
-void RegionGrabber::updateSelection(QMouseEvent *event) {
+void RegionGrabber::updateSelection(QMouseEvent* event) {
     setSelection(new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY));
 }
 
@@ -73,7 +73,7 @@ void RegionGrabber::mousePressEvent(QMouseEvent* event) {
 }
 
 void RegionGrabber::mouseMoveEvent(QMouseEvent* event) {
-    if (selection != nullptr) {
+    if(selection != nullptr) {
         auto newSelection = new QRect(dragX, dragY, event->x() - dragX, event->y() - dragY);
         auto a = *newSelection;
         auto b = *selection;
@@ -142,7 +142,7 @@ QRect* RegionGrabber::setSelection(QRect* selectionIn) {
     return selectionIn;
 }
 
-QRect *RegionGrabber::getSelection() {
+QRect* RegionGrabber::getSelection() {
     return selection;
 }
 

@@ -43,7 +43,8 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
 
     layout->setColumnMinimumWidth(1, 300);
-    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1), layout->minimumSize().height() - 12);
+    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),
+                                                      layout->minimumSize().height() - 12);
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
 
     move(config->getX() - x(), config->getY() - y());
@@ -88,7 +89,7 @@ PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
     return pinnedAreaGrabber;
 }
 
-void MainWindow::dragUpload(Config *config) {
+void MainWindow::dragUpload(Config* config) {
     auto* dragUploadWidget = new DragUploadWidget(config);
     dragUploadWidget->show();
 }
@@ -99,7 +100,7 @@ void MainWindow::handleConfig() {
     configWidget->show();
 }
 
-void MainWindow::closeEvent(QCloseEvent *event) {
+void MainWindow::closeEvent(QCloseEvent* event) {
     config->setX(x());
     config->setY(y());
     config->write();

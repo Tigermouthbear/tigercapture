@@ -22,9 +22,11 @@ public:
     RegionGrabber();
 
     void quitOnClose(bool value);
+
     QRect* getSelection();
 
 public slots:
+
     void grabInputs();
 
 protected:
@@ -34,10 +36,15 @@ protected:
     int dragY = 0;
 
     void closeEvent(QCloseEvent* event) override;
+
     void keyPressEvent(QKeyEvent* event) override;
+
     void mousePressEvent(QMouseEvent* event) override;
+
     void mouseMoveEvent(QMouseEvent* event) override;
+
     void mouseReleaseEvent(QMouseEvent* event) override;
+
     void paintEvent(QPaintEvent* event) override;
 
     virtual void onFinish();

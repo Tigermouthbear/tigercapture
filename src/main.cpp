@@ -21,7 +21,7 @@ int main(int argc, char* argv[]) {
             Screenshot screenshot = {config};
             screenshot.take();
             auto future = screenshot.save();
-            if (future != nullptr) future->wait();
+            if(future != nullptr) future->wait();
             return QApplication::exec();
         } else if(arg == "--area") {
             auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
                     "    --full         make fullscreen screenshot, upload, then close\n"
                     "    --area         make area screenshot, upload, then close\n"
                     "    --help         show this text\n"
-                );
+            );
             return 0;
         }
     }

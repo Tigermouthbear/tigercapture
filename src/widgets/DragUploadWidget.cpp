@@ -11,9 +11,11 @@
 
 #include "DragUploadWidget.h"
 #include "../Utils.h"
-#include "../clipboard.h"
+#include "../Clipboard.h"
 
-DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
+DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr,
+                                                            Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint |
+                                                            Qt::FramelessWindowHint | Qt::Tool) {
     this->config = config;
 
     resize(100, 100);
@@ -39,24 +41,24 @@ void DragUploadWidget::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void DragUploadWidget::mouseReleaseEvent(QMouseEvent* event) {
-    if (dragging) {
+    if(dragging) {
         // If this widget is out of all screen bounds then close
         bool visible = false;
         int right = x + width();
         int bottom = y + height();
-        for (auto scr : QGuiApplication::screens()) {
+        for(auto scr : QGuiApplication::screens()) {
             auto g = scr->geometry();
-            if (!(x < g.right() && right > g.left() && y > g.bottom() && bottom < g.top())) {
+            if(!(x < g.right() && right > g.left() && y > g.bottom() && bottom < g.top())) {
                 visible = true;
                 break;
             }
         }
-        if (!visible) close();
+        if(!visible) close();
         if(event->button() == Qt::LeftButton) dragging = false;
     }
 }
 
-void DragUploadWidget::dragEnterEvent(QDragEnterEvent *event) {
+void DragUploadWidget::dragEnterEvent(QDragEnterEvent* event) {
     if(event->mimeData()->hasUrls()) event->acceptProposedAction();
 }
 
@@ -67,10 +69,10 @@ void uploadCallback(void* config, const std::string& res) {
     Clipboard::copyToClipboard(res);
 
     // display notification
-    ((Config*)config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+    ((Config*) config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 }
 
-void DragUploadWidget::dropEvent(QDropEvent *event) {
+void DragUploadWidget::dropEvent(QDropEvent* event) {
     const QMimeData* mimeData = event->mimeData();
 
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
@@ -82,7 +84,7 @@ void DragUploadWidget::dropEvent(QDropEvent *event) {
     }
 }
 
-void DragUploadWidget::paintEvent(QPaintEvent *event) {
+void DragUploadWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.drawText(0, 0, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter, "Drag and Drop");
     Utils::drawOutlineBox(&painter, 0, 0, width() - 1, height() - 1);

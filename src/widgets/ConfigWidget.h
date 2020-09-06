@@ -31,6 +31,7 @@ public:
     ConfigWidget(Config* config);
 
 public slots:
+
     void save();
 };
 

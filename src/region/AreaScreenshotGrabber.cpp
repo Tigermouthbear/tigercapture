@@ -31,7 +31,7 @@ void AreaScreenshotGrabber::onFinish() {
     if(hasDragged && selection != nullptr) {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
         auto future = screenshot->save();
-        if (future != nullptr) {
+        if(future != nullptr) {
             // Wait until uploading is finished to properly quit
             future->wait();
         }

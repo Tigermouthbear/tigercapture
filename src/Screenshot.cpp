@@ -12,21 +12,21 @@
 #include <QClipboard>
 #include <QSystemTrayIcon>
 #include "FileUtils.h"
-#include "clipboard.h"
+#include "Clipboard.h"
 
-Screenshot::Screenshot(Config *config) {
+Screenshot::Screenshot(Config* config) {
     this->config = config;
 }
 
 void Screenshot::take() {
     auto delay = config->getDelay();
-    if (delay > 0) {
+    if(delay > 0) {
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
 
     // First pass: Find combined screen size
     QRect total;
-    for (auto scr : QGuiApplication::screens()) {
+    for(auto scr : QGuiApplication::screens()) {
         auto g = scr->geometry();
 
         int right = g.x() + g.width();
@@ -42,7 +42,7 @@ void Screenshot::take() {
     QPainter painter(&pixmap);
 
     // Second pass, paint onto end screenshot
-    for (auto scr : QGuiApplication::screens()) {
+    for(auto scr : QGuiApplication::screens()) {
         auto g = scr->geometry();
         auto pix = scr->grabWindow(0);
         painter.drawPixmap(g.x(), g.y(), g.width(), g.height(), pix);
@@ -53,14 +53,14 @@ void Screenshot::crop(int x, int y, int width, int height) {
     pixmap = pixmap.copy(x, y, width, height);
 }
 
-static void screenshotCallback(void* config, const std::string &res) {
-    if (res.empty()) return;
+static void screenshotCallback(void* config, const std::string& res) {
+    if(res.empty()) return;
 
     // copy response
     Clipboard::copyToClipboard(res);
 
     // display notification
-    ((Config*)config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+    ((Config*) config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 }
 
 std::future<void>* Screenshot::save() {
@@ -68,7 +68,7 @@ std::future<void>* Screenshot::save() {
     //if (config->shouldClipboard()) {
     //    Clipboard::copyToClipboard(pixmap);
     //} else {
-        Clipboard::clearClipboard(); // clear so user doesnt accidentally paste something else while waiting for the image to upload
+    Clipboard::clearClipboard(); // clear so user doesnt accidentally paste something else while waiting for the image to upload
     //}
 
     // save file
