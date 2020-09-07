@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPainter>
+#include "../Config.h"
 
 class RegionGrabber: public QWidget {
 Q_OBJECT
@@ -21,12 +22,13 @@ private:
 public:
     RegionGrabber();
 
-    void quitOnClose(bool value);
+    ~RegionGrabber() override;
+
+    void setQuitOnClose(Config* value);
 
     QRect* getSelection();
 
 public slots:
-
     void grabInputs();
 
 protected:
@@ -49,7 +51,7 @@ protected:
 
     virtual void onFinish();
 
-    bool quit = false;
+    Config* quit = nullptr;
 };
 
 

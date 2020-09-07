@@ -28,10 +28,11 @@ private:
     QPushButton* saveButton;
 
 public:
-    ConfigWidget(Config* config);
+    explicit ConfigWidget(Config* config);
+
+    ~ConfigWidget() override;
 
 public slots:
-
     void save();
 };
 

@@ -112,3 +112,15 @@ int Config::getDelay() const {
 void Config::setDelay(int delayIn) {
     this->delay = delayIn;
 }
+
+void Config::setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget) {
+    this->uploadsExplorerWidget = uploadsExplorerWidget;
+}
+
+void Config::updateUploadsExplorer() {
+    if(uploadsExplorerWidget != nullptr) uploadsExplorerWidget->updateUploads();
+}
+
+Config::~Config() {
+    delete systemTrayIcon;
+}

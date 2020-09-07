@@ -19,7 +19,7 @@ private:
     int y = 0;
 
 public:
-    DragUploadWidget(Config* config);
+    explicit DragUploadWidget(Config* config);
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;

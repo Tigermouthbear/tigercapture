@@ -13,6 +13,7 @@
 #include <QTimer>
 
 RegionGrabber::RegionGrabber(): QWidget() {
+    setAttribute(Qt::WA_DeleteOnClose);
     setAttribute(Qt::WA_StaticContents);
     setAttribute(Qt::WA_NoSystemBackground);
     setAttribute(Qt::WA_TranslucentBackground);
@@ -50,7 +51,10 @@ void RegionGrabber::grabInputs() {
 }
 
 void RegionGrabber::closeEvent(QCloseEvent* event) {
-    if(quit) QApplication::quit();
+    if(quit != nullptr) {
+        delete quit;
+        QApplication::quit();
+    }
 }
 
 void RegionGrabber::keyPressEvent(QKeyEvent* event) {
@@ -125,7 +129,7 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
     }
 }
 
-void RegionGrabber::quitOnClose(bool value) {
+void RegionGrabber::setQuitOnClose(Config* value) {
     quit = value;
 }
 
@@ -151,4 +155,8 @@ void RegionGrabber::onFinish() {
     releaseMouse();
     hide();
     close();
+}
+
+RegionGrabber::~RegionGrabber() {
+    delete selection;
 }

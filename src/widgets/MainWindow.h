@@ -30,6 +30,8 @@ private:
 public:
     MainWindow(Config* config);
 
+    ~MainWindow() override;
+
     static void fullScreenshotImpl(Config* config);
 
     static AreaScreenshotGrabber* areaScreenshotImpl(Config* config);

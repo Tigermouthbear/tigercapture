@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    app.setWindowIcon(QIcon("../icons/icon.ico"));
+    QApplication::setWindowIcon(QIcon("../icons/icon.ico"));
 
     auto* config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
     config->read();
@@ -22,10 +22,11 @@ int main(int argc, char* argv[]) {
             screenshot.take();
             auto future = screenshot.save();
             if(future != nullptr) future->wait();
-            return QApplication::exec();
+            delete config;
+            return 0;
         } else if(arg == "--area") {
             auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
-            areaScreenshotGrabber->quitOnClose(true);
+            areaScreenshotGrabber->setQuitOnClose(config);
             areaScreenshotGrabber->show();
             return QApplication::exec();
         } else {

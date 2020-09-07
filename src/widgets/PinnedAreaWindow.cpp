@@ -10,11 +10,13 @@
 #include "../Utils.h"
 
 PinnedAreaWindow::PinnedAreaWindow(int x, int y, QImage image, QMainWindow* parent): QMainWindow(parent) {
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setWindowFlag(Qt::FramelessWindowHint);
     setWindowFlag(Qt::Dialog);
 
     // make the image widget
-    auto* widget = new PinnedAreaWidget(image);
+    widget = new PinnedAreaWidget(image);
     setCentralWidget(widget);
 
     // set position and size
@@ -30,10 +32,11 @@ void PinnedAreaWindow::mousePressEvent(QMouseEvent* event) {
     }
 }
 
-PinnedAreaWindow::PinnedAreaWidget::PinnedAreaWidget(QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint |
-                                                                                     Qt::WindowStaysOnTopHint |
-                                                                                     Qt::FramelessWindowHint |
-                                                                                     Qt::Tool) {
+PinnedAreaWindow::~PinnedAreaWindow() {
+    delete widget;
+}
+
+PinnedAreaWindow::PinnedAreaWidget::PinnedAreaWidget(QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->image = std::move(image);
 }
 

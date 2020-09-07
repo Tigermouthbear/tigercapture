@@ -12,6 +12,7 @@ class Config;
 #include <QtWidgets/QSystemTrayIcon>
 #include "json.hpp"
 #include "Uploader.h"
+#include "widgets/UploadsExplorerWidget.h"
 
 class Config {
 private:
@@ -32,8 +33,12 @@ private:
 
     QSystemTrayIcon* systemTrayIcon;
 
+    UploadsExplorerWidget* uploadsExplorerWidget;
+
 public:
     Config(const std::string& file);
+
+    ~Config();
 
     void read();
 
@@ -66,6 +71,10 @@ public:
     void setDelay(int delayIn);
 
     QSystemTrayIcon* getSystemTrayIcon();
+
+    void setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget);
+
+    void updateUploadsExplorer();
 };
 
 

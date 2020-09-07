@@ -10,7 +10,6 @@
 #include <QThread>
 #include <QtGui/QPainter>
 #include <QClipboard>
-#include <QSystemTrayIcon>
 #include "FileUtils.h"
 #include "Clipboard.h"
 

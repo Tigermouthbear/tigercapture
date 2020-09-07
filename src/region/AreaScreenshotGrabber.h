@@ -12,10 +12,13 @@
 
 class AreaScreenshotGrabber: public RegionGrabber {
 private:
+    Config* config;
     Screenshot* screenshot;
 
 public:
-    AreaScreenshotGrabber(Config* config);
+    explicit AreaScreenshotGrabber(Config* config);
+
+    ~AreaScreenshotGrabber() override;
 
 protected:
     void onFinish() override;

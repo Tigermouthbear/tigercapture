@@ -35,12 +35,13 @@ void PinnedAreaGrabber::onFinish() {
         window->resize(1, 1); // No one will notice this pixel... I hope
         window->show();
 
-        // This is big memory leak tiger lol
         auto* pinnedArea = new PinnedAreaWindow(selection->x(), selection->y(), screenshot->image(), window);
         pinnedArea->show();
-
-        delete screenshot;
     }
 
     close();
+}
+
+PinnedAreaGrabber::~PinnedAreaGrabber() {
+    delete screenshot;
 }

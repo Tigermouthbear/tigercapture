@@ -13,7 +13,9 @@ private:
     Screenshot* screenshot;
 
 public:
-    PinnedAreaGrabber(Config* config);
+    explicit PinnedAreaGrabber(Config* config);
+
+    ~PinnedAreaGrabber() override;
 
 protected:
     void onFinish() override;

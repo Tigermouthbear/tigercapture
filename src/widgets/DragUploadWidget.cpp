@@ -1,6 +1,7 @@
 //
 // Created by Tigermouthbear on 8/20/20.
 //
+
 #include <QtGui/QGuiApplication>
 #include <QScreen>
 #include <QMouseEvent>
@@ -13,10 +14,10 @@
 #include "../Utils.h"
 #include "../Clipboard.h"
 
-DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr,
-                                                            Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint |
-                                                            Qt::FramelessWindowHint | Qt::Tool) {
+DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr,Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->config = config;
+
+    setAttribute(Qt::WA_DeleteOnClose);
 
     resize(100, 100);
     setAcceptDrops(true);

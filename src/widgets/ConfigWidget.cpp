@@ -12,6 +12,8 @@
 ConfigWidget::ConfigWidget(Config* config): QWidget() {
     this->config = config;
 
+    setAttribute(Qt::WA_DeleteOnClose);
+
     setWindowTitle("Config");
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
@@ -68,4 +70,14 @@ void ConfigWidget::save() {
     config->setShouldClipboard(shouldClipboardCheckbox->isChecked());
     if(!config->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
     close();
+}
+
+ConfigWidget::~ConfigWidget() {
+    delete delayInput;
+    delete shouldMinimizeCheckbox;
+    delete shouldClipboardCheckbox;
+    delete uploadersLabel;
+    delete clipboardLabel;
+    delete uploadersDropdown;
+    delete saveButton;
 }

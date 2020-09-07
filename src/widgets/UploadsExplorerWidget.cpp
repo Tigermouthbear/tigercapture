@@ -25,7 +25,6 @@ void UploadsExplorerWidget::updateUploads() {
     file.open(FileUtils::getUploadsLogFile());
     for(std::pair<std::string, std::string> pair;
         std::getline(file, pair.first, ',') && std::getline(file, pair.second);) {
-        printf("%s\n", pair.first.c_str());
         map[pair] = new UploadedFileWidget(this, pair);
     }
     file.close();
@@ -38,13 +37,19 @@ void UploadsExplorerWidget::updateUploads() {
     }
 
     // add all from map
-    int num = 0;
+    int num = map.size() - 1;
     std::map<std::pair<std::string, std::string>, UploadedFileWidget*>::iterator it;
     for(it = map.begin(); it != map.end(); it++) {
         layout->addWidget(it->second, (int) (num / 2), num % 2);
-        num++;
+        num--;
     }
 
     update();
+}
+
+UploadsExplorerWidget::~UploadsExplorerWidget() {
+    delete scrollArea;
+    delete central;
+    delete layout;
 }
 

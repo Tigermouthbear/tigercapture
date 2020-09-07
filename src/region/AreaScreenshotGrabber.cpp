@@ -10,6 +10,7 @@
 
 // fullscreen screenshot right when this is opened
 AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
+    this->config = config;
     screenshot = new Screenshot(config);
     screenshot->take();
 }
@@ -35,6 +36,13 @@ void AreaScreenshotGrabber::onFinish() {
             // Wait until uploading is finished to properly quit
             future->wait();
         }
+
+        // update explorer
+        config->updateUploadsExplorer();
     }
     close();
+}
+
+AreaScreenshotGrabber::~AreaScreenshotGrabber() {
+    delete screenshot;
 }

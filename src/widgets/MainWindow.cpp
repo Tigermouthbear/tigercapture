@@ -15,6 +15,7 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
 
     setWindowTitle("TigerCapture");
     setWindowFlags(Qt::WindowStaysOnTopHint);
+    setAttribute(Qt::WA_DeleteOnClose);
 
     // create layout
     auto* widget = new QWidget(this);
@@ -43,9 +44,9 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
 
     layout->setColumnMinimumWidth(1, 300);
-    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),
-                                                      layout->minimumSize().height() - 12);
+    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),layout->minimumSize().height() - 12);
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
+    config->setUploadsExplorerWidget(uploadsExplorerWidget);
 
     move(config->getX() - x(), config->getY() - y());
 }
@@ -109,18 +110,17 @@ void MainWindow::closeEvent(QCloseEvent* event) {
 
 void MainWindow::fullScreenshot() {
     fullScreenshotImpl(config);
-    uploadsExplorerWidget->updateUploads();
 }
 
 void MainWindow::areaScreenshot() {
     areaScreenshotImpl(config);
-    uploadsExplorerWidget->updateUploads();
 }
 
 void MainWindow::fullScreenshotImpl(Config* config) {
     Screenshot screenshot = {config};
     screenshot.take();
     screenshot.save();
+    config->updateUploadsExplorer();
 }
 
 AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(Config* config) {
@@ -135,4 +135,14 @@ void MainWindow::pinArea() {
 
 void MainWindow::dragUpload() {
     dragUpload(config);
+}
+
+MainWindow::~MainWindow() {
+    delete config;
+    delete fullButton;
+    delete areaButton;
+    delete pinButton;
+    delete dragUploadButton;
+    delete configButton;
+    delete uploadsExplorerWidget;
 }
