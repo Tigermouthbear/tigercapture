@@ -20,6 +20,9 @@ Q_OBJECT
 private:
     Config* config;
 
+    QWidget* centralWidget;
+    QGridLayout* layout;
+
     QPushButton* fullButton;
     QPushButton* areaButton;
     QPushButton* pinButton;

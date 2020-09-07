@@ -18,9 +18,9 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     setAttribute(Qt::WA_DeleteOnClose);
 
     // create layout
-    auto* widget = new QWidget(this);
-    setCentralWidget(widget);
-    auto* layout = new QGridLayout(widget);
+    centralWidget = new QWidget(this);
+    setCentralWidget(centralWidget);
+    layout = new QGridLayout(centralWidget);
 
     // initialize buttons
     fullButton = new QPushButton("Full Screenshot", this);
@@ -145,4 +145,6 @@ MainWindow::~MainWindow() {
     delete dragUploadButton;
     delete configButton;
     delete uploadsExplorerWidget;
+    delete centralWidget;
+    delete layout;
 }
