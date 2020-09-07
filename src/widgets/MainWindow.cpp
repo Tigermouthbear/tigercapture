@@ -39,7 +39,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     layout->addWidget(dragUploadButton, 3, 0);
     connect(dragUploadButton, SIGNAL (released()), this, SLOT (dragUpload()));
 
-    configButton = new QPushButton("TigerCapture", this);
+    configButton = new QPushButton("Config", this);
     layout->addWidget(configButton, 4, 0);
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
 
