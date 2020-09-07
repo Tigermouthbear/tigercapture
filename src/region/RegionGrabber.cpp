@@ -129,7 +129,7 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
     }
 }
 
-void RegionGrabber::setQuitOnClose(Config* value) {
+void RegionGrabber::setQuitOnClose(TigerCapture* value) {
     quit = value;
 }
 

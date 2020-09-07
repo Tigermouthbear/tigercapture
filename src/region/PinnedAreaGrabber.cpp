@@ -6,8 +6,8 @@
 
 #include "../widgets/PinnedAreaWindow.h"
 
-PinnedAreaGrabber::PinnedAreaGrabber(Config* config): RegionGrabber() {
-    screenshot = new Screenshot(config);
+PinnedAreaGrabber::PinnedAreaGrabber(TigerCapture* tigerCapture): RegionGrabber() {
+    screenshot = new Screenshot(tigerCapture);
     screenshot->take();
 }
 

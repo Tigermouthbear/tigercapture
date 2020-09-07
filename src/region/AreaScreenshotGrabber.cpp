@@ -9,9 +9,9 @@
 #include <future>
 
 // fullscreen screenshot right when this is opened
-AreaScreenshotGrabber::AreaScreenshotGrabber(Config* config): RegionGrabber() {
-    this->config = config;
-    screenshot = new Screenshot(config);
+AreaScreenshotGrabber::AreaScreenshotGrabber(TigerCapture* tigerCapture): RegionGrabber() {
+    this->tigerCapture = tigerCapture;
+    screenshot = new Screenshot(tigerCapture);
     screenshot->take();
 }
 
@@ -38,7 +38,7 @@ void AreaScreenshotGrabber::onFinish() {
         }
 
         // update explorer
-        config->updateUploadsExplorer();
+        tigerCapture->updateUploadsExplorer();
     }
     close();
 }

@@ -12,12 +12,12 @@
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
-#include "../Config.h"
+#include "../TigerCapture.h"
 
 class ConfigWidget: public QWidget {
 Q_OBJECT
 private:
-    Config* config;
+    TigerCapture* tigerCapture;
 
     QLineEdit* delayInput;
     QCheckBox* shouldMinimizeCheckbox;
@@ -28,7 +28,7 @@ private:
     QPushButton* saveButton;
 
 public:
-    explicit ConfigWidget(Config* config);
+    explicit ConfigWidget(TigerCapture* tigerCapture);
 
     ~ConfigWidget() override;
 

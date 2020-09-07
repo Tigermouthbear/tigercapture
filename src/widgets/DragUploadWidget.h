@@ -6,11 +6,11 @@
 #define TIGERCAPTURE_DRAGUPLOADWIDGET_H
 
 #include <QWidget>
-#include "../Config.h"
+#include "../TigerCapture.h"
 
 class DragUploadWidget: public QWidget {
 private:
-    Config* config;
+    TigerCapture* tigerCapture;
 
     int dragX{};
     int dragY{};
@@ -19,7 +19,7 @@ private:
     int y = 0;
 
 public:
-    explicit DragUploadWidget(Config* config);
+    explicit DragUploadWidget(TigerCapture* tigerCapture);
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;

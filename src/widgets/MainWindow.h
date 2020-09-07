@@ -12,13 +12,13 @@
 #include <QtWidgets/QLineEdit>
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
-#include "../Config.h"
+#include "../TigerCapture.h"
 #include "UploadsExplorerWidget.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT
 private:
-    Config* config;
+    TigerCapture* tigerCapture;
 
     QWidget* centralWidget;
     QGridLayout* layout;
@@ -31,17 +31,17 @@ private:
     UploadsExplorerWidget* uploadsExplorerWidget;
 
 public:
-    MainWindow(Config* config);
+    MainWindow(TigerCapture* tigerCapture);
 
     ~MainWindow() override;
 
-    static void fullScreenshotImpl(Config* config);
+    static void fullScreenshotImpl(TigerCapture* tigerCapture);
 
-    static AreaScreenshotGrabber* areaScreenshotImpl(Config* config);
+    static AreaScreenshotGrabber* areaScreenshotImpl(TigerCapture* tigerCapture);
 
-    static PinnedAreaGrabber* pinArea(Config* config);
+    static PinnedAreaGrabber* pinArea(TigerCapture* tigerCapture);
 
-    static void dragUpload(Config* config);
+    static void dragUpload(TigerCapture* tigerCapture);
 
 public slots:
 

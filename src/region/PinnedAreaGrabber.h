@@ -13,7 +13,7 @@ private:
     Screenshot* screenshot;
 
 public:
-    explicit PinnedAreaGrabber(Config* config);
+    explicit PinnedAreaGrabber(TigerCapture* tigerCapture);
 
     ~PinnedAreaGrabber() override;
 

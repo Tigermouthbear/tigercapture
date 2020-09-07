@@ -8,7 +8,7 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPainter>
-#include "../Config.h"
+#include "../TigerCapture.h"
 
 class RegionGrabber: public QWidget {
 Q_OBJECT
@@ -24,7 +24,7 @@ public:
 
     ~RegionGrabber() override;
 
-    void setQuitOnClose(Config* value);
+    void setQuitOnClose(TigerCapture* value);
 
     QRect* getSelection();
 
@@ -51,7 +51,7 @@ protected:
 
     virtual void onFinish();
 
-    Config* quit = nullptr;
+    TigerCapture* quit = nullptr;
 };
 
 

@@ -32,7 +32,7 @@ add_executable(tigercapture
         src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
         src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
         src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h
-        src/Config.cpp src/Config.h
+        src/TigerCapture.cpp src/TigerCapture.h
         src/Screenshot.cpp src/Screenshot.h
         src/Uploader.cpp src/Uploader.h
         src/Utils.h

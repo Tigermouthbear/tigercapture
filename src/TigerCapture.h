@@ -3,10 +3,10 @@
 // Created by Tigermouthbear on 8/18/20.
 //
 
-#ifndef TIGERCAPTURE_CONFIG_H
-#define TIGERCAPTURE_CONFIG_H
+#ifndef TIGERCAPTURE_TIGERCAPTURE_H
+#define TIGERCAPTURE_TIGERCAPTURE_H
 
-class Config;
+class TigerCapture;
 
 #include <string>
 #include <QtWidgets/QSystemTrayIcon>
@@ -14,7 +14,7 @@ class Config;
 #include "Uploader.h"
 #include "widgets/UploadsExplorerWidget.h"
 
-class Config {
+class TigerCapture {
 private:
     std::string file;
     nlohmann::json json;
@@ -36,9 +36,9 @@ private:
     UploadsExplorerWidget* uploadsExplorerWidget;
 
 public:
-    Config(const std::string& file);
+    explicit TigerCapture(const std::string& file);
 
-    ~Config();
+    ~TigerCapture();
 
     void read();
 
@@ -78,4 +78,4 @@ public:
 };
 
 
-#endif //TIGERCAPTURE_CONFIG_H
+#endif //TIGERCAPTURE_TIGERCAPTURE_H

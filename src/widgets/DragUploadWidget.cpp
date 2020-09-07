@@ -14,8 +14,8 @@
 #include "../Utils.h"
 #include "../Clipboard.h"
 
-DragUploadWidget::DragUploadWidget(Config* config): QWidget(nullptr,Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
-    this->config = config;
+DragUploadWidget::DragUploadWidget(TigerCapture* tigerCapture): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
+    this->tigerCapture = tigerCapture;
 
     setAttribute(Qt::WA_DeleteOnClose);
 
@@ -63,14 +63,14 @@ void DragUploadWidget::dragEnterEvent(QDragEnterEvent* event) {
     if(event->mimeData()->hasUrls()) event->acceptProposedAction();
 }
 
-void uploadCallback(void* config, const std::string& res) {
+void uploadCallback(void* tigerCapture, const std::string& res) {
     if(res.empty()) return;
 
     // copy response
     Clipboard::copyToClipboard(res);
 
     // display notification
-    ((Config*) config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+    ((TigerCapture*) tigerCapture)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 }
 
 void DragUploadWidget::dropEvent(QDropEvent* event) {
@@ -78,8 +78,8 @@ void DragUploadWidget::dropEvent(QDropEvent* event) {
 
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
-        if(config->getUploader() != nullptr && url.isLocalFile()) {
-            auto upload = config->getUploader()->Upload(url.toLocalFile().toStdString(), config, uploadCallback);
+        if(tigerCapture->getUploader() != nullptr && url.isLocalFile()) {
+            auto upload = tigerCapture->getUploader()->Upload(url.toLocalFile().toStdString(), tigerCapture, uploadCallback);
             // discard future, just let this run in the background
         }
     }

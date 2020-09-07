@@ -6,27 +6,27 @@
 #include <iostream>
 #include "widgets/MainWindow.h"
 #include "FileUtils.h"
-#include "Config.h"
+#include "TigerCapture.h"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QApplication::setWindowIcon(QIcon("../icons/icon.ico"));
 
-    auto* config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
-    config->read();
+    auto* tigerCapture = new TigerCapture(FileUtils::getApplicationDirectory() + "/config.json");
+    tigerCapture->read();
 
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
         if(arg == "--full") {
-            Screenshot screenshot = {config};
+            Screenshot screenshot = {tigerCapture};
             screenshot.take();
             auto future = screenshot.save();
             if(future != nullptr) future->wait();
-            delete config;
+            delete tigerCapture;
             return 0;
         } else if(arg == "--area") {
-            auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
-            areaScreenshotGrabber->setQuitOnClose(config);
+            auto* areaScreenshotGrabber = new AreaScreenshotGrabber(tigerCapture);
+            areaScreenshotGrabber->setQuitOnClose(tigerCapture);
             areaScreenshotGrabber->show();
             return QApplication::exec();
         } else {
@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    MainWindow mainWindow(config);
+    MainWindow mainWindow(tigerCapture);
     mainWindow.show();
 
     return QApplication::exec();

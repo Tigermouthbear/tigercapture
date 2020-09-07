@@ -2,10 +2,10 @@
 // Created by Tigermouthbear on 8/18/20.
 //
 
-#include "Config.h"
+#include "TigerCapture.h"
 #include "FileUtils.h"
 
-Config::Config(const std::string& file) {
+TigerCapture::TigerCapture(const std::string& file) {
     this->file = file;
 
     json = {
@@ -25,7 +25,7 @@ Config::Config(const std::string& file) {
     systemTrayIcon->show();
 }
 
-void Config::read() {
+void TigerCapture::read() {
     minimize = json["minimize"];
     clipboard = json["clipboard"];
     setUploader(json["uploader"]);
@@ -34,7 +34,7 @@ void Config::read() {
     delay = json["delay"];
 }
 
-void Config::write() {
+void TigerCapture::write() {
     json["minimize"] = minimize;
     json["clipboard"] = clipboard;
     json["uploader"] = uploaderLoc;
@@ -45,27 +45,27 @@ void Config::write() {
     FileUtils::writeJSON(file, json);
 }
 
-bool Config::shouldMinimize() const {
+bool TigerCapture::shouldMinimize() const {
     return minimize;
 }
 
-void Config::setShouldMinimize(bool value) {
+void TigerCapture::setShouldMinimize(bool value) {
     minimize = value;
 }
 
-bool Config::shouldClipboard() const {
+bool TigerCapture::shouldClipboard() const {
     return clipboard;
 }
 
-void Config::setShouldClipboard(bool value) {
+void TigerCapture::setShouldClipboard(bool value) {
     clipboard = value;
 }
 
-Uploader* Config::getUploader() {
+Uploader* TigerCapture::getUploader() {
     return uploader;
 }
 
-bool Config::setUploader(const std::string& value) {
+bool TigerCapture::setUploader(const std::string& value) {
     if(value == "None" || value.empty()) {
         uploaderLoc = "";
         uploader = nullptr;
@@ -81,46 +81,46 @@ bool Config::setUploader(const std::string& value) {
     return true;
 }
 
-std::string Config::getUploaderLoc() {
+std::string TigerCapture::getUploaderLoc() {
     return uploaderLoc;
 }
 
-int Config::getX() const {
+int TigerCapture::getX() const {
     return x;
 }
 
-void Config::setX(int xIn) {
+void TigerCapture::setX(int xIn) {
     x = xIn;
 }
 
-int Config::getY() const {
+int TigerCapture::getY() const {
     return y;
 }
 
-void Config::setY(int yIn) {
+void TigerCapture::setY(int yIn) {
     y = yIn;
 }
 
-QSystemTrayIcon* Config::getSystemTrayIcon() {
+QSystemTrayIcon* TigerCapture::getSystemTrayIcon() {
     return systemTrayIcon;
 }
 
-int Config::getDelay() const {
+int TigerCapture::getDelay() const {
     return delay;
 }
 
-void Config::setDelay(int delayIn) {
+void TigerCapture::setDelay(int delayIn) {
     this->delay = delayIn;
 }
 
-void Config::setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget) {
+void TigerCapture::setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget) {
     this->uploadsExplorerWidget = uploadsExplorerWidget;
 }
 
-void Config::updateUploadsExplorer() {
+void TigerCapture::updateUploadsExplorer() {
     if(uploadsExplorerWidget != nullptr) uploadsExplorerWidget->updateUploads();
 }
 
-Config::~Config() {
+TigerCapture::~TigerCapture() {
     delete systemTrayIcon;
 }

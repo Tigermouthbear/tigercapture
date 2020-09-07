@@ -9,17 +9,17 @@
 #include <ctime>
 #include <string>
 #include <QPixmap>
-#include "Config.h"
+#include "TigerCapture.h"
 #include "Uploader.h"
 
 class Screenshot {
 private:
-    Config* config;
+    TigerCapture* tigerCapture;
 
     QPixmap pixmap;
 
 public:
-    Screenshot(Config* config);
+    Screenshot(TigerCapture* tigerCapture);
 
     ~Screenshot();
 

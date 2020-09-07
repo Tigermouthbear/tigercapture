@@ -10,8 +10,8 @@
 #include <QLayout>
 #include <QApplication>
 
-MainWindow::MainWindow(Config* config): QMainWindow() {
-    this->config = config;
+MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
+    this->tigerCapture = tigerCapture;
 
     setWindowTitle("TigerCapture");
     setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -39,16 +39,16 @@ MainWindow::MainWindow(Config* config): QMainWindow() {
     layout->addWidget(dragUploadButton, 3, 0);
     connect(dragUploadButton, SIGNAL (released()), this, SLOT (dragUpload()));
 
-    configButton = new QPushButton("Config", this);
+    configButton = new QPushButton("TigerCapture", this);
     layout->addWidget(configButton, 4, 0);
     connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
 
     layout->setColumnMinimumWidth(1, 300);
     uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),layout->minimumSize().height() - 12);
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
-    config->setUploadsExplorerWidget(uploadsExplorerWidget);
+    tigerCapture->setUploadsExplorerWidget(uploadsExplorerWidget);
 
-    move(config->getX() - x(), config->getY() - y());
+    move(tigerCapture->getX() - x(), tigerCapture->getY() - y());
 }
 
 void MainWindow::activateWindow() {
@@ -58,7 +58,7 @@ void MainWindow::activateWindow() {
 
 // minimize, delay then actually fullscreen screenshot
 void MainWindow::handleFullScreenshot() {
-    if(isActiveWindow() && config->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
@@ -67,7 +67,7 @@ void MainWindow::handleFullScreenshot() {
 }
 
 void MainWindow::handleAreaScreenshot() {
-    if(isActiveWindow() && config->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
@@ -76,69 +76,69 @@ void MainWindow::handleAreaScreenshot() {
 }
 
 void MainWindow::handlePinArea() {
-    if(isActiveWindow() && config->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else pinArea(config);
+    } else pinArea(tigerCapture);
     pinButton->setDown(false);
 }
 
-PinnedAreaGrabber* MainWindow::pinArea(Config* config) {
-    auto* pinnedAreaGrabber = new PinnedAreaGrabber(config);
+PinnedAreaGrabber* MainWindow::pinArea(TigerCapture* tigerCapture) {
+    auto* pinnedAreaGrabber = new PinnedAreaGrabber(tigerCapture);
     pinnedAreaGrabber->show();
     return pinnedAreaGrabber;
 }
 
-void MainWindow::dragUpload(Config* config) {
-    auto* dragUploadWidget = new DragUploadWidget(config);
+void MainWindow::dragUpload(TigerCapture* tigerCapture) {
+    auto* dragUploadWidget = new DragUploadWidget(tigerCapture);
     dragUploadWidget->show();
 }
 
 void MainWindow::handleConfig() {
-    auto* configWidget = new ConfigWidget(config);
+    auto* configWidget = new ConfigWidget(tigerCapture);
     configWidget->move(x() + width() + 20, y());
     configWidget->show();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    config->setX(x());
-    config->setY(y());
-    config->write();
+    tigerCapture->setX(x());
+    tigerCapture->setY(y());
+    tigerCapture->write();
     QApplication::quit();
 }
 
 void MainWindow::fullScreenshot() {
-    fullScreenshotImpl(config);
+    fullScreenshotImpl(tigerCapture);
 }
 
 void MainWindow::areaScreenshot() {
-    areaScreenshotImpl(config);
+    areaScreenshotImpl(tigerCapture);
 }
 
-void MainWindow::fullScreenshotImpl(Config* config) {
+void MainWindow::fullScreenshotImpl(TigerCapture* config) {
     Screenshot screenshot = {config};
     screenshot.take();
     screenshot.save();
     config->updateUploadsExplorer();
 }
 
-AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(Config* config) {
+AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* config) {
     auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
     areaScreenshotGrabber->show();
     return areaScreenshotGrabber;
 }
 
 void MainWindow::pinArea() {
-    pinArea(config);
+    pinArea(tigerCapture);
 }
 
 void MainWindow::dragUpload() {
-    dragUpload(config);
+    dragUpload(tigerCapture);
 }
 
 MainWindow::~MainWindow() {
-    delete config;
+    delete tigerCapture;
     delete fullButton;
     delete areaButton;
     delete pinButton;

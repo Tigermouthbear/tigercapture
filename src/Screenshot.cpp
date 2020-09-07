@@ -13,12 +13,12 @@
 #include "FileUtils.h"
 #include "Clipboard.h"
 
-Screenshot::Screenshot(Config* config) {
-    this->config = config;
+Screenshot::Screenshot(TigerCapture* tigerCapture) {
+    this->tigerCapture = tigerCapture;
 }
 
 void Screenshot::take() {
-    auto delay = config->getDelay();
+    auto delay = tigerCapture->getDelay();
     if(delay > 0) {
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
@@ -52,19 +52,19 @@ void Screenshot::crop(int x, int y, int width, int height) {
     pixmap = pixmap.copy(x, y, width, height);
 }
 
-static void screenshotCallback(void* config, const std::string& res) {
+static void screenshotCallback(void* tigerCapture, const std::string& res) {
     if(res.empty()) return;
 
     // copy response
     Clipboard::copyToClipboard(res);
 
     // display notification
-    ((Config*) config)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+    ((TigerCapture*) tigerCapture)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 }
 
 std::future<void>* Screenshot::save() {
     // TODO: Broken
-    //if (config->shouldClipboard()) {
+    //if (tigerCapture->shouldClipboard()) {
     //    Clipboard::copyToClipboard(pixmap);
     //} else {
     Clipboard::clearClipboard(); // clear so user doesnt accidentally paste something else while waiting for the image to upload
@@ -75,9 +75,9 @@ std::future<void>* Screenshot::save() {
     pixmap.save(QString::fromStdString(loc));
 
     // upload then copy url to clipboard
-    if(config->getUploader() != nullptr) {
+    if(tigerCapture->getUploader() != nullptr) {
         // upload async, if response is empty break
-        return config->getUploader()->Upload(loc, config, screenshotCallback);
+        return tigerCapture->getUploader()->Upload(loc, tigerCapture, screenshotCallback);
     }
     return nullptr;
 }

@@ -12,11 +12,11 @@
 
 class AreaScreenshotGrabber: public RegionGrabber {
 private:
-    Config* config;
+    TigerCapture* tigerCapture;
     Screenshot* screenshot;
 
 public:
-    explicit AreaScreenshotGrabber(Config* config);
+    explicit AreaScreenshotGrabber(TigerCapture* tigerCapture);
 
     ~AreaScreenshotGrabber() override;
 

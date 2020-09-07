@@ -10,7 +10,7 @@
 #include <utility>
 #include "json.hpp"
 #include "FileUtils.h"
-#include "Config.h"
+#include "TigerCapture.h"
 
 Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
                    std::string fileFormName, std::string responseRegex) {
