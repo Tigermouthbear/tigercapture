@@ -28,7 +28,7 @@ public:
 
     QRect* getSelection();
 
-public slots:
+private slots:
     void grabInputs();
 
 protected:

@@ -7,6 +7,7 @@
 
 #include <QtWidgets/QToolButton>
 #include <QMenu>
+#include <QContextMenuEvent>
 
 class UploadedFileWidget: public QToolButton {
 Q_OBJECT
@@ -26,6 +27,9 @@ public:
 private slots:
     void copyURL();
     void copyFileLocation();
+
+protected:
+    void contextMenuEvent(QContextMenuEvent* event) override;
 };
 
 

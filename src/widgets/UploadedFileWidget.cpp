@@ -29,6 +29,10 @@ UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, s
     show();
 }
 
+void UploadedFileWidget::contextMenuEvent(QContextMenuEvent* event) {
+    menu->popup({event->globalX(), event->globalY()});
+}
+
 void UploadedFileWidget::copyURL() {
     Clipboard::copyToClipboard(url);
 }

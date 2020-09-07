@@ -32,7 +32,7 @@ public:
 
     ~ConfigWidget() override;
 
-public slots:
+private slots:
     void save();
 };
 
