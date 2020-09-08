@@ -6,8 +6,13 @@
 
 #include <QtWidgets/QGridLayout>
 #include <iostream>
-#include <filesystem>
 #include "../FileUtils.h"
+
+#if defined(__APPLE__) && defined(__MACH__)
+#include <experimental/filesystem>
+#else
+#include <filesystem>
+#endif
 
 ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     this->tigerCapture = tigerCapture;
