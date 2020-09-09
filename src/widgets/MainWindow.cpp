@@ -49,6 +49,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     tigerCapture->setUploadsExplorerWidget(uploadsExplorerWidget);
 
     move(tigerCapture->getX() - x(), tigerCapture->getY() - y());
+    setFixedSize(450, 205);
 }
 
 void MainWindow::activateWindow() {
