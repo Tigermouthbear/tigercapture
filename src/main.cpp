@@ -10,7 +10,7 @@
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    QApplication::setWindowIcon(QIcon("../icons/icon.ico"));
+    QApplication::setWindowIcon(QIcon("../data/icon.ico"));
 
     auto* tigerCapture = new TigerCapture(FileUtils::getApplicationDirectory() + "/config.json");
     tigerCapture->read();

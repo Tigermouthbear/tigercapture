@@ -43,4 +43,4 @@ install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
 
-#include_directories("/usr/x86_64-w64-mingw32/include/")
+configure_file(${CMAKE_SOURCE_DIR}/data/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/data/icon.ico COPYONLY)
