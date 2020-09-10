@@ -21,7 +21,7 @@ TigerCapture::TigerCapture(const std::string& file) {
 
     // set system try icon
     systemTrayIcon = new QSystemTrayIcon();
-    systemTrayIcon->setIcon(QIcon("../data/icon.ico"));
+    systemTrayIcon->setIcon(QIcon("../data/icon-large.ico"));
     systemTrayIcon->show();
 }
 
