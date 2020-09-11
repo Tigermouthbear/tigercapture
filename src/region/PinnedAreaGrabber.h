@@ -15,8 +15,6 @@ private:
 public:
     explicit PinnedAreaGrabber(TigerCapture* tigerCapture);
 
-    ~PinnedAreaGrabber() override;
-
 protected:
     void onFinish() override;
 

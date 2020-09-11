@@ -31,9 +31,7 @@ private:
     UploadsExplorerWidget* uploadsExplorerWidget;
 
 public:
-    MainWindow(TigerCapture* tigerCapture);
-
-    ~MainWindow() override;
+    explicit MainWindow(TigerCapture* tigerCapture);
 
     static void fullScreenshotImpl(TigerCapture* tigerCapture);
 

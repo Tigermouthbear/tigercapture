@@ -30,8 +30,6 @@ private:
 public:
     explicit ConfigWidget(TigerCapture* tigerCapture);
 
-    ~ConfigWidget() override;
-
 private slots:
     void save();
 };

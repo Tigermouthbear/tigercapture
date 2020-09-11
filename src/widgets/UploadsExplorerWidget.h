@@ -15,8 +15,6 @@ class UploadsExplorerWidget: public QWidget {
 public:
     explicit UploadsExplorerWidget(QWidget* parent, int width, int height);
 
-    ~UploadsExplorerWidget() override;
-
     void updateUploads();
 
 private:

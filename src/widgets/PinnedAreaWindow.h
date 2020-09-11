@@ -11,8 +11,6 @@ class PinnedAreaWindow: public QMainWindow {
 public:
     PinnedAreaWindow(int x, int y, QImage image, QMainWindow* parent);
 
-    ~PinnedAreaWindow() override;
-
     class PinnedAreaWidget: public QWidget {
     private:
         QImage image;

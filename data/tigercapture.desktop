@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Encoding=UTF-8
+Name=TigerCapture
+Comment=Screenshot and file uploading tool
+Exec=tigercapture
+Icon=tigercapture
+Terminal=false

@@ -22,8 +22,6 @@ private:
 public:
     UploadedFileWidget(QWidget* widget, std::pair<std::string, std::string> pair);
 
-    ~UploadedFileWidget() override;
-
 private slots:
     void copyURL();
     void copyFileLocation();

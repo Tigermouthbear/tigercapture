@@ -37,11 +37,8 @@ void PinnedAreaGrabber::onFinish() {
 
         auto* pinnedArea = new PinnedAreaWindow(selection->x(), selection->y(), screenshot->image(), window);
         pinnedArea->show();
+        delete screenshot;
     }
 
     close();
-}
-
-PinnedAreaGrabber::~PinnedAreaGrabber() {
-    delete screenshot;
 }

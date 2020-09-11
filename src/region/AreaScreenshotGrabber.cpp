@@ -36,13 +36,9 @@ void AreaScreenshotGrabber::onFinish() {
             // Wait until uploading is finished to properly quit
             future->wait();
         }
-
+        delete screenshot;
         // update explorer
         tigerCapture->updateUploadsExplorer();
     }
     close();
-}
-
-AreaScreenshotGrabber::~AreaScreenshotGrabber() {
-    delete screenshot;
 }

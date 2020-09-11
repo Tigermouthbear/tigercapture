@@ -15,7 +15,6 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
 
     setWindowTitle("TigerCapture");
     setWindowFlags(Qt::WindowStaysOnTopHint);
-    setAttribute(Qt::WA_DeleteOnClose);
 
     // create layout
     centralWidget = new QWidget(this);
@@ -106,7 +105,6 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     tigerCapture->setX(x());
     tigerCapture->setY(y());
     tigerCapture->write();
-    QApplication::quit();
 }
 
 void MainWindow::fullScreenshot() {
@@ -117,15 +115,15 @@ void MainWindow::areaScreenshot() {
     areaScreenshotImpl(tigerCapture);
 }
 
-void MainWindow::fullScreenshotImpl(TigerCapture* config) {
-    Screenshot screenshot = {config};
+void MainWindow::fullScreenshotImpl(TigerCapture* tigerCapture) {
+    Screenshot screenshot = {tigerCapture};
     screenshot.take();
     screenshot.save();
-    config->updateUploadsExplorer();
+    tigerCapture->updateUploadsExplorer();
 }
 
-AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* config) {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(config);
+AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* tigerCapture) {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(tigerCapture);
     areaScreenshotGrabber->show();
     return areaScreenshotGrabber;
 }
@@ -136,16 +134,4 @@ void MainWindow::pinArea() {
 
 void MainWindow::dragUpload() {
     dragUpload(tigerCapture);
-}
-
-MainWindow::~MainWindow() {
-    delete tigerCapture;
-    delete fullButton;
-    delete areaButton;
-    delete pinButton;
-    delete dragUploadButton;
-    delete configButton;
-    delete uploadsExplorerWidget;
-    delete centralWidget;
-    delete layout;
 }

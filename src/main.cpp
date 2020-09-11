@@ -10,10 +10,12 @@
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    QApplication::setWindowIcon(QIcon("../data/icon.ico"));
+    QApplication::setQuitOnLastWindowClosed(false);
 
     auto* tigerCapture = new TigerCapture(FileUtils::getApplicationDirectory() + "/config.json");
     tigerCapture->read();
+
+    QApplication::setWindowIcon(QIcon(tigerCapture->getResource("icons/icon.ico").c_str()));
 
     if(argc == 2) {
         std::string arg = std::string(argv[1]);

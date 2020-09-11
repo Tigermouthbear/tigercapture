@@ -40,9 +40,3 @@ void UploadedFileWidget::copyURL() {
 void UploadedFileWidget::copyFileLocation() {
     Clipboard::copyToClipboard(loc);
 }
-
-UploadedFileWidget::~UploadedFileWidget() {
-    delete copyURLAction;
-    delete copyFileLocationAction;
-    delete menu;
-}

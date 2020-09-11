@@ -38,10 +38,28 @@ add_executable(tigercapture
         src/Utils.h
         src/FileUtils.h
         src/json.hpp
-        src/Clipboard.cpp src/Clipboard.h)
+        src/Clipboard.cpp src/Clipboard.h
+        src/widgets/SystemTray.cpp src/widgets/SystemTray.h)
+
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
+install(FILES data/tigercapture.desktop DESTINATION /usr/share/applications)
+install(FILES data/icons/icon.ico data/icons/icon-large.ico DESTINATION /usr/share/tigercapture/icons)
+install(FILES data/icons/hicolor/48x48/tigercapture.png DESTINATION /usr/share/icons/hicolor/48x48/apps)
+install(FILES data/icons/hicolor/128x128/tigercapture.png DESTINATION /usr/share/icons/hicolor/128x128/apps)
+install(FILES data/icons/hicolor/256x256/tigercapture.png DESTINATION /usr/share/icons/hicolor/256x256/apps)
+install(FILES data/icons/hicolor/scaleable/tigercapture.svg DESTINATION /usr/share/icons/hicolor/scaleable/apps)
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
 
-configure_file(${CMAKE_SOURCE_DIR}/data/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/data/icon.ico COPYONLY)
-configure_file(${CMAKE_SOURCE_DIR}/data/icon-large.ico ${CMAKE_CURRENT_BINARY_DIR}/data/icon-large.ico COPYONLY)
+target_compile_definitions(tigercapture PRIVATE INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
+
+# .desktop and resources
+configure_file(${CMAKE_SOURCE_DIR}/data/tigercapture.desktop ${CMAKE_CURRENT_BINARY_DIR}/share/applications/tigercapture.desktop COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/icon.ico ${CMAKE_CURRENT_BINARY_DIR}/icons/icon.ico COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/icon-large.ico ${CMAKE_CURRENT_BINARY_DIR}/icons/icon-large.ico COPYONLY)
+
+# hicolor icons
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/48x48/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/48x48/apps/tigercapture.png COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/128x128/apps/tigercapture.png COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/256x256/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/256x256/apps/tigercapture.png COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/scaleable/tigercapture.svg ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/scaleable/apps/tigercapture.svg COPYONLY)

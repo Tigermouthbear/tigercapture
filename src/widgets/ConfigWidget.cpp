@@ -6,27 +6,21 @@
 
 #include <QtWidgets/QGridLayout>
 #include <iostream>
+#include <QtCore/QDir>
 #include "../FileUtils.h"
-
-#if defined(__APPLE__) && defined(__MACH__)
-#include <experimental/filesystem>
-#else
-#include <filesystem>
-#endif
 
 ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     this->tigerCapture = tigerCapture;
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setWindowTitle("TigerCapture");
+    setWindowTitle("TigerCapture Config");
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // create layout
     auto* layout = new QGridLayout(this);
 
     // add elements
-
     uploadersLabel = new QLabel("Close window on capture", this);
     layout->addWidget(uploadersLabel, 1, 0);
 
@@ -56,11 +50,16 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     uploadersDropdown = new QComboBox(this);
     uploadersDropdown->addItem("None");
     uploadersDropdown->setCurrentText("None");
-    for(const auto& entry: std::filesystem::directory_iterator(FileUtils::getUploadersDirectory())) {
-        std::string filename = entry.path().filename();
+
+    // gather files
+    QDir directory(FileUtils::getUploadersDirectory().c_str());
+    QStringList files = directory.entryList(QStringList() << "*.json" << "*.JSON", QDir::Files);
+    for(const auto& file: files) {
+        std::string filename = file.toStdString();
         uploadersDropdown->addItem(filename.c_str());
         if(tigerCapture->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
     }
+
     layout->addWidget(uploadersDropdown, 4, 1);
 
 
@@ -75,14 +74,4 @@ void ConfigWidget::save() {
     tigerCapture->setShouldClipboard(shouldClipboardCheckbox->isChecked());
     if(!tigerCapture->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
     close();
-}
-
-ConfigWidget::~ConfigWidget() {
-    delete delayInput;
-    delete shouldMinimizeCheckbox;
-    delete shouldClipboardCheckbox;
-    delete uploadersLabel;
-    delete clipboardLabel;
-    delete uploadersDropdown;
-    delete saveButton;
 }

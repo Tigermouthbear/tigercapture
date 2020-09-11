@@ -46,10 +46,3 @@ void UploadsExplorerWidget::updateUploads() {
 
     update();
 }
-
-UploadsExplorerWidget::~UploadsExplorerWidget() {
-    delete scrollArea;
-    delete central;
-    delete layout;
-}
-

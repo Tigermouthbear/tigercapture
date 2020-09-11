@@ -9,9 +9,9 @@
 class TigerCapture;
 
 #include <string>
-#include <QtWidgets/QSystemTrayIcon>
 #include "json.hpp"
 #include "Uploader.h"
+#include "widgets/SystemTray.h"
 #include "widgets/UploadsExplorerWidget.h"
 
 class TigerCapture {
@@ -31,9 +31,11 @@ private:
 
     int delay;
 
-    QSystemTrayIcon* systemTrayIcon;
+    SystemTray* systemTray = nullptr;
 
     UploadsExplorerWidget* uploadsExplorerWidget;
+
+    std::string resourcePath;
 
 public:
     explicit TigerCapture(const std::string& file);
@@ -70,11 +72,16 @@ public:
 
     void setDelay(int delayIn);
 
-    QSystemTrayIcon* getSystemTrayIcon();
+    SystemTray* getSystemTray();
 
     void setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget);
 
     void updateUploadsExplorer();
+
+    std::string getResource(const std::string& resource);
+
+public slots:
+    static void exit();
 };
 
 

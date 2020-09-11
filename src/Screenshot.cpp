@@ -59,7 +59,7 @@ static void screenshotCallback(void* tigerCapture, const std::string& res) {
     Clipboard::copyToClipboard(res);
 
     // display notification
-    ((TigerCapture*) tigerCapture)->getSystemTrayIcon()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+    ((TigerCapture*) tigerCapture)->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
 }
 
 std::future<void>* Screenshot::save() {

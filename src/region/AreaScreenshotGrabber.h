@@ -18,8 +18,6 @@ private:
 public:
     explicit AreaScreenshotGrabber(TigerCapture* tigerCapture);
 
-    ~AreaScreenshotGrabber() override;
-
 protected:
     void onFinish() override;
 

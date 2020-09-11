@@ -32,10 +32,6 @@ void PinnedAreaWindow::mousePressEvent(QMouseEvent* event) {
     }
 }
 
-PinnedAreaWindow::~PinnedAreaWindow() {
-    delete widget;
-}
-
 PinnedAreaWindow::PinnedAreaWidget::PinnedAreaWidget(QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->image = std::move(image);
 }
