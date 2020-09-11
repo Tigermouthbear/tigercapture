@@ -20,8 +20,6 @@ public:
 
 private slots:
     static void exit();
-
-    static void openWindow();
 };
 
 
