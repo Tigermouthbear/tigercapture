@@ -105,6 +105,7 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     tigerCapture->setX(x());
     tigerCapture->setY(y());
     tigerCapture->write();
+    QApplication::exit();
 }
 
 void MainWindow::fullScreenshot() {
