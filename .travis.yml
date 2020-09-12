@@ -12,10 +12,8 @@ jobs:
           apt:
             sources:
               - ubuntu-toolchain-r-test
-              - kalakris-cmake
             packages:
               - g++-6
-              - cmake
       - os: osx
         osx_image: xcode7.2
 
