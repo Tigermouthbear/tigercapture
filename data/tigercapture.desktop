@@ -2,6 +2,7 @@
 Type=Application
 Encoding=UTF-8
 Name=TigerCapture
+Categories=Graphics;Utility;
 Comment=Screenshot and file uploading tool
 Exec=tigercapture
 Icon=tigercapture

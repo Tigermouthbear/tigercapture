@@ -4,7 +4,7 @@
 
 #include "PinnedAreaGrabber.h"
 
-#include "../widgets/PinnedAreaWindow.h"
+#include "../widgets/PinnedArea.h"
 
 PinnedAreaGrabber::PinnedAreaGrabber(TigerCapture* tigerCapture): RegionGrabber() {
     screenshot = new Screenshot(tigerCapture);
@@ -26,16 +26,7 @@ void PinnedAreaGrabber::onFinish() {
     auto selection = getSelection();
     if(hasDragged && !dragging && selection != nullptr) {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
-
-        // This is necessary so it dosent go in the taskbar
-        auto* window = new QMainWindow();
-        window->setWindowFlag(Qt::FramelessWindowHint);
-        window->setWindowFlag(Qt::WindowStaysOnTopHint);
-        window->setWindowFlag(Qt::Tool);
-        window->resize(1, 1); // No one will notice this pixel... I hope
-        window->show();
-
-        auto* pinnedArea = new PinnedAreaWindow(selection->x(), selection->y(), screenshot->image(), window);
+        auto* pinnedArea = new PinnedArea(selection->x(), selection->y(), screenshot->image());
         pinnedArea->show();
         delete screenshot;
     }

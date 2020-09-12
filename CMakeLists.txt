@@ -28,7 +28,7 @@ add_executable(tigercapture
         src/region/RegionGrabber.cpp src/region/RegionGrabber.h
         src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h
         src/widgets/MainWindow.cpp src/widgets/MainWindow.h
-        src/widgets/PinnedAreaWindow.h src/widgets/PinnedAreaWindow.cpp
+        src/widgets/PinnedArea.h src/widgets/PinnedArea.cpp
         src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
         src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
         src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h
