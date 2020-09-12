@@ -1,0 +1,34 @@
+language: cpp
+
+os:
+  - linux
+  - osx
+
+jobs:
+  include:
+      - os: linux
+        dist: trusty
+      - os: osx
+        osx_image: xcode7.2
+
+compiler:
+  - gcc
+  - clang
+
+addons:
+  apt:
+    packages:
+      - libcurl4
+      - qt5-default
+
+before_install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update           ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew link curl --force; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt5      ; fi
+
+before_script:
+  - mkdir build
+  - cd build
+  - CXX=/usr/bin/g++-6 CC=/usr/bin/gcc-6 cmake ..
+
+script: make
