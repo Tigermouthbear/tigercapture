@@ -15,16 +15,14 @@ compiler:
   - gcc
   - clang
 
-addons:
-  apt:
-    packages:
-      - libcurl4
-      - qt5-default
-
 before_install:
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update           ; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew link curl --force; fi
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt5      ; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew update; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install libcurl; fi
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then brew install qt5; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo add-apt-repository --yes ppa:ubuntu-sdk-team/ppa; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get update -qq; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install -qq qt5-qmake qtbase5-dev qtdeclarative5-dev libqt5webkit5-dev libsqlite3-dev; fi
+  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sudo apt-get install qt5-default qttools5-dev-tools libcurl4-openssl-dev; fi
 
 before_script:
   - mkdir build
