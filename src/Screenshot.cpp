@@ -18,7 +18,7 @@ Screenshot::Screenshot(TigerCapture* tigerCapture) {
 }
 
 void Screenshot::take() {
-    auto delay = tigerCapture->getDelay();
+    auto delay = tigerCapture->getConfig()->getDelay();
     if(delay > 0) {
         std::this_thread::sleep_for(std::chrono::milliseconds(delay));
     }
@@ -75,9 +75,9 @@ std::future<void>* Screenshot::save() {
     pixmap.save(QString::fromStdString(loc));
 
     // upload then copy url to clipboard
-    if(tigerCapture->getUploader() != nullptr) {
+    if(tigerCapture->getConfig()->getUploader() != nullptr) {
         // upload async, if response is empty break
-        return tigerCapture->getUploader()->Upload(loc, tigerCapture, screenshotCallback);
+        return tigerCapture->getConfig()->getUploader()->Upload(loc, tigerCapture, screenshotCallback);
     }
     return nullptr;
 }

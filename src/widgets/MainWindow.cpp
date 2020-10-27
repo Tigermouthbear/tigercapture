@@ -1,14 +1,15 @@
 //
-// Created by Tigermouthbear on 8/16/20.
+// Created by Tigermouthbear on 10/26/20.
 //
 
 #include "MainWindow.h"
 
-#include "ConfigWidget.h"
-#include "DragUploadWidget.h"
 #include <QTimer>
 #include <QLayout>
 #include <QApplication>
+
+#include "DragUploadWidget.h"
+#include "ConfigWidget.h"
 
 MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     this->tigerCapture = tigerCapture;
@@ -47,7 +48,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
     tigerCapture->setUploadsExplorerWidget(uploadsExplorerWidget);
 
-    move(tigerCapture->getX() - x(), tigerCapture->getY() - y());
+    move(tigerCapture->getConfig()->getX() - x(), tigerCapture->getConfig()->getY() - y());
     setFixedSize(450, 205);
 }
 
@@ -58,7 +59,7 @@ void MainWindow::activateWindow() {
 
 // minimize, delay then actually fullscreen screenshot
 void MainWindow::handleFullScreenshot() {
-    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
@@ -67,7 +68,7 @@ void MainWindow::handleFullScreenshot() {
 }
 
 void MainWindow::handleAreaScreenshot() {
-    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
@@ -76,7 +77,7 @@ void MainWindow::handleAreaScreenshot() {
 }
 
 void MainWindow::handlePinArea() {
-    if(isActiveWindow() && tigerCapture->shouldMinimize()) {
+    if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
@@ -102,9 +103,9 @@ void MainWindow::handleConfig() {
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
-    tigerCapture->setX(x());
-    tigerCapture->setY(y());
-    tigerCapture->write();
+    tigerCapture->getConfig()->setX(x());
+    tigerCapture->getConfig()->setY(y());
+    tigerCapture->getConfig()->write();
     QApplication::exit();
 }
 

@@ -25,14 +25,14 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     layout->addWidget(uploadersLabel, 1, 0);
 
     shouldMinimizeCheckbox = new QCheckBox(this);
-    shouldMinimizeCheckbox->setChecked(tigerCapture->shouldMinimize());
+    shouldMinimizeCheckbox->setChecked(tigerCapture->getConfig()->shouldMinimize());
     layout->addWidget(shouldMinimizeCheckbox, 1, 1, 1, 1, Qt::AlignHCenter);
 
     clipboardLabel = new QLabel("Copy image before uploading", this);
     layout->addWidget(clipboardLabel, 2, 0);
 
     shouldClipboardCheckbox = new QCheckBox(this);
-    shouldClipboardCheckbox->setChecked(tigerCapture->shouldClipboard());
+    shouldClipboardCheckbox->setChecked(tigerCapture->getConfig()->shouldClipboard());
     layout->addWidget(shouldClipboardCheckbox, 2, 1, 1, 1, Qt::AlignHCenter);
 
 
@@ -40,7 +40,7 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     layout->addWidget(uploadersLabel, 3, 0);
 
     delayInput = new QLineEdit(this);
-    delayInput->setText(std::to_string(tigerCapture->getDelay()).c_str());
+    delayInput->setText(std::to_string(tigerCapture->getConfig()->getDelay()).c_str());
     delayInput->setValidator(new QIntValidator(0, 20000, this));
     layout->addWidget(delayInput, 3, 1, 1, 1, Qt::AlignHCenter);
 
@@ -57,7 +57,7 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     for(const auto& file: files) {
         std::string filename = file.toStdString();
         uploadersDropdown->addItem(filename.c_str());
-        if(tigerCapture->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
+        if(tigerCapture->getConfig()->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
     }
 
     layout->addWidget(uploadersDropdown, 4, 1);
@@ -69,9 +69,9 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
 }
 
 void ConfigWidget::save() {
-    tigerCapture->setDelay(std::stoi(delayInput->text().toStdString()));
-    tigerCapture->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
-    tigerCapture->setShouldClipboard(shouldClipboardCheckbox->isChecked());
-    if(!tigerCapture->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
+    tigerCapture->getConfig()->setDelay(std::stoi(delayInput->text().toStdString()));
+    tigerCapture->getConfig()->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
+    tigerCapture->getConfig()->setShouldClipboard(shouldClipboardCheckbox->isChecked());
+    if(!tigerCapture->getConfig()->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
     close();
 }

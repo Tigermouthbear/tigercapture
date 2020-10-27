@@ -1,5 +1,5 @@
 //
-// Created by Tigermouthbear on 8/16/20.
+// Created by Tigermouthbear on 10/26/20.
 //
 
 #ifndef TIGERCAPTURE_MAINWINDOW_H
@@ -10,10 +10,17 @@
 #include <QPushButton>
 #include <QtWidgets/QSystemTrayIcon>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QGridLayout>
+
+class MainWindow;
+class UploadsExplorerWidget;
+class AreaScreenshotGrabber;
+class PinnedAreaGrabber;
+#include "../TigerCapture.h"
+class TigerCapture;
+
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
-#include "../TigerCapture.h"
-#include "UploadsExplorerWidget.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT
@@ -34,33 +41,22 @@ public:
     explicit MainWindow(TigerCapture* tigerCapture);
 
     static void fullScreenshotImpl(TigerCapture* tigerCapture);
-
     static AreaScreenshotGrabber* areaScreenshotImpl(TigerCapture* tigerCapture);
-
     static PinnedAreaGrabber* pinArea(TigerCapture* tigerCapture);
-
     static void dragUpload(TigerCapture* tigerCapture);
 
 public slots:
-
     void fullScreenshot();
-
     void areaScreenshot();
-
     void pinArea();
-
     void dragUpload();
 
 private slots:
-
     void activateWindow();
 
     void handleFullScreenshot();
-
     void handleAreaScreenshot();
-
     void handlePinArea();
-
     void handleConfig();
 
 protected:

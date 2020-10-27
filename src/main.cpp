@@ -1,19 +1,16 @@
 //
-// Created by Tigermouthbear on 8/16/20.
+// Created by Tigermouthbear on 10/26/20.
 //
 
-#include <QApplication>
-#include <iostream>
-#include "widgets/MainWindow.h"
-#include "FileUtils.h"
+#include <QtWidgets/QApplication>
+
 #include "TigerCapture.h"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
     QApplication::setQuitOnLastWindowClosed(false);
 
-    auto* tigerCapture = new TigerCapture(FileUtils::getApplicationDirectory() + "/config.json");
-    tigerCapture->read();
+    auto* tigerCapture = new TigerCapture();
 
     QApplication::setWindowIcon(QIcon(tigerCapture->getResource("icons/icon.ico").c_str()));
 
@@ -28,7 +25,6 @@ int main(int argc, char* argv[]) {
             return 0;
         } else if(arg == "--area") {
             auto* areaScreenshotGrabber = new AreaScreenshotGrabber(tigerCapture);
-            areaScreenshotGrabber->setQuitOnClose(tigerCapture);
             areaScreenshotGrabber->show();
             return QApplication::exec();
         } else {
@@ -43,8 +39,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    MainWindow mainWindow(tigerCapture);
-    mainWindow.show();
+    tigerCapture->openWindow();
 
     return QApplication::exec();
 }

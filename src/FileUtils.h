@@ -28,11 +28,11 @@ public:
     static std::string createDirectoryIfNonexistant(const std::string& directory) {
         if(!exists(directory)) {
             mode_t nMode = 0733;
-#if defined(_WIN32)
+            #if defined(_WIN32)
             _mkdir(directory.c_str());
-#else
+            #else
             mkdir(directory.c_str(), nMode);
-#endif
+            #endif
         }
         return directory;
     }

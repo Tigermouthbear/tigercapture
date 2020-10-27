@@ -9,7 +9,11 @@
 #include <ctime>
 #include <string>
 #include <QPixmap>
+
+class Screenshot;
 #include "TigerCapture.h"
+class TigerCapture;
+
 #include "Uploader.h"
 
 class Screenshot {

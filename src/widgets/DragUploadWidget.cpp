@@ -78,8 +78,8 @@ void DragUploadWidget::dropEvent(QDropEvent* event) {
 
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
-        if(tigerCapture->getUploader() != nullptr && url.isLocalFile()) {
-            auto upload = tigerCapture->getUploader()->Upload(url.toLocalFile().toStdString(), tigerCapture, uploadCallback);
+        if(tigerCapture->getConfig()->getUploader() != nullptr && url.isLocalFile()) {
+            auto upload = tigerCapture->getConfig()->getUploader()->Upload(url.toLocalFile().toStdString(), tigerCapture, uploadCallback);
             // discard future, just let this run in the background
         }
     }

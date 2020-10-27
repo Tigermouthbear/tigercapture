@@ -8,7 +8,6 @@
 #include <QWidget>
 #include <QKeyEvent>
 #include <QPainter>
-#include "../TigerCapture.h"
 
 class RegionGrabber: public QWidget {
 Q_OBJECT
@@ -24,8 +23,6 @@ public:
 
     ~RegionGrabber() override;
 
-    void setQuitOnClose(TigerCapture* value);
-
     QRect* getSelection();
 
 private slots:
@@ -36,8 +33,6 @@ protected:
     bool hasDragged = false;
     int dragX = 0;
     int dragY = 0;
-
-    void closeEvent(QCloseEvent* event) override;
 
     void keyPressEvent(QKeyEvent* event) override;
 
@@ -50,8 +45,6 @@ protected:
     void paintEvent(QPaintEvent* event) override;
 
     virtual void onFinish();
-
-    TigerCapture* quit = nullptr;
 };
 
 

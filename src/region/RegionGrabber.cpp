@@ -7,10 +7,11 @@
 #include <QtGui/QGuiApplication>
 #include <QScreen>
 #include <QPainter>
-#include "../Utils.h"
 #include <QApplication>
 #include <QtGui/QPainterPath>
 #include <QTimer>
+
+#include "../Utils.h"
 
 RegionGrabber::RegionGrabber(): QWidget() {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -48,13 +49,6 @@ RegionGrabber::RegionGrabber(): QWidget() {
 void RegionGrabber::grabInputs() {
     grabKeyboard();
     grabMouse();
-}
-
-void RegionGrabber::closeEvent(QCloseEvent* event) {
-    if(quit != nullptr) {
-        delete quit;
-        QApplication::quit();
-    }
 }
 
 void RegionGrabber::keyPressEvent(QKeyEvent* event) {
@@ -127,10 +121,6 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
     } else {
         painter.fillRect(total, backgroundColor);
     }
-}
-
-void RegionGrabber::setQuitOnClose(TigerCapture* value) {
-    quit = value;
 }
 
 QRect* RegionGrabber::setSelection(QRect* selectionIn) {

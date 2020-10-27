@@ -5,14 +5,16 @@
 #ifndef TIGERCAPTURE_CONFIGWIDGET_H
 #define TIGERCAPTURE_CONFIGWIDGET_H
 
-
 #include <QtWidgets/QWidget>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QCheckBox>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLineEdit>
+
+class ConfigWidget;
 #include "../TigerCapture.h"
+class TigerCapture;
 
 class ConfigWidget: public QWidget {
 Q_OBJECT

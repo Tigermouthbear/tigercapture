@@ -5,8 +5,8 @@
 #ifndef TIGERCAPTURE_AREASCREENSHOTGRABBER_H
 #define TIGERCAPTURE_AREASCREENSHOTGRABBER_H
 
-
 #include <future>
+
 #include "RegionGrabber.h"
 #include "../Screenshot.h"
 

@@ -6,7 +6,10 @@
 #define TIGERCAPTURE_DRAGUPLOADWIDGET_H
 
 #include <QWidget>
+
+class DragUploadWidget;
 #include "../TigerCapture.h"
+class TigerCapture;
 
 class DragUploadWidget: public QWidget {
 private:
