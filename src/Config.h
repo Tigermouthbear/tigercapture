@@ -21,10 +21,10 @@ private:
     std::string uploaderLoc;
     Uploader* uploader{};
 
-    int x;
-    int y;
+    int x{};
+    int y{};
 
-    int delay;
+    int delay{};
 
 public:
     Config(const std::string& path);

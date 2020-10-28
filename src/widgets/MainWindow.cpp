@@ -87,7 +87,7 @@ void MainWindow::handlePinArea() {
         hide();
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else pinAreaImpl(tigerCapture);
+    } else pinArea();
     pinButton->setDown(false);
 }
 
@@ -98,43 +98,19 @@ void MainWindow::handleConfig() {
 }
 
 void MainWindow::fullScreenshot() {
-    fullScreenshotImpl(tigerCapture);
+    tigerCapture->fullScreenshot();
 }
 
 void MainWindow::areaScreenshot() {
-    areaScreenshotImpl(tigerCapture);
+    tigerCapture->areaScreenshot();
 }
 
 void MainWindow::pinArea() {
-    pinAreaImpl(tigerCapture);
+    tigerCapture->pinArea();
 }
 
 void MainWindow::dragUpload() {
-    dragUploadImpl(tigerCapture);
-}
-
-void MainWindow::fullScreenshotImpl(TigerCapture* tigerCapture) {
-    auto* screenshot = new Screenshot(tigerCapture);
-    screenshot->take();
-    auto future = screenshot->save();
-}
-
-AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* tigerCapture) {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(tigerCapture);
-    areaScreenshotGrabber->show();
-    return areaScreenshotGrabber;
-}
-
-PinnedAreaGrabber* MainWindow::pinAreaImpl(TigerCapture* tigerCapture) {
-    auto* pinnedAreaGrabber = new PinnedAreaGrabber(tigerCapture);
-    pinnedAreaGrabber->show();
-    return pinnedAreaGrabber;
-}
-
-DragUploadWidget* MainWindow::dragUploadImpl(TigerCapture* tigerCapture) {
-    auto* dragUploadWidget = new DragUploadWidget(tigerCapture);
-    dragUploadWidget->show();
-    return dragUploadWidget;
+    tigerCapture->dragUpload();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {

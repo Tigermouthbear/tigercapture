@@ -10,8 +10,7 @@
 #include <QThread>
 #include <QtGui/QPainter>
 #include <QClipboard>
-#include "FileUtils.h"
-#include "Clipboard.h"
+#include "TigerCapture.hpp"
 
 Screenshot::Screenshot(TigerCapture* tigerCapture) {
     this->tigerCapture = tigerCapture;
@@ -57,10 +56,10 @@ std::future<void>* Screenshot::save() {
     auto* out = new std::future<void>;
     *out = std::async([=]() {
         // clear so user doesnt accidentally paste something else while waiting for the image to upload
-        Clipboard::clearClipboard();
+        TC::Clipboard::clearClipboard();
 
         // save screenshot to folder
-        std::string loc = FileUtils::genNewImageLocation();
+        std::string loc = TC::Files::genNewImageLocation();
         pixmap.save(QString::fromStdString(loc));
 
         // upload then copy url to clipboard
@@ -70,13 +69,13 @@ std::future<void>* Screenshot::save() {
             if(res.empty()) return;
 
             // copy response
-            Clipboard::copyToClipboard(res);
+            TC::Clipboard::copyToClipboard(res);
 
             // display notification
             tigerCapture->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
         } else {
             // save location to log file
-            std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
+            std::ofstream log(TC::Files::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
             log << loc << ",\n";
             log.close();
             printf("Saved to: %s\n", loc.c_str());

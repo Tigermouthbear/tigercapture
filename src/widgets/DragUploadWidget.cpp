@@ -11,8 +11,7 @@
 #include <QPainter>
 
 #include "DragUploadWidget.h"
-#include "../Utils.h"
-#include "../Clipboard.h"
+#include "../TigerCapture.hpp"
 
 DragUploadWidget::DragUploadWidget(TigerCapture* tigerCapture): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->tigerCapture = tigerCapture;
@@ -72,14 +71,14 @@ void DragUploadWidget::dropEvent(QDropEvent* event) {
             auto* out = new std::future<void>;
             *out = std::async([=]() {
                 // clear so user doesnt accidentally paste something else while waiting for the image to upload
-                Clipboard::clearClipboard();
+                TC::Clipboard::clearClipboard();
 
                 // actually upload
                 std::string res = tigerCapture->getConfig()->getUploader()->Upload(url.toLocalFile().toStdString());
                 if(res.empty()) return;
 
                 // copy response
-                Clipboard::copyToClipboard(res);
+                TC::Clipboard::copyToClipboard(res);
 
                 // display notification
                 ((TigerCapture*) tigerCapture)->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
@@ -92,5 +91,5 @@ void DragUploadWidget::dropEvent(QDropEvent* event) {
 void DragUploadWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.drawText(0, 0, width(), height(), Qt::AlignHCenter | Qt::AlignVCenter, "Drag and Drop");
-    Utils::drawOutlineBox(&painter, 0, 0, width() - 1, height() - 1);
+    TC::drawOutlineBox(&painter, 0, 0, width() - 1, height() - 1);
 }

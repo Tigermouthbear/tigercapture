@@ -6,12 +6,11 @@
 
 #include <QtGui/QGuiApplication>
 #include <QScreen>
-#include <QPainter>
 #include <QApplication>
 #include <QtGui/QPainterPath>
 #include <QTimer>
 
-#include "../Utils.h"
+#include "../TigerCapture.hpp"
 
 RegionGrabber::RegionGrabber(): QWidget() {
     setAttribute(Qt::WA_DeleteOnClose);
@@ -117,7 +116,7 @@ void RegionGrabber::paintEvent(QPaintEvent* event) {
 
         painter.fillPath(path, backgroundColor);
         painter.fillRect(*selection, Qt::transparent);
-        Utils::drawOutlineBox(&painter, *selection);
+        TC::drawOutlineBox(&painter, *selection);
     } else {
         painter.fillRect(total, backgroundColor);
     }

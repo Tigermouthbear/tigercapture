@@ -23,12 +23,11 @@ add_subdirectory(clip)
 
 add_executable(tigercapture
         src/main.cpp
+        src/json.hpp
+        src/TigerCapture.hpp
         src/TigerCapture.cpp src/TigerCapture.h
         src/Config.cpp src/Config.h
         src/Screenshot.cpp src/Screenshot.h
-        src/json.hpp
-        src/FileUtils.h src/Utils.h
-        src/Clipboard.cpp src/Clipboard.h
         src/Uploader.cpp src/Uploader.h
         src/widgets/MainWindow.cpp src/widgets/MainWindow.h
         src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h

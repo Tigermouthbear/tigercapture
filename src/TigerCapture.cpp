@@ -7,10 +7,9 @@
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtCore/QtCore>
-#include "FileUtils.h"
 
 TigerCapture::TigerCapture() {
-    config = new Config(FileUtils::getApplicationDirectory() + "/config.json");
+    config = new Config(TC::Files::getApplicationDirectory() + "/config.json");
     config->read();
 
     // find resource path and set system try icon
@@ -65,4 +64,25 @@ bool TigerCapture::shouldUpdateUploadsExplorer() const {
 
 std::string TigerCapture::getResource(const std::string& resource) {
     return resourcePath.append("/").append(resource);
+}
+
+void TigerCapture::fullScreenshot() {
+    auto* screenshot = new Screenshot(this);
+    screenshot->take();
+    auto future = screenshot->save();
+}
+
+void TigerCapture::areaScreenshot() {
+    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(this);
+    areaScreenshotGrabber->show();
+}
+
+void TigerCapture::pinArea() {
+    auto* pinnedAreaGrabber = new PinnedAreaGrabber(this);
+    pinnedAreaGrabber->show();
+}
+
+void TigerCapture::dragUpload() {
+    auto* dragUploadWidget = new DragUploadWidget(this);
+    dragUploadWidget->show();
 }

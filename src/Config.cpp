@@ -4,10 +4,10 @@
 
 #include "Config.h"
 
-#include "FileUtils.h"
+#include "TigerCapture.hpp"
 
 Config::Config(const std::string& configPath) {
-    this->file = file;
+    this->file = configPath;
 
     json = {
             {"minimize",  true},
@@ -17,7 +17,7 @@ Config::Config(const std::string& configPath) {
             {"y",         0},
             {"delay",     0}
     };
-    nlohmann::json read = FileUtils::readJSON(file);
+    nlohmann::json read = TC::Files::readJSON(file);
     if(read != nullptr) json.merge_patch(read);
 }
 
@@ -38,7 +38,7 @@ void Config::write() {
     json["y"] = y;
     json["delay"] = delay;
 
-    FileUtils::writeJSON(file, json);
+    TC::Files::writeJSON(file, json);
 }
 
 bool Config::shouldMinimize() const {
@@ -68,7 +68,7 @@ bool Config::setUploader(const std::string& value) {
         return true;
     }
 
-    Uploader* newUploader = Uploader::createFromJSON(FileUtils::getUploadersDirectory() + "/" + value);
+    Uploader* newUploader = Uploader::createFromJSON(TC::Files::getUploadersDirectory() + "/" + value);
     if(newUploader == nullptr) return false;
 
     uploaderLoc = value;

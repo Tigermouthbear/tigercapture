@@ -42,11 +42,6 @@ private:
 public:
     explicit MainWindow(TigerCapture* tigerCapture);
 
-    static void fullScreenshotImpl(TigerCapture* tigerCapture);
-    static AreaScreenshotGrabber* areaScreenshotImpl(TigerCapture* tigerCapture);
-    static PinnedAreaGrabber* pinAreaImpl(TigerCapture* tigerCapture);
-    static DragUploadWidget* dragUploadImpl(TigerCapture* tigerCapture);
-
 public slots:
     void fullScreenshot();
     void areaScreenshot();

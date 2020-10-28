@@ -5,8 +5,8 @@
 #ifndef TIGERCAPTURE_TIGERCAPTURE_H
 #define TIGERCAPTURE_TIGERCAPTURE_H
 
+#include "TigerCapture.hpp"
 #include "Config.h"
-
 #include "widgets/MainWindow.h"
 #include "widgets/SystemTray.h"
 #include "widgets/UploadsExplorerWidget.h"
@@ -36,6 +36,11 @@ public:
     bool shouldUpdateUploadsExplorer() const;
 
     std::string getResource(const std::string& resource);
+
+    void fullScreenshot();
+    void areaScreenshot();
+    void pinArea();
+    void dragUpload();
 };
 
 

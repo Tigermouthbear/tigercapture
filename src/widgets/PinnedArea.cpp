@@ -9,7 +9,8 @@
 #include <QPainter>
 #include <utility>
 #include <QMouseEvent>
-#include "../Utils.h"
+
+#include "../TigerCapture.hpp"
 
 PinnedArea::PinnedArea(int x, int y, QImage image): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->x = x;
@@ -66,5 +67,5 @@ void PinnedArea::mouseReleaseEvent(QMouseEvent* event) {
 void PinnedArea::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.drawImage(0, 0, image, 0, 0, -1, -1, Qt::AutoColor);
-    Utils::drawOutlineBox(&painter, 0, 0, image.width() - 1, image.height() - 1);
+    TC::drawOutlineBox(&painter, 0, 0, image.width() - 1, image.height() - 1);
 }

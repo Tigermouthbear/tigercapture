@@ -4,7 +4,7 @@
 
 #include "UploadsExplorerWidget.h"
 
-#include "../FileUtils.h"
+#include "../TigerCapture.hpp"
 
 UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int height): QWidget(parent) {
     scrollArea = new QScrollArea(this);
@@ -23,7 +23,7 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int hei
 void UploadsExplorerWidget::updateUploads() {
     // create upload elements
     std::ifstream file;
-    file.open(FileUtils::getUploadsLogFile());
+    file.open(TC::Files::getUploadsLogFile());
     for(std::pair<std::string, std::string> pair;
         std::getline(file, pair.first, ',') && std::getline(file, pair.second);) {
         uploadedFileWidgets.push_back(new UploadedFileWidget(this, pair));

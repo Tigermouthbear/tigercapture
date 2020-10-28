@@ -7,7 +7,6 @@
 #include <QtWidgets/QGridLayout>
 #include <iostream>
 #include <QtCore/QDir>
-#include "../FileUtils.h"
 
 ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     this->tigerCapture = tigerCapture;
@@ -52,7 +51,7 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
     uploadersDropdown->setCurrentText("None");
 
     // gather files
-    QDir directory(FileUtils::getUploadersDirectory().c_str());
+    QDir directory(TC::Files::getUploadersDirectory().c_str());
     QStringList files = directory.entryList(QStringList() << "*.json" << "*.JSON", QDir::Files);
     for(const auto& file: files) {
         std::string filename = file.toStdString();

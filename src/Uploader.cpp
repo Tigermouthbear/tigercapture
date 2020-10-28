@@ -7,8 +7,8 @@
 #include <iostream>
 #include <QtCore/QString>
 #include <utility>
-#include "json.hpp"
-#include "FileUtils.h"
+
+#include "TigerCapture.hpp"
 
 Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
                    std::string fileFormName, std::string responseRegex) {
@@ -65,7 +65,7 @@ std::string Uploader::Upload(const std::string& path) {
         printf("Uploaded: %s\n", out.c_str());
 
         // save entry to log file
-        std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
+        std::ofstream log(TC::Files::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
         log << path << "," << out << "\n";
         log.close();
         printf("Saved to: %s\n", path.c_str());
@@ -123,7 +123,7 @@ size_t Uploader::WriteCallback(void* contents, size_t size, size_t nmemb, void* 
 }
 
 Uploader* Uploader::createFromJSON(const std::string& file) {
-    nlohmann::json json = FileUtils::readJSON(file);
+    nlohmann::json json = TC::Files::readJSON(file);
     if(json == nullptr) return nullptr;
 
     std::string requestURL;

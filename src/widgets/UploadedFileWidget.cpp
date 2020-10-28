@@ -4,7 +4,7 @@
 
 #include "UploadedFileWidget.h"
 
-#include "../Clipboard.h"
+#include "../TigerCapture.hpp"
 
 UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, std::string> pair): QToolButton(widget) {
     url = pair.second;
@@ -35,9 +35,9 @@ void UploadedFileWidget::contextMenuEvent(QContextMenuEvent* event) {
 }
 
 void UploadedFileWidget::copyURL() {
-    Clipboard::copyToClipboard(url);
+    TC::Clipboard::copyToClipboard(url);
 }
 
 void UploadedFileWidget::copyFileLocation() {
-    Clipboard::copyToClipboard(loc);
+    TC::Clipboard::copyToClipboard(loc);
 }
