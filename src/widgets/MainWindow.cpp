@@ -24,23 +24,23 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     // initialize buttons
     fullButton = new QPushButton("Full Screenshot", this);
     layout->addWidget(fullButton, 0, 0);
-    connect(fullButton, SIGNAL (released()), this, SLOT (handleFullScreenshot()));
+    connect(fullButton, SIGNAL(released()), this, SLOT(handleFullScreenshot()));
 
     areaButton = new QPushButton("Area Screenshot", this);
     layout->addWidget(areaButton, 1, 0);
-    connect(areaButton, SIGNAL (released()), this, SLOT (handleAreaScreenshot()));
+    connect(areaButton, SIGNAL(released()), this, SLOT(handleAreaScreenshot()));
 
     pinButton = new QPushButton("Pin Area", this);
     layout->addWidget(pinButton, 2, 0);
-    connect(pinButton, SIGNAL (released()), this, SLOT (handlePinArea()));
+    connect(pinButton, SIGNAL(released()), this, SLOT(handlePinArea()));
 
     dragUploadButton = new QPushButton("Drag and Drop");
     layout->addWidget(dragUploadButton, 3, 0);
-    connect(dragUploadButton, SIGNAL (released()), this, SLOT (dragUpload()));
+    connect(dragUploadButton, SIGNAL(released()), this, SLOT(dragUpload()));
 
     configButton = new QPushButton("Config", this);
     layout->addWidget(configButton, 4, 0);
-    connect(configButton, SIGNAL (released()), this, SLOT (handleConfig()));
+    connect(configButton, SIGNAL(released()), this, SLOT(handleConfig()));
 
     layout->setColumnMinimumWidth(1, 300);
     uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),layout->minimumSize().height() - 12);
@@ -141,7 +141,9 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     tigerCapture->getConfig()->setX(x());
     tigerCapture->getConfig()->setY(y());
     tigerCapture->getConfig()->write();
-    QApplication::exit();
+    tigerCapture->setWindowClosed();
+
+    QMainWindow::closeEvent(event);
 }
 
 void MainWindow::queryExplorerUpdate() {

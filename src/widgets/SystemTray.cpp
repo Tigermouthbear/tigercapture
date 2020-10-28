@@ -6,7 +6,8 @@
 
 #include <QApplication>
 
-SystemTray::SystemTray(const std::string& icon) {
+SystemTray::SystemTray(TigerCapture* tigerCapture, const std::string& icon): QSystemTrayIcon() {
+    this->tigerCapture = tigerCapture;
     setIcon(QIcon(icon.c_str()));
 
     // add menu
@@ -14,6 +15,12 @@ SystemTray::SystemTray(const std::string& icon) {
     exitAction = menu->addAction("Exit");
     connect(exitAction, SIGNAL(triggered()), this, SLOT(exit()));
     setContextMenu(menu);
+
+    connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(openWindow()));
+}
+
+void SystemTray::openWindow() {
+    tigerCapture->openWindow();
 }
 
 void SystemTray::exit() {

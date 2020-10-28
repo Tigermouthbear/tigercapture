@@ -9,16 +9,23 @@
 #include <QMenu>
 #include <QAction>
 
+class SystemTray;
+#include "../TigerCapture.h"
+class TigerCapture;
+
 class SystemTray: public QSystemTrayIcon {
 Q_OBJECT
 private:
+    TigerCapture* tigerCapture;
     QMenu* menu;
     QAction* exitAction;
 
 public:
-    explicit SystemTray(const std::string& icon);
+    explicit SystemTray(TigerCapture* tigerCapture, const std::string& icon);
 
 private slots:
+    void openWindow();
+
     static void exit();
 };
 

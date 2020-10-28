@@ -28,6 +28,7 @@ public:
 
     MainWindow* getMainWindow();
     void openWindow();
+    void setWindowClosed();
 
     SystemTray* getSystemTray();
 

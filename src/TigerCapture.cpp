@@ -25,7 +25,7 @@ TigerCapture::TigerCapture() {
         if(!QFile::exists(icon.c_str())) continue;
 
         // create system tray when resource path is found
-        systemTray = new SystemTray(icon);
+        systemTray = new SystemTray(this, icon);
         systemTray->show();
 
         resourcePath = dir;
@@ -47,6 +47,10 @@ void TigerCapture::openWindow() {
     }
 }
 
+void TigerCapture::setWindowClosed() {
+    mainWindow = nullptr;
+}
+
 SystemTray* TigerCapture::getSystemTray() {
     return systemTray;
 }
@@ -62,4 +66,3 @@ bool TigerCapture::shouldUpdateUploadsExplorer() const {
 std::string TigerCapture::getResource(const std::string& resource) {
     return resourcePath.append("/").append(resource);
 }
-
