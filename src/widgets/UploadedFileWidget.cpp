@@ -23,8 +23,9 @@ UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, s
     // set icon and add menu to widget
     if(QString::fromStdString(pair.first).endsWith(".png")) {
         setIcon(QIcon(pair.first.c_str()));
-        setIconSize({100, 100});
     }
+    setIconSize({100, 100});
+
     setMenu(menu);
     show();
 }

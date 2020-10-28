@@ -18,7 +18,7 @@ public:
     void updateUploads();
 
 private:
-    std::map<std::pair<std::string, std::string>, UploadedFileWidget*> map;
+    std::vector<UploadedFileWidget*> uploadedFileWidgets;
 
     QScrollArea* scrollArea;
     QWidget* central;

@@ -21,11 +21,12 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int hei
 }
 
 void UploadsExplorerWidget::updateUploads() {
+    // create upload elements
     std::ifstream file;
     file.open(FileUtils::getUploadsLogFile());
     for(std::pair<std::string, std::string> pair;
         std::getline(file, pair.first, ',') && std::getline(file, pair.second);) {
-        map[pair] = new UploadedFileWidget(this, pair);
+        uploadedFileWidgets.push_back(new UploadedFileWidget(this, pair));
     }
     file.close();
 
@@ -37,10 +38,9 @@ void UploadsExplorerWidget::updateUploads() {
     }
 
     // add all from map
-    int num = map.size() - 1;
-    std::map<std::pair<std::string, std::string>, UploadedFileWidget*>::iterator it;
-    for(it = map.begin(); it != map.end(); it++) {
-        layout->addWidget(it->second, (int) (num / 2), num % 2);
+    int num = uploadedFileWidgets.size() - 1;
+    for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
+        layout->addWidget(uploadedFileWidget, (int) (num / 2), num % 2);
         num--;
     }
 
