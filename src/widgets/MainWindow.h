@@ -21,6 +21,7 @@ class TigerCapture;
 
 #include "../region/AreaScreenshotGrabber.h"
 #include "../region/PinnedAreaGrabber.h"
+#include "DragUploadWidget.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT
@@ -35,6 +36,7 @@ private:
     QPushButton* pinButton;
     QPushButton* dragUploadButton;
     QPushButton* configButton;
+
     UploadsExplorerWidget* uploadsExplorerWidget;
 
 public:
@@ -42,8 +44,8 @@ public:
 
     static void fullScreenshotImpl(TigerCapture* tigerCapture);
     static AreaScreenshotGrabber* areaScreenshotImpl(TigerCapture* tigerCapture);
-    static PinnedAreaGrabber* pinArea(TigerCapture* tigerCapture);
-    static void dragUpload(TigerCapture* tigerCapture);
+    static PinnedAreaGrabber* pinAreaImpl(TigerCapture* tigerCapture);
+    static DragUploadWidget* dragUploadImpl(TigerCapture* tigerCapture);
 
 public slots:
     void fullScreenshot();
@@ -58,6 +60,8 @@ private slots:
     void handleAreaScreenshot();
     void handlePinArea();
     void handleConfig();
+
+    void queryExplorerUpdate();
 
 protected:
     void closeEvent(QCloseEvent* event) override;

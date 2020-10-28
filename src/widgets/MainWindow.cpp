@@ -8,7 +8,6 @@
 #include <QLayout>
 #include <QApplication>
 
-#include "DragUploadWidget.h"
 #include "ConfigWidget.h"
 
 MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
@@ -46,10 +45,15 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     layout->setColumnMinimumWidth(1, 300);
     uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),layout->minimumSize().height() - 12);
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
-    tigerCapture->setUploadsExplorerWidget(uploadsExplorerWidget);
 
+    // set size
     move(tigerCapture->getConfig()->getX() - x(), tigerCapture->getConfig()->getY() - y());
     setFixedSize(450, 205);
+
+    // start timer for updates
+    auto* timer = new QTimer(this);
+    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(queryExplorerUpdate()));
+    timer->start(1000);
 }
 
 void MainWindow::activateWindow() {
@@ -57,7 +61,7 @@ void MainWindow::activateWindow() {
     show();
 }
 
-// minimize, delay then actually fullscreen screenshot
+// minimize, if needed, delay then actually fullscreen screenshot
 void MainWindow::handleFullScreenshot() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
@@ -67,6 +71,7 @@ void MainWindow::handleFullScreenshot() {
     fullButton->setDown(false);
 }
 
+// minimize, if needed, delay then actually open area screenshot
 void MainWindow::handleAreaScreenshot() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
@@ -76,37 +81,20 @@ void MainWindow::handleAreaScreenshot() {
     areaButton->setDown(false);
 }
 
+// minimize, if needed, delay then actually open pin region grabber
 void MainWindow::handlePinArea() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
         QTimer::singleShot(500, this, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else pinArea(tigerCapture);
+    } else pinAreaImpl(tigerCapture);
     pinButton->setDown(false);
-}
-
-PinnedAreaGrabber* MainWindow::pinArea(TigerCapture* tigerCapture) {
-    auto* pinnedAreaGrabber = new PinnedAreaGrabber(tigerCapture);
-    pinnedAreaGrabber->show();
-    return pinnedAreaGrabber;
-}
-
-void MainWindow::dragUpload(TigerCapture* tigerCapture) {
-    auto* dragUploadWidget = new DragUploadWidget(tigerCapture);
-    dragUploadWidget->show();
 }
 
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(tigerCapture);
     configWidget->move(x() + width() + 20, y());
     configWidget->show();
-}
-
-void MainWindow::closeEvent(QCloseEvent* event) {
-    tigerCapture->getConfig()->setX(x());
-    tigerCapture->getConfig()->setY(y());
-    tigerCapture->getConfig()->write();
-    QApplication::exit();
 }
 
 void MainWindow::fullScreenshot() {
@@ -117,11 +105,18 @@ void MainWindow::areaScreenshot() {
     areaScreenshotImpl(tigerCapture);
 }
 
+void MainWindow::pinArea() {
+    pinAreaImpl(tigerCapture);
+}
+
+void MainWindow::dragUpload() {
+    dragUploadImpl(tigerCapture);
+}
+
 void MainWindow::fullScreenshotImpl(TigerCapture* tigerCapture) {
-    Screenshot screenshot = {tigerCapture};
-    screenshot.take();
-    screenshot.save();
-    tigerCapture->updateUploadsExplorer();
+    auto* screenshot = new Screenshot(tigerCapture);
+    screenshot->take();
+    auto future = screenshot->save();
 }
 
 AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* tigerCapture) {
@@ -130,10 +125,25 @@ AreaScreenshotGrabber* MainWindow::areaScreenshotImpl(TigerCapture* tigerCapture
     return areaScreenshotGrabber;
 }
 
-void MainWindow::pinArea() {
-    pinArea(tigerCapture);
+PinnedAreaGrabber* MainWindow::pinAreaImpl(TigerCapture* tigerCapture) {
+    auto* pinnedAreaGrabber = new PinnedAreaGrabber(tigerCapture);
+    pinnedAreaGrabber->show();
+    return pinnedAreaGrabber;
 }
 
-void MainWindow::dragUpload() {
-    dragUpload(tigerCapture);
+DragUploadWidget* MainWindow::dragUploadImpl(TigerCapture* tigerCapture) {
+    auto* dragUploadWidget = new DragUploadWidget(tigerCapture);
+    dragUploadWidget->show();
+    return dragUploadWidget;
+}
+
+void MainWindow::closeEvent(QCloseEvent* event) {
+    tigerCapture->getConfig()->setX(x());
+    tigerCapture->getConfig()->setY(y());
+    tigerCapture->getConfig()->write();
+    QApplication::exit();
+}
+
+void MainWindow::queryExplorerUpdate() {
+    if(tigerCapture->shouldUpdateUploadsExplorer()) uploadsExplorerWidget->updateUploads();
 }

@@ -5,12 +5,10 @@
 #include "Uploader.h"
 
 #include <iostream>
-#include <QSystemTrayIcon>
 #include <QtCore/QString>
 #include <utility>
 #include "json.hpp"
 #include "FileUtils.h"
-#include "TigerCapture.h"
 
 Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
                    std::string fileFormName, std::string responseRegex) {
@@ -22,10 +20,10 @@ Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
-std::future<void>* Uploader::Upload(std::string path, void* extraData, void (* callback)(void*, const std::string&)) {
+std::future<void>* Uploader::Upload(const std::string& path, void* extraData, void (* callback)(void*, const std::string&)) {
     auto* out = new std::future<void>;
     *out = std::async([=]() {
-        std::string res = Upload(&path);
+        std::string res = Upload(path);
         if(callback != nullptr) {
             callback(extraData, res);
         }
@@ -33,7 +31,7 @@ std::future<void>* Uploader::Upload(std::string path, void* extraData, void (* c
     return out;
 }
 
-std::string Uploader::Upload(const std::string* path) {
+std::string Uploader::Upload(const std::string& path) {
     CURL* curl = curl_easy_init();
     curl_mime* form = curl_mime_init(curl);
     curl_mimepart* field = curl_mime_addpart(form);
@@ -43,7 +41,7 @@ std::string Uploader::Upload(const std::string* path) {
 
     // put file
     curl_mime_name(field, fileFormName.c_str());
-    curl_mime_filedata(field, path->c_str());
+    curl_mime_filedata(field, path.c_str());
 
     // put other data
     for(const std::pair<std::string, std::string>& data: formData) {
@@ -68,9 +66,9 @@ std::string Uploader::Upload(const std::string* path) {
 
         // save entry to log file
         std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
-        log << *path << "," << out << "\n";
+        log << path << "," << out << "\n";
         log.close();
-        printf("Saved to: %s\n", path->c_str());
+        printf("Saved to: %s\n", path.c_str());
     } else {
         out = std::string();
         printf("ERROR uploading screenshot to %s (%d: %s) (Response: %s)\n", url.c_str(), curLcode, errbuf,

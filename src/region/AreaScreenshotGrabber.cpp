@@ -31,14 +31,14 @@ void AreaScreenshotGrabber::onFinish() {
     auto selection = getSelection();
     if(hasDragged && selection != nullptr) {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
-        auto future = screenshot->save();
-        if(future != nullptr) {
-            // Wait until uploading is finished to properly quit
-            future->wait();
-        }
-        delete screenshot;
-        // update explorer
-        tigerCapture->updateUploadsExplorer();
+        future = screenshot->save();
     }
+
     close();
+}
+
+// waits for screenshot to be saved
+void AreaScreenshotGrabber::wait() {
+    while(future == nullptr) {  }
+    future->wait();
 }

@@ -17,7 +17,9 @@ public:
     Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
              std::string fileFormName, std::string responseRegex);
 
-    std::future<void>* Upload(std::string path, void* extraData, void (* callback)(void*, const std::string&));
+    std::future<void>* Upload(const std::string& path, void* extraData, void (* callback)(void*, const std::string&));
+
+    std::string Upload(const std::string& path);
 
     static Uploader* createFromJSON(const std::string& file);
 
@@ -30,8 +32,6 @@ private:
     std::vector<std::pair<std::string, std::string>> formData;
     std::string fileFormName;
     std::string responseRegex;
-
-    std::string Upload(const std::string* path);
 
     static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
 };

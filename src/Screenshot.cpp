@@ -41,7 +41,7 @@ void Screenshot::take() {
     QPainter painter(&pixmap);
 
     // Second pass, paint onto end screenshot
-    for(auto scr : QGuiApplication::screens()) {
+    for(auto scr: QGuiApplication::screens()) {
         auto g = scr->geometry();
         auto pix = scr->grabWindow(0);
         painter.drawPixmap(g.x(), g.y(), g.width(), g.height(), pix);
@@ -52,34 +52,42 @@ void Screenshot::crop(int x, int y, int width, int height) {
     pixmap = pixmap.copy(x, y, width, height);
 }
 
-static void screenshotCallback(void* tigerCapture, const std::string& res) {
-    if(res.empty()) return;
-
-    // copy response
-    Clipboard::copyToClipboard(res);
-
-    // display notification
-    ((TigerCapture*) tigerCapture)->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
-}
-
+// save image and pass to uploader
 std::future<void>* Screenshot::save() {
-    // TODO: Broken
-    //if (tigerCapture->shouldClipboard()) {
-    //    Clipboard::copyToClipboard(pixmap);
-    //} else {
-    Clipboard::clearClipboard(); // clear so user doesnt accidentally paste something else while waiting for the image to upload
-    //}
+    auto* out = new std::future<void>;
+    *out = std::async([=]() {
+        // clear so user doesnt accidentally paste something else while waiting for the image to upload
+        Clipboard::clearClipboard();
 
-    // save file
-    std::string loc = FileUtils::genNewImageLocation();
-    pixmap.save(QString::fromStdString(loc));
+        // save screenshot to folder
+        std::string loc = FileUtils::genNewImageLocation();
+        pixmap.save(QString::fromStdString(loc));
 
-    // upload then copy url to clipboard
-    if(tigerCapture->getConfig()->getUploader() != nullptr) {
-        // upload async, if response is empty break
-        return tigerCapture->getConfig()->getUploader()->Upload(loc, tigerCapture, screenshotCallback);
-    }
-    return nullptr;
+        // upload then copy url to clipboard
+        if(tigerCapture->getConfig()->getUploader() != nullptr) {
+            // upload, if response is empty break
+            std::string res = tigerCapture->getConfig()->getUploader()->Upload(loc);
+            if(res.empty()) return;
+
+            // copy response
+            Clipboard::copyToClipboard(res);
+
+            // display notification
+            tigerCapture->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+        } else {
+            // save location to log file
+            std::ofstream log(FileUtils::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
+            log << loc << ",\n";
+            log.close();
+            printf("Saved to: %s\n", loc.c_str());
+        }
+
+        // update explorer
+        tigerCapture->updateUploadsExplorer();
+
+        delete this;
+    });
+    return out;
 }
 
 QImage Screenshot::image() {

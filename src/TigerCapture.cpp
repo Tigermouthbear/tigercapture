@@ -51,14 +51,15 @@ SystemTray* TigerCapture::getSystemTray() {
     return systemTray;
 }
 
-void TigerCapture::setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget) {
-    this->uploadsExplorerWidget = uploadsExplorerWidget;
+void TigerCapture::updateUploadsExplorer() {
+    shouldUpdateExplorer = true;
 }
 
-void TigerCapture::updateUploadsExplorer() {
-    if(uploadsExplorerWidget != nullptr) uploadsExplorerWidget->updateUploads();
+bool TigerCapture::shouldUpdateUploadsExplorer() const {
+    return shouldUpdateExplorer;
 }
 
 std::string TigerCapture::getResource(const std::string& resource) {
     return resourcePath.append("/").append(resource);
 }
+

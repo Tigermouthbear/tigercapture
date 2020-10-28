@@ -17,7 +17,7 @@ private:
     MainWindow* mainWindow = nullptr;
     SystemTray* systemTray = nullptr;
 
-    UploadsExplorerWidget* uploadsExplorerWidget;
+    bool shouldUpdateExplorer = false;
 
     std::string resourcePath;
 
@@ -31,8 +31,8 @@ public:
 
     SystemTray* getSystemTray();
 
-    void setUploadsExplorerWidget(UploadsExplorerWidget* uploadsExplorerWidget);
     void updateUploadsExplorer();
+    bool shouldUpdateUploadsExplorer() const;
 
     std::string getResource(const std::string& resource);
 };

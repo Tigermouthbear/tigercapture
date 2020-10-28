@@ -12,8 +12,6 @@ int main(int argc, char* argv[]) {
 
     auto* tigerCapture = new TigerCapture();
 
-    QApplication::setWindowIcon(QIcon(tigerCapture->getResource("icons/icon.ico").c_str()));
-
     if(argc == 2) {
         std::string arg = std::string(argv[1]);
         if(arg == "--full") {
@@ -24,8 +22,9 @@ int main(int argc, char* argv[]) {
             delete tigerCapture;
             return 0;
         } else if(arg == "--area") {
-            auto* areaScreenshotGrabber = new AreaScreenshotGrabber(tigerCapture);
+            auto* areaScreenshotGrabber = (new AreaScreenshotGrabber(tigerCapture));
             areaScreenshotGrabber->show();
+            areaScreenshotGrabber->wait();
             return QApplication::exec();
         } else {
             printf(
@@ -39,6 +38,8 @@ int main(int argc, char* argv[]) {
         }
     }
 
+    // set window icon then open window
+    QApplication::setWindowIcon(QIcon(tigerCapture->getResource("icons/icon.ico").c_str()));
     tigerCapture->openWindow();
 
     return QApplication::exec();

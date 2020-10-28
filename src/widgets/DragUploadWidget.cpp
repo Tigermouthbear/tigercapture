@@ -63,23 +63,27 @@ void DragUploadWidget::dragEnterEvent(QDragEnterEvent* event) {
     if(event->mimeData()->hasUrls()) event->acceptProposedAction();
 }
 
-void uploadCallback(void* tigerCapture, const std::string& res) {
-    if(res.empty()) return;
-
-    // copy response
-    Clipboard::copyToClipboard(res);
-
-    // display notification
-    ((TigerCapture*) tigerCapture)->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
-}
-
 void DragUploadWidget::dropEvent(QDropEvent* event) {
     const QMimeData* mimeData = event->mimeData();
 
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
         if(tigerCapture->getConfig()->getUploader() != nullptr && url.isLocalFile()) {
-            auto upload = tigerCapture->getConfig()->getUploader()->Upload(url.toLocalFile().toStdString(), tigerCapture, uploadCallback);
+            auto* out = new std::future<void>;
+            *out = std::async([=]() {
+                // clear so user doesnt accidentally paste something else while waiting for the image to upload
+                Clipboard::clearClipboard();
+
+                // actually upload
+                std::string res = tigerCapture->getConfig()->getUploader()->Upload(url.toLocalFile().toStdString());
+                if(res.empty()) return;
+
+                // copy response
+                Clipboard::copyToClipboard(res);
+
+                // display notification
+                ((TigerCapture*) tigerCapture)->getSystemTray()->showMessage("TigerCapture", ("Uploaded to: " + res).c_str());
+            });
             // discard future, just let this run in the background
         }
     }

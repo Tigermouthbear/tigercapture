@@ -15,8 +15,12 @@ private:
     TigerCapture* tigerCapture;
     Screenshot* screenshot;
 
+    std::future<void>* future = nullptr;
+
 public:
     explicit AreaScreenshotGrabber(TigerCapture* tigerCapture);
+
+    void wait();
 
 protected:
     void onFinish() override;
