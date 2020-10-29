@@ -4,7 +4,7 @@
 
 #include "UploadsExplorerWidget.h"
 
-#include "../TigerCapture.hpp"
+#include "../../TigerCapture.hpp"
 
 UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int height): QWidget(parent) {
     scrollArea = new QScrollArea(this);

@@ -16,12 +16,12 @@ class MainWindow;
 class UploadsExplorerWidget;
 class AreaScreenshotGrabber;
 class PinnedAreaGrabber;
-#include "../TigerCapture.h"
+#include "../../TigerCapture.h"
 class TigerCapture;
 
-#include "../region/AreaScreenshotGrabber.h"
-#include "../region/PinnedAreaGrabber.h"
-#include "DragUploadWidget.h"
+#include "../../region/AreaScreenshotGrabber.h"
+#include "../../region/PinnedAreaGrabber.h"
+#include "../DragUploadWidget.h"
 
 class MainWindow: public QMainWindow {
 Q_OBJECT

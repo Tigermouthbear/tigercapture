@@ -7,9 +7,9 @@
 
 #include "TigerCapture.hpp"
 #include "Config.h"
-#include "widgets/MainWindow.h"
+#include "widgets/gui/MainWindow.h"
 #include "widgets/SystemTray.h"
-#include "widgets/UploadsExplorerWidget.h"
+#include "widgets/gui/UploadsExplorerWidget.h"
 
 class TigerCapture: public QObject {
 Q_OBJECT

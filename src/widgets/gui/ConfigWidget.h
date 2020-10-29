@@ -13,7 +13,7 @@
 #include <QtWidgets/QLineEdit>
 
 class ConfigWidget;
-#include "../TigerCapture.h"
+#include "../../TigerCapture.h"
 class TigerCapture;
 
 class ConfigWidget: public QDialog {

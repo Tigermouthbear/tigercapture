@@ -29,13 +29,13 @@ add_executable(tigercapture
         src/Config.cpp src/Config.h
         src/Screenshot.cpp src/Screenshot.h
         src/Uploader.cpp src/Uploader.h
-        src/widgets/MainWindow.cpp src/widgets/MainWindow.h
-        src/widgets/ConfigWidget.cpp src/widgets/ConfigWidget.h
+        src/widgets/gui/MainWindow.cpp src/widgets/gui/MainWindow.h
+        src/widgets/gui/ConfigWidget.cpp src/widgets/gui/ConfigWidget.h
         src/widgets/DragUploadWidget.cpp src/widgets/DragUploadWidget.h
         src/widgets/PinnedArea.cpp src/widgets/PinnedArea.h
         src/widgets/SystemTray.cpp src/widgets/SystemTray.h
-        src/widgets/UploadedFileWidget.cpp src/widgets/UploadedFileWidget.h
-        src/widgets/UploadsExplorerWidget.cpp src/widgets/UploadsExplorerWidget.h
+        src/widgets/gui/UploadedFileWidget.cpp src/widgets/gui/UploadedFileWidget.h
+        src/widgets/gui/UploadsExplorerWidget.cpp src/widgets/gui/UploadsExplorerWidget.h
         src/region/AreaScreenshotGrabber.cpp src/region/AreaScreenshotGrabber.h
         src/region/PinnedAreaGrabber.cpp src/region/PinnedAreaGrabber.h
         src/region/RegionGrabber.cpp src/region/RegionGrabber.h)

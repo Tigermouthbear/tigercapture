@@ -4,7 +4,7 @@
 
 #include "UploadedFileWidget.h"
 
-#include "../TigerCapture.hpp"
+#include "../../TigerCapture.hpp"
 
 UploadedFileWidget::UploadedFileWidget(QWidget* widget, std::pair<std::string, std::string> pair): QToolButton(widget) {
     url = pair.second;
