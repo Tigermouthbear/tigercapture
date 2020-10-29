@@ -8,12 +8,12 @@
 #include <iostream>
 #include <QtCore/QDir>
 
-ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QWidget() {
+ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     this->tigerCapture = tigerCapture;
 
     setAttribute(Qt::WA_DeleteOnClose);
 
-    setWindowTitle("TigerCapture Config");
+    setWindowTitle("TigerCapture | Config");
     setWindowFlags(Qt::WindowStaysOnTopHint);
 
     // create layout

@@ -43,17 +43,13 @@ public:
     explicit MainWindow(TigerCapture* tigerCapture);
 
 public slots:
-    void fullScreenshot();
-    void areaScreenshot();
-    void pinArea();
-    void dragUpload();
-
-private slots:
     void activateWindow();
 
+private slots:
     void handleFullScreenshot();
     void handleAreaScreenshot();
     void handlePinArea();
+    void handleDragUpload();
     void handleConfig();
 
     void queryExplorerUpdate();

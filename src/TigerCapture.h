@@ -11,7 +11,8 @@
 #include "widgets/SystemTray.h"
 #include "widgets/UploadsExplorerWidget.h"
 
-class TigerCapture {
+class TigerCapture: public QObject {
+Q_OBJECT
 private:
     Config* config;
     MainWindow* mainWindow = nullptr;
@@ -37,6 +38,7 @@ public:
 
     std::string getResource(const std::string& resource);
 
+public slots:
     void fullScreenshot();
     void areaScreenshot();
     void pinArea();

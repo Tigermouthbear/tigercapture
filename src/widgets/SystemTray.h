@@ -17,7 +17,11 @@ class SystemTray: public QSystemTrayIcon {
 Q_OBJECT
 private:
     TigerCapture* tigerCapture;
+
     QMenu* menu;
+    QAction* fullAction;
+    QAction* areaAction;
+    QAction* pinAction;
     QAction* exitAction;
 
 public:
@@ -25,7 +29,9 @@ public:
 
 private slots:
     void openWindow();
-
+    void fullScreenshot();
+    void areaScreenshot();
+    void pinArea();
     static void exit();
 };
 

@@ -36,7 +36,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
 
     dragUploadButton = new QPushButton("Drag and Drop");
     layout->addWidget(dragUploadButton, 3, 0);
-    connect(dragUploadButton, SIGNAL(released()), this, SLOT(dragUpload()));
+    connect(dragUploadButton, SIGNAL(released()), this, SLOT(handleDragUpload()));
 
     configButton = new QPushButton("Config", this);
     layout->addWidget(configButton, 4, 0);
@@ -65,52 +65,37 @@ void MainWindow::activateWindow() {
 void MainWindow::handleFullScreenshot() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
-        QTimer::singleShot(500, this, SLOT(fullScreenshot()));
+        QTimer::singleShot(500, tigerCapture, SLOT(fullScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else fullScreenshot();
-    fullButton->setDown(false);
+    } else tigerCapture->fullScreenshot();
 }
 
 // minimize, if needed, delay then actually open area screenshot
 void MainWindow::handleAreaScreenshot() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
-        QTimer::singleShot(500, this, SLOT(areaScreenshot()));
+        QTimer::singleShot(500, tigerCapture, SLOT(areaScreenshot()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else areaScreenshot();
-    areaButton->setDown(false);
+    } else tigerCapture->areaScreenshot();
 }
 
 // minimize, if needed, delay then actually open pin region grabber
 void MainWindow::handlePinArea() {
     if(isActiveWindow() && tigerCapture->getConfig()->shouldMinimize()) {
         hide();
-        QTimer::singleShot(500, this, SLOT(pinArea()));
+        QTimer::singleShot(500, tigerCapture, SLOT(pinArea()));
         QTimer::singleShot(501, this, SLOT(activateWindow()));
-    } else pinArea();
-    pinButton->setDown(false);
+    } else tigerCapture->pinArea();
+}
+
+void MainWindow::handleDragUpload() {
+    tigerCapture->dragUpload();
 }
 
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(tigerCapture);
     configWidget->move(x() + width() + 20, y());
     configWidget->show();
-}
-
-void MainWindow::fullScreenshot() {
-    tigerCapture->fullScreenshot();
-}
-
-void MainWindow::areaScreenshot() {
-    tigerCapture->areaScreenshot();
-}
-
-void MainWindow::pinArea() {
-    tigerCapture->pinArea();
-}
-
-void MainWindow::dragUpload() {
-    tigerCapture->dragUpload();
 }
 
 void MainWindow::closeEvent(QCloseEvent* event) {
