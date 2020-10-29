@@ -32,10 +32,7 @@ void UploadsExplorerWidget::updateUploads() {
 
     // remove all previous elements
     QLayoutItem* item;
-    while((item = layout->takeAt(0)) != nullptr) {
-        delete item->widget();
-        delete item;
-    }
+    while((item = layout->takeAt(0)) != nullptr) delete item;
 
     // add all from map
     int num = uploadedFileWidgets.size() - 1;

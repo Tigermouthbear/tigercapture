@@ -9,7 +9,7 @@
 #include <QtCore/QtCore>
 
 TigerCapture::TigerCapture() {
-    config = new Config(TC::Files::getApplicationDirectory() + "/config.json");
+    config = new Config(TC::Files::getConfigDirectory() + "/config.json");
     config->read();
 
     // find resource path and set system try icon

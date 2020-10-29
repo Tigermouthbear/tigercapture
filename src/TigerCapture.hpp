@@ -35,6 +35,19 @@ namespace TC {
         drawOutlineBox(painter, box.x(), box.y(), box.width(), box.height());
     }
 
+    static std::string isoTime() {
+        QDateTime dt = QDateTime::currentDateTime();
+        dt.setTimeSpec(Qt::LocalTime);
+        return QDateTime::currentDateTime().toString(Qt::ISODate).toStdString();
+    }
+
+    static std::string getMonthFormatted() {
+        time_t time = std::time(nullptr);
+        tm* date = localtime(&time);
+        std::string month = (date->tm_mon < 9 ? "0" : "") + std::to_string(date->tm_mon + 1);
+        return std::to_string(1900 + date->tm_year).append("-").append(month);
+    }
+
     //
     // Clipboard IO
     //
@@ -44,7 +57,8 @@ namespace TC {
             clip::set_text(cstr);
         }
 
-        static void copyToClipboard(const QPixmap& pixmap) {
+        // TODO: IMPLEMENT IMAGE COPYING ON SCREENSHOT
+        [[maybe_unused]] static void copyToClipboard(const QPixmap& pixmap) {
             auto image = pixmap.toImage();
 
             clip::image_spec spec = {
@@ -96,7 +110,7 @@ namespace TC {
             return std::string(pw->pw_dir);
         }
 
-        static std::string getApplicationDirectory() {
+        static std::string getConfigDirectory() {
             return createDirectoryIfNonexistant(getHomeDirectory() + "/.config/TigerCapture");
         }
 
@@ -109,17 +123,15 @@ namespace TC {
         }
 
         static std::string getUploadersDirectory() {
-            return createDirectoryIfNonexistant(getApplicationDirectory() + "/Uploaders");
+            return createDirectoryIfNonexistant(getConfigDirectory() + "/Uploaders");
         }
 
-        static std::string isoTime() {
-            QDateTime dt = QDateTime::currentDateTime();
-            dt.setTimeSpec(Qt::LocalTime);
-            return QDateTime::currentDateTime().toString(Qt::ISODate).toStdString();
+        static std::string getScreenshotsDir() {
+            return createDirectoryIfNonexistant(getPicturesDirectory() + "/" + getMonthFormatted());
         }
 
         static std::string genNewImageLocation() {
-            std::string path = getPicturesDirectory().append("/").append(isoTime());
+            std::string path = getScreenshotsDir().append("/").append(isoTime());
             std::string final = path;
             final.append(".png");
 
@@ -134,20 +146,16 @@ namespace TC {
         }
 
         static std::string getUploadLogsFolder() {
-            return createDirectoryIfNonexistant(getApplicationDirectory() + "/Uploads");
-        }
-
-        static std::string getMonthFormatted() {
-            time_t time = std::time(nullptr);
-            tm* date = localtime(&time);
-            std::string month = (date->tm_mon < 10 ? "0" : "") + std::to_string(date->tm_mon + 1);
-            return std::to_string(1900 + date->tm_year).append("-").append(month);
+            return createDirectoryIfNonexistant(getConfigDirectory() + "/Uploads");
         }
 
         static std::string getUploadsLogFile() {
             return getUploadLogsFolder() + "/" + getMonthFormatted() + ".csv";
         }
 
+        //
+        // JSON
+        //
         static nlohmann::json readJSON(const char* file) {
             if(exists(file)) {
                 try {
