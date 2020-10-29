@@ -33,7 +33,7 @@ void AreaScreenshotGrabber::onFinish() {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
         future = screenshot->save();
     }
-
+    
     close();
     if(shouldQuit) quit();
 }
@@ -43,7 +43,9 @@ void AreaScreenshotGrabber::setQuitOnClose() {
 }
 
 void AreaScreenshotGrabber::quit() {
-    while(future == nullptr) {  }
-    future->wait();
+    if(hasDragged && getSelection() != nullptr) {
+        while(future == nullptr) {  }
+        future->wait();
+    }
     QApplication::exit();
 }
