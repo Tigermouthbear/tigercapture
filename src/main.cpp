@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
         } else if(arg == "--area") {
             auto* areaScreenshotGrabber = (new AreaScreenshotGrabber(tigerCapture));
             areaScreenshotGrabber->show();
-            areaScreenshotGrabber->wait();
+            areaScreenshotGrabber->setQuitOnClose();
             return QApplication::exec();
         } else {
             printf(

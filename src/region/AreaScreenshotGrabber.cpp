@@ -35,10 +35,15 @@ void AreaScreenshotGrabber::onFinish() {
     }
 
     close();
+    if(shouldQuit) quit();
 }
 
-// waits for screenshot to be saved
-void AreaScreenshotGrabber::wait() {
+void AreaScreenshotGrabber::setQuitOnClose() {
+    shouldQuit = true;
+}
+
+void AreaScreenshotGrabber::quit() {
     while(future == nullptr) {  }
     future->wait();
+    QApplication::exit();
 }

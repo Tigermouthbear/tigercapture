@@ -17,10 +17,13 @@ private:
 
     std::future<void>* future = nullptr;
 
+    bool shouldQuit = false;
+    void quit();
+
 public:
     explicit AreaScreenshotGrabber(TigerCapture* tigerCapture);
 
-    void wait();
+    void setQuitOnClose();
 
 protected:
     void onFinish() override;
