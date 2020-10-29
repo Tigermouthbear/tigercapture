@@ -10,6 +10,7 @@
 SystemTray::SystemTray(TigerCapture* tigerCapture, const std::string& icon): QSystemTrayIcon() {
     this->tigerCapture = tigerCapture;
     setIcon(QIcon(icon.c_str()));
+    setToolTip("TigerCapture");
 
     // add menu
     menu = new QMenu();
