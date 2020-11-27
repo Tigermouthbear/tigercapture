@@ -19,17 +19,20 @@ TigerCapture::TigerCapture() {
     #elif defined(Q_OS_WIN)
     std::string dirs[] = { applicationDirPath }
     #endif
+    bool exists = false;
+    std::string icon;
     for(const std::string& dir: dirs) {
-        std::string icon = dir + "/icons/icon-large.ico";
-        if(!QFile::exists(icon.c_str())) continue;
-
-        // create system tray when resource path is found
-        systemTray = new SystemTray(this, icon);
-        systemTray->show();
-
-        resourcePath = dir;
-        break;
+        icon = dir + "/icons/icon-large.ico";
+        if(QFile::exists(icon.c_str())) {
+            resourcePath = dir;
+            exists = true;
+            break;
+        }
     }
+    // create system tray when resource path is found
+    if(exists) systemTray = new SystemTray(this, icon);
+    else systemTray = new SystemTray(this);
+    systemTray->show();
 }
 
 Config* TigerCapture::getConfig() {

@@ -25,6 +25,7 @@ private:
     QAction* exitAction;
 
 public:
+    explicit SystemTray(TigerCapture* tigerCapture);
     explicit SystemTray(TigerCapture* tigerCapture, const std::string& icon);
 
 private slots:

@@ -7,9 +7,10 @@
 #include <QApplication>
 #include <QTimer>
 
-SystemTray::SystemTray(TigerCapture* tigerCapture, const std::string& icon): QSystemTrayIcon() {
+SystemTray::SystemTray(TigerCapture* tigerCapture): QSystemTrayIcon() {
     this->tigerCapture = tigerCapture;
-    setIcon(QIcon(icon.c_str()));
+    setIcon(QIcon());
+
     setToolTip("TigerCapture");
 
     // add menu
@@ -31,6 +32,10 @@ SystemTray::SystemTray(TigerCapture* tigerCapture, const std::string& icon): QSy
     setContextMenu(menu);
 
     connect(this, SIGNAL(activated(QSystemTrayIcon::ActivationReason)), this, SLOT(openWindow()));
+}
+
+SystemTray::SystemTray(TigerCapture* tigerCapture, const std::string& icon): SystemTray(tigerCapture) {
+    setIcon(QIcon(icon.c_str()));
 }
 
 void SystemTray::openWindow() {
