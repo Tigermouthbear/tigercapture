@@ -17,9 +17,8 @@
 #include <utility>
 #include <QtCore/QDateTime>
 #include <QtGui/QPainter>
-#include <QClipboard>
-#include <QGuiApplication>
 #include "json.hpp"
+#include "../clip/clip.h"
 
 namespace TC {
     //
@@ -54,15 +53,33 @@ namespace TC {
     //
     namespace Clipboard {
         static void copyToClipboard(const std::string& text) {
-            QGuiApplication::clipboard()->setText(text.c_str());
+            clip::set_text(text);
         }
 
         static void copyToClipboard(const QPixmap& pixmap) {
-            QGuiApplication::clipboard()->setImage(pixmap.toImage());
+            QImage image = pixmap.toImage();
+
+            clip::image_spec spec = {
+                    (unsigned long) image.width(),
+                    (unsigned long) image.height(),
+                    (unsigned long) image.depth(),
+                    (unsigned long) image.bytesPerLine(),
+                    0xff0000,
+                    0xff00,
+                    0xff,
+                    0xff000000,
+                    16,
+                    8,
+                    0,
+                    24,
+            };
+
+            clip::image clip_image(image.bits(), spec);
+            clip::set_image(clip_image);
         }
 
         static void clearClipboard() {
-            QGuiApplication::clipboard()->clear();
+            clip::clear();
         }
     }
 

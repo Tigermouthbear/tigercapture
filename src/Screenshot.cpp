@@ -9,7 +9,6 @@
 #include <QtGui/QScreen>
 #include <QThread>
 #include <QtGui/QPainter>
-#include <QClipboard>
 #include "TigerCapture.hpp"
 
 Screenshot::Screenshot(TigerCapture* tigerCapture) {

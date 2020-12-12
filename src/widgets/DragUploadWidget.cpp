@@ -7,11 +7,9 @@
 #include <QMouseEvent>
 #include <QMimeData>
 #include <QApplication>
-#include <QClipboard>
 #include <QPainter>
 
 #include "DragUploadWidget.h"
-#include "../TigerCapture.hpp"
 
 DragUploadWidget::DragUploadWidget(TigerCapture* tigerCapture): QWidget(nullptr, Qt::X11BypassWindowManagerHint | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint | Qt::Tool) {
     this->tigerCapture = tigerCapture;
