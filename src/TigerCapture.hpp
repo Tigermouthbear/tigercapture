@@ -17,7 +17,8 @@
 #include <utility>
 #include <QtCore/QDateTime>
 #include <QtGui/QPainter>
-#include "../clip/clip.h"
+#include <QClipboard>
+#include <QGuiApplication>
 #include "json.hpp"
 
 namespace TC {
@@ -53,34 +54,15 @@ namespace TC {
     //
     namespace Clipboard {
         static void copyToClipboard(const std::string& text) {
-            auto cstr = text.c_str();
-            clip::set_text(cstr);
+            QGuiApplication::clipboard()->setText(text.c_str());
         }
 
-        // TODO: IMPLEMENT IMAGE COPYING ON SCREENSHOT
-        [[maybe_unused]] static void copyToClipboard(const QPixmap& pixmap) {
-            auto image = pixmap.toImage();
-
-            clip::image_spec spec = {
-                    (unsigned long) image.width(),
-                    (unsigned long) image.height(),
-                    (unsigned long) image.depth(),
-                    (unsigned long) image.bytesPerLine(),
-                    0xff, // red
-                    0xff00, // green
-                    0xff0000, // blue
-                    0xff000000,
-                    0,
-                    8,
-                    16,
-                    24
-            };
-            clip::image img(image.data_ptr(), spec);
-            clip::set_image(img);
+        static void copyToClipboard(const QPixmap& pixmap) {
+            QGuiApplication::clipboard()->setImage(pixmap.toImage());
         }
 
         static void clearClipboard() {
-            clip::clear();
+            QGuiApplication::clipboard()->clear();
         }
     }
 

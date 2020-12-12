@@ -58,6 +58,11 @@ std::future<void>* Screenshot::save() {
         // clear so user doesnt accidentally paste something else while waiting for the image to upload
         TC::Clipboard::clearClipboard();
 
+        // copy to clipboard if wanted
+        if(tigerCapture->getConfig()->shouldClipboard()) {
+            TC::Clipboard::copyToClipboard(pixmap);
+        }
+
         // save screenshot to folder
         std::string loc = TC::Files::genNewImageLocation();
         pixmap.save(QString::fromStdString(loc));
