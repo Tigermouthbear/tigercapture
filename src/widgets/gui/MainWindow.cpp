@@ -108,5 +108,8 @@ void MainWindow::closeEvent(QCloseEvent* event) {
 }
 
 void MainWindow::queryExplorerUpdate() {
-    if(tigerCapture->shouldUpdateUploadsExplorer()) uploadsExplorerWidget->updateUploads();
+    if(tigerCapture->shouldUpdateUploadsExplorer()) {
+        tigerCapture->updateUploadsExplorer(false);
+        uploadsExplorerWidget->updateUploads();
+    }
 }

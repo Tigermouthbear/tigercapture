@@ -10,13 +10,7 @@
 
 #include "TigerCapture.hpp"
 
-Uploader::Uploader(std::string url, const std::vector<std::pair<std::string, std::string>>& formData,
-                   std::string fileFormName, std::string responseRegex) {
-    this->url = std::move(url);
-    this->formData = formData;
-    this->fileFormName = std::move(fileFormName);
-    this->responseRegex = std::move(responseRegex);
-
+Uploader::Uploader() {
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
@@ -33,11 +27,26 @@ std::future<void>* Uploader::Upload(const std::string& path, void* extraData, vo
 
 std::string Uploader::Upload(const std::string& path) {
     CURL* curl = curl_easy_init();
-    curl_mime* form = curl_mime_init(curl);
-    curl_mimepart* field = curl_mime_addpart(form);
     std::string responseBuffer;
     char errbuf[CURL_ERROR_SIZE];
     errbuf[0] = 0;
+
+
+    // add headers
+    struct curl_slist* headers = NULL;
+    headers = curl_slist_append(headers, "content-type: multipart/form-data;");
+    if(headerData.size() > 0) {
+        // loop all in array
+        for(const std::pair<std::string, std::string>& data: headerData)
+            headers = curl_slist_append(headers, (data.first + ": " + data.second).c_str());
+    }
+
+    // add them to request
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+    // add arguments
+    curl_mime* form = curl_mime_init(curl);
+    curl_mimepart* field = curl_mime_addpart(form);
 
     // put file
     curl_mime_name(field, fileFormName.c_str());
@@ -50,19 +59,24 @@ std::string Uploader::Upload(const std::string& path) {
         curl_mime_data(field, data.second.c_str(), CURL_ZERO_TERMINATED);
     }
 
-    // set post info
+    // add to request
     curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+
+
+    // set post info
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
     curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
 
+    // post
     CURLcode curLcode = curl_easy_perform(curl);
 
+    // parse response
     std::string out;
     if(curLcode == CURLE_OK) {
         out = parseVariables(responseRegex, responseBuffer);
-        printf("Uploaded: %s\n", out.c_str());
+        printf("Uploaded to: %s\n", out.c_str());
 
         // save entry to log file
         std::ofstream log(TC::Files::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
@@ -75,8 +89,40 @@ std::string Uploader::Upload(const std::string& path) {
                responseBuffer.c_str());
     }
 
+    // free mem
     curl_easy_cleanup(curl);
+    curl_slist_free_all(headers);
+    curl_mime_free(form);
+
     return out;
+}
+
+void Uploader::setURL(std::string value) {
+    url = value;
+}
+
+void Uploader::addHeaderData(std::pair<std::string, std::string> data) {
+    headerData.push_back(data);
+}
+
+void Uploader::addFormData(std::pair<std::string, std::string> data) {
+    formData.push_back(data);
+}
+
+void Uploader::setFileFormName(std::string value) {
+    fileFormName = value;
+}
+
+void Uploader::setResponseRegex(std::string value) {
+    responseRegex = value;
+}
+
+void Uploader::setType(int value) {
+    type = value;
+}
+
+bool Uploader::check(int typeIn) {
+    return (type & typeIn) == typeIn;
 }
 
 std::string Uploader::findVariable(const std::string& var, const nlohmann::json& json) {
@@ -126,19 +172,40 @@ Uploader* Uploader::createFromJSON(const std::string& file) {
     nlohmann::json json = TC::Files::readJSON(file);
     if(json == nullptr) return nullptr;
 
-    std::string requestURL;
-    std::vector<std::pair<std::string, std::string>> formData;
-    std::string fileFormName;
-    std::string URL;
+    Uploader* uploader = new Uploader();
     try {
-        requestURL = json["RequestURL"];
-        for(auto it = json["Arguments"].begin(); it != json["Arguments"].end(); ++it)
-            formData.emplace_back(std::string(it.key()), std::string(it.value()));
-        fileFormName = json["FileFormName"];
-        URL = json["URL"];
+        nlohmann::json::array_t destination = json["DestinationType"];
+        for(auto it = destination.begin(); it != destination.end(); it++) {
+            std::string name = it->get<std::string>();
+            std::transform(name.begin(), name.end(), name.begin(), ::toupper);
+
+            if(name == "FILEUPLOADER") uploader->type = uploader->type | FILE_UPLOADER;
+            else if(name == "IMAGEUPLOADER") {
+                uploader->type = uploader->type | IMAGE_UPLOADER;
+            }
+            else if(name == "TEXTUPLOADER") uploader->type = uploader->type | TEXT_UPLOADER;
+        }
+
+        uploader->url = json["RequestURL"];
+
+        if(json.contains("Headers")) {
+            nlohmann::json args = json["Headers"];
+            for(auto it = args.begin(); it != args.end(); ++it)
+                uploader->headerData.emplace_back(std::string(it.key()), std::string(it.value()));
+        }
+
+        if(json.contains("Arguments")) {
+            nlohmann::json args = json["Arguments"];
+            for(auto it = args.begin(); it != args.end(); ++it)
+                uploader->formData.emplace_back(std::string(it.key()), std::string(it.value()));
+        }
+
+        uploader->fileFormName = json["FileFormName"];
+
+        uploader->responseRegex = json["URL"];
     } catch(nlohmann::json::parse_error error) {
         return nullptr;
     }
 
-    return new Uploader(requestURL, formData, fileFormName, URL);
+    return uploader;
 }

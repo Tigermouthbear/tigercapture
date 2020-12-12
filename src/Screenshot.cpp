@@ -63,7 +63,7 @@ std::future<void>* Screenshot::save() {
         pixmap.save(QString::fromStdString(loc));
 
         // upload then copy url to clipboard
-        if(tigerCapture->getConfig()->getUploader() != nullptr) {
+        if(tigerCapture->getConfig()->getUploader() != nullptr && tigerCapture->getConfig()->getUploader()->check(Uploader::IMAGE_UPLOADER)) {
             // upload, if response is empty break
             std::string res = tigerCapture->getConfig()->getUploader()->Upload(loc);
             if(res.empty()) return;

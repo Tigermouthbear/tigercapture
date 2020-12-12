@@ -5,6 +5,7 @@
 #include <QtWidgets/QApplication>
 
 #include "TigerCapture.h"
+#include "Singleton.h"
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
@@ -13,6 +14,15 @@ int main(int argc, char* argv[]) {
     auto* tigerCapture = new TigerCapture();
 
     if(argc == 2) {
+        tigerCapture->getSystemTray()->hide();
+
+        // make sure only one command interface is running
+        Singleton singleton(7197);
+        if(!singleton()) {
+            printf("Tigercapture already running in background! Exiting...\n");
+            return 0;
+        }
+
         std::string arg = std::string(argv[1]);
         if(arg == "--full") {
             Screenshot screenshot = {tigerCapture};
@@ -36,6 +46,13 @@ int main(int argc, char* argv[]) {
             );
             return 0;
         }
+    }
+
+    // make sure two instances aren't running at once
+    Singleton singleton(7196);
+    if(!singleton()) {
+        printf("Tigercapture already running! Exiting...\n");
+        return 0;
     }
 
     // set window icon then open window

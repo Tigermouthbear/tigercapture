@@ -58,6 +58,8 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
         uploadersDropdown->addItem(filename.c_str());
         if(tigerCapture->getConfig()->getUploaderLoc() == filename) uploadersDropdown->setCurrentText(filename.c_str());
     }
+    uploadersDropdown->addItem("Imgur");
+    if(tigerCapture->getConfig()->getUploaderLoc() == "Imgur") uploadersDropdown->setCurrentText("Imgur");
 
     layout->addWidget(uploadersDropdown, 4, 1);
 

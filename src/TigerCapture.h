@@ -33,7 +33,7 @@ public:
 
     SystemTray* getSystemTray();
 
-    void updateUploadsExplorer();
+    void updateUploadsExplorer(bool val = true);
     bool shouldUpdateUploadsExplorer() const;
 
     std::string getResource(const std::string& resource);

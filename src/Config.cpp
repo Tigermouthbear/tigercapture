@@ -63,10 +63,29 @@ Uploader* Config::getUploader() {
 
 bool Config::setUploader(const std::string& value) {
     if(value == "None" || value.empty()) {
+        if(uploader != nullptr) delete uploader;
         uploaderLoc = "";
         uploader = nullptr;
         return true;
     }
+
+    if(value == "Imgur") {
+        if(uploaderLoc == "Imgur") return true;
+
+        // create imgur uploader
+        Uploader* imgurUploader = new Uploader();
+        imgurUploader->setURL("https://api.imgur.com/3/image");
+        imgurUploader->setFileFormName("image");
+        imgurUploader->setResponseRegex("$json:data.link$");
+        imgurUploader->setType(Uploader::IMAGE_UPLOADER);
+        imgurUploader->addHeaderData(std::pair("authorization", "Client-ID 123aea91ef7437d"));
+
+        // set it
+        uploaderLoc = "Imgur";
+        delete uploader;
+        uploader = imgurUploader;
+    }
+
 
     Uploader* newUploader = Uploader::createFromJSON(TC::Files::getUploadersDirectory() + "/" + value);
     if(newUploader == nullptr) return false;

@@ -68,13 +68,24 @@ void DragUploadWidget::dropEvent(QDropEvent* event) {
     if(mimeData->hasUrls() && mimeData->urls().size() == 1) {
         QUrl url = mimeData->urls().at(0);
         if(tigerCapture->getConfig()->getUploader() != nullptr && url.isLocalFile()) {
+            QString file = url.toLocalFile();
+
+            // make sure it can upload
+            if(file.endsWith(".txt")) {
+                if(!tigerCapture->getConfig()->getUploader()->check(Uploader::TEXT_UPLOADER)) return;
+            } else if(file.endsWith(".png") || file.endsWith(".jpg") || file.endsWith(".jpeg") || file.endsWith(".gif")) {
+                if(!tigerCapture->getConfig()->getUploader()->check(Uploader::IMAGE_UPLOADER)) return;
+            } else {
+                if(!tigerCapture->getConfig()->getUploader()->check(Uploader::FILE_UPLOADER)) return;
+            }
+
             auto* out = new std::future<void>;
             *out = std::async([=]() {
                 // clear so user doesnt accidentally paste something else while waiting for the image to upload
                 TC::Clipboard::clearClipboard();
 
                 // actually upload
-                std::string res = tigerCapture->getConfig()->getUploader()->Upload(url.toLocalFile().toStdString());
+                std::string res = tigerCapture->getConfig()->getUploader()->Upload(file.toStdString());
                 if(res.empty()) return;
 
                 // copy response

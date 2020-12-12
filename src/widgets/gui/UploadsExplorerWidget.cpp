@@ -21,6 +21,8 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int hei
 }
 
 void UploadsExplorerWidget::updateUploads() {
+    uploadedFileWidgets.clear();
+
     // create upload elements
     std::ifstream file;
     file.open(TC::Files::getUploadsLogFile());
@@ -31,8 +33,11 @@ void UploadsExplorerWidget::updateUploads() {
     file.close();
 
     // remove all previous elements
-    QLayoutItem* item;
-    while((item = layout->takeAt(0)) != nullptr) delete item;
+    QLayoutItem *child;
+    while((child = layout->takeAt(0)) != 0) {
+        layout->removeItem(child);
+        delete child;
+    }
 
     // add all from map
     int num = uploadedFileWidgets.size() - 1;

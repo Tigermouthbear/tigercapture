@@ -57,8 +57,8 @@ SystemTray* TigerCapture::getSystemTray() {
     return systemTray;
 }
 
-void TigerCapture::updateUploadsExplorer() {
-    shouldUpdateExplorer = true;
+void TigerCapture::updateUploadsExplorer(bool val) {
+    shouldUpdateExplorer = val;
 }
 
 bool TigerCapture::shouldUpdateUploadsExplorer() const {

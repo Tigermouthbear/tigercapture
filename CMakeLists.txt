@@ -38,7 +38,8 @@ add_executable(tigercapture
         src/widgets/gui/UploadsExplorerWidget.cpp src/widgets/gui/UploadsExplorerWidget.h
         src/region/AreaScreenshotGrabber.cpp src/region/AreaScreenshotGrabber.h
         src/region/PinnedAreaGrabber.cpp src/region/PinnedAreaGrabber.h
-        src/region/RegionGrabber.cpp src/region/RegionGrabber.h)
+        src/region/RegionGrabber.cpp src/region/RegionGrabber.h
+        src/Singleton.cpp src/Singleton.h)
 
 install(TARGETS tigercapture DESTINATION ${CMAKE_INSTALL_PREFIX})
 install(FILES data/tigercapture.desktop DESTINATION /usr/share/applications)
