@@ -1,12 +1,25 @@
 # TigerCapture
-An opensource screenshotting and file uploading tool. Currently only supports multipart form-data requests for custom uploaders.
+An opensource screenshotting and file uploading tool for GNU/Linux. Supports uploading to Imgur and custom hosts using configuration similar to ShareX.
 
-## Plans for 1.0 (first release)
-- Autostart on boot
-- global shortcuts instead of command interface
+## Installing
 
-## Building
-This is still a work in progress so no builds will be available, but you are free to build it yourself!
+### Arch
+AUR package available as `tigercapture` at https://aur.archlinux.org/packages/tigercapture/
+````
+git clone https://aur.archlinux.org/tigercapture.git
+cd tigercapture
+makepkg -si
+````
+
+### Other Distros
+````
+git clone --recursive https://github.com/Tigermouthbear/tigercapture.git
+cd tigercapture
+mkdir build && cd build
+cmake ..
+make
+sudo make install
+````
 
 #### Dependencies
 - Qt5
