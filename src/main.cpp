@@ -14,8 +14,6 @@ int main(int argc, char* argv[]) {
     auto* tigerCapture = new TigerCapture();
 
     if(argc == 2) {
-        tigerCapture->getSystemTray()->hide();
-
         // make sure only one command interface is running
         Singleton singleton(7197);
         if(!singleton()) {
