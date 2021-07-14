@@ -51,7 +51,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
 
     // set column sizes and stretch
     layout->setColumnStretch(0, 0);
-    layout->setColumnStretch(1, 10);
+    layout->setColumnStretch(1, 1);
 
     QObject::connect(this, SIGNAL(updateExplorerSignal()), this, SLOT(updateExplorerSlot()), Qt::QueuedConnection);
 }

@@ -63,4 +63,4 @@ configure_file(${CMAKE_SOURCE_DIR}/data/icons/icon-large.ico ${CMAKE_CURRENT_BIN
 configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/48x48/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/48x48/apps/tigercapture.png COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/128x128/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/128x128/apps/tigercapture.png COPYONLY)
 configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/256x256/tigercapture.png ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/256x256/apps/tigercapture.png COPYONLY)
-configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/scaleable/tigercapture.svg ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/scaleable/apps/tigercapture.svg COPYONLY)
+configure_file(${CMAKE_SOURCE_DIR}/data/icons/hicolor/scalable/tigercapture.svg ${CMAKE_CURRENT_BINARY_DIR}/share/icons/hicolor/scalable/apps/tigercapture.svg COPYONLY)
