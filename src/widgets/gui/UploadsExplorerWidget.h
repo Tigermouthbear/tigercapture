@@ -11,19 +11,23 @@
 
 #include "UploadedFileWidget.h"
 
-class UploadsExplorerWidget: public QWidget {
+class UploadsExplorerWidget: public QScrollArea {
 public:
-    explicit UploadsExplorerWidget(QWidget* parent, int width, int height);
+    explicit UploadsExplorerWidget(QWidget* parent);
 
 public slots:
     void updateUploads();
 
+protected:
+    void resizeEvent(QResizeEvent *event) override;
+
 private:
     std::vector<UploadedFileWidget*> uploadedFileWidgets;
 
-    QScrollArea* scrollArea;
     QWidget* central;
     QGridLayout* layout;
+
+    void updateScrollArea();
 };
 
 

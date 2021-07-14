@@ -6,18 +6,34 @@
 
 #include "../../TigerCapture.hpp"
 
-UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent, int width, int height): QWidget(parent) {
-    scrollArea = new QScrollArea(this);
+UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent): QScrollArea(parent) {
     central = new QWidget(this);
     layout = new QGridLayout(central);
-    scrollArea->setFixedSize(width, height);
-    scrollArea->setWidget(central);
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    QGridLayout(this).addWidget(central);
+    setWidget(central);
+    setWidgetResizable(true);
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
     updateUploads();
 
-    scrollArea->show();
+    show();
+}
+
+void UploadsExplorerWidget::updateScrollArea() {
+    // remove all previous elements
+    QLayoutItem *child;
+    while((child = layout->takeAt(0)) != 0) {
+        layout->removeItem(child);
+        delete child;
+    }
+
+    // add all widgets to scroll area
+    int columns = (this->width() / 100); columns = columns > 1 ? columns-1 : 1; // how many widgets are in one row
+    int num = uploadedFileWidgets.size() - 1;
+    for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
+        layout->addWidget(uploadedFileWidget, (int) (num / columns), num % columns);
+        num--;
+    }
 }
 
 void UploadsExplorerWidget::updateUploads() {
@@ -32,19 +48,11 @@ void UploadsExplorerWidget::updateUploads() {
     }
     file.close();
 
-    // remove all previous elements
-    QLayoutItem *child;
-    while((child = layout->takeAt(0)) != 0) {
-        layout->removeItem(child);
-        delete child;
-    }
-
-    // add all from map
-    int num = uploadedFileWidgets.size() - 1;
-    for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
-        layout->addWidget(uploadedFileWidget, (int) (num / 2), num % 2);
-        num--;
-    }
-
+    updateScrollArea();
     update();
+}
+
+void UploadsExplorerWidget::resizeEvent(QResizeEvent* event) {
+    updateScrollArea();
+    QScrollArea::resizeEvent(event);
 }

@@ -43,13 +43,15 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     connect(configButton, SIGNAL(released()), this, SLOT(handleConfig()));
 
     layout->setColumnMinimumWidth(1, 300);
-    uploadsExplorerWidget = new UploadsExplorerWidget(this, layout->columnMinimumWidth(1),layout->minimumSize().height() - 12);
+    uploadsExplorerWidget = new UploadsExplorerWidget(this);
     layout->addWidget(uploadsExplorerWidget, 0, 1, 5, 1);
 
-    // set size
+    // set size and position from config
     move(tigerCapture->getConfig()->getX() - x(), tigerCapture->getConfig()->getY() - y());
-    //setFixedSize(450, 205);
-    setMinimumSize(450, 205);
+
+    // set column sizes and stretch
+    layout->setColumnStretch(0, 0);
+    layout->setColumnStretch(1, 10);
 
     QObject::connect(this, SIGNAL(updateExplorerSignal()), this, SLOT(updateExplorerSlot()), Qt::QueuedConnection);
 }
