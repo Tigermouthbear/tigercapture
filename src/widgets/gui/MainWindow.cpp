@@ -111,6 +111,4 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     tigerCapture->getConfig()->setY(y());
     tigerCapture->getConfig()->write();
     tigerCapture->setWindowClosed();
-
-    QMainWindow::closeEvent(event);
 }

@@ -51,6 +51,7 @@ void TigerCapture::openWindow() {
 }
 
 void TigerCapture::setWindowClosed() {
+    delete mainWindow;
     mainWindow = nullptr;
 }
 
