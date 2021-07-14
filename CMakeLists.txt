@@ -47,7 +47,8 @@ install(FILES data/icons/icon.ico data/icons/icon-large.ico DESTINATION /usr/sha
 install(FILES data/icons/hicolor/48x48/tigercapture.png DESTINATION /usr/share/icons/hicolor/48x48/apps)
 install(FILES data/icons/hicolor/128x128/tigercapture.png DESTINATION /usr/share/icons/hicolor/128x128/apps)
 install(FILES data/icons/hicolor/256x256/tigercapture.png DESTINATION /usr/share/icons/hicolor/256x256/apps)
-install(FILES data/icons/hicolor/scaleable/tigercapture.svg DESTINATION /usr/share/icons/hicolor/scaleable/apps)
+install(FILES data/icons/hicolor/scalable/tigercapture.svg DESTINATION /usr/share/icons/hicolor/scalable/apps)
+
 
 target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
 

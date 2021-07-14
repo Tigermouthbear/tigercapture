@@ -13,6 +13,7 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent): QScrollArea(paren
     setWidget(central);
     setWidgetResizable(true);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
     updateUploads();
 
