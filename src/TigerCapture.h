@@ -15,13 +15,15 @@ class TigerCapture: public QObject {
 Q_OBJECT
 private:
     Config* config;
-    MainWindow* mainWindow = nullptr;
-    SystemTray* systemTray = nullptr;
+    bool mainWindowOpen = false;
+    MainWindow* mainWindow;
+    SystemTray* systemTray;
 
     std::string resourcePath;
 
 public:
     TigerCapture();
+    ~TigerCapture();
 
     Config* getConfig();
 

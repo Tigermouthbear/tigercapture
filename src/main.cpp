@@ -33,7 +33,9 @@ int main(int argc, char* argv[]) {
             auto* areaScreenshotGrabber = (new AreaScreenshotGrabber(tigerCapture));
             areaScreenshotGrabber->show();
             areaScreenshotGrabber->setQuitOnClose();
-            return QApplication::exec();
+            int r = QApplication::exec();
+            delete tigerCapture;
+            return r;
         } else {
             printf(
                     "Usage:\n"
@@ -57,5 +59,7 @@ int main(int argc, char* argv[]) {
     QApplication::setWindowIcon(QIcon(tigerCapture->getResource("icons/icon.ico").c_str()));
     tigerCapture->openWindow();
 
-    return QApplication::exec();
+    int r = QApplication::exec();
+    delete tigerCapture;
+    return r;
 }

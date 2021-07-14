@@ -44,14 +44,16 @@ MainWindow* TigerCapture::getMainWindow() {
 }
 
 void TigerCapture::openWindow() {
-    if(mainWindow == nullptr) {
+    if(!mainWindowOpen) {
         mainWindow = new MainWindow(this);
         mainWindow->show();
+        mainWindowOpen = true;
     }
 }
 
 void TigerCapture::setWindowClosed() {
-    mainWindow = nullptr;
+    mainWindowOpen = false;
+    delete mainWindow;
 }
 
 SystemTray* TigerCapture::getSystemTray() {
@@ -81,4 +83,9 @@ void TigerCapture::pinArea() {
 void TigerCapture::dragUpload() {
     auto* dragUploadWidget = new DragUploadWidget(this);
     dragUploadWidget->show();
+}
+
+TigerCapture::~TigerCapture() {
+    delete mainWindow;
+    delete systemTray;
 }

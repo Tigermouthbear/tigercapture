@@ -56,3 +56,9 @@ void UploadsExplorerWidget::resizeEvent(QResizeEvent* event) {
     updateScrollArea();
     QScrollArea::resizeEvent(event);
 }
+
+UploadsExplorerWidget::~UploadsExplorerWidget() {
+    for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets)
+        delete uploadedFileWidget;
+}
+

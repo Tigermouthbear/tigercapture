@@ -14,6 +14,7 @@
 class UploadsExplorerWidget: public QScrollArea {
 public:
     explicit UploadsExplorerWidget(QWidget* parent);
+    ~UploadsExplorerWidget();
 
 public slots:
     void updateUploads();
