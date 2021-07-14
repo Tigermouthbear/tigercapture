@@ -10,7 +10,8 @@
 
 #include "TigerCapture.hpp"
 
-Uploader::Uploader() {
+Uploader::Uploader(TigerCapture* tigerCapture) {
+    this->tigerCapture = tigerCapture;
     curl_global_init(CURL_GLOBAL_ALL);
 }
 
@@ -94,6 +95,9 @@ std::string Uploader::Upload(const std::string& path) {
     curl_slist_free_all(headers);
     curl_mime_free(form);
 
+    // update screenshot explorer
+    tigerCapture->getMainWindow()->updateExplorer();
+
     return out;
 }
 
@@ -168,11 +172,11 @@ size_t Uploader::WriteCallback(void* contents, size_t size, size_t nmemb, void* 
     return size * nmemb;
 }
 
-Uploader* Uploader::createFromJSON(const std::string& file) {
+Uploader* Uploader::createFromJSON(TigerCapture* tigerCapture, const std::string& file) {
     nlohmann::json json = TC::Files::readJSON(file);
     if(json == nullptr) return nullptr;
 
-    Uploader* uploader = new Uploader();
+    Uploader* uploader = new Uploader(tigerCapture);
     try {
         nlohmann::json::array_t destination = json["DestinationType"];
         for(auto it = destination.begin(); it != destination.end(); it++) {

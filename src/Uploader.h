@@ -13,7 +13,19 @@
 #include <future>
 #include "json.hpp"
 
+class MainWindow;
+class Config;
+class UploadsExplorerWidget;
+class AreaScreenshotGrabber;
+class PinnedAreaGrabber;
+class Uploader;
+#include "TigerCapture.h"
+class TigerCapture;
+
 class Uploader {
+private:
+    TigerCapture* tigerCapture;
+
 public:
     const static int FILE_UPLOADER = 1;
     const static int IMAGE_UPLOADER = 2;
@@ -24,12 +36,12 @@ public:
 
     bool check(int type);
 
-    static Uploader* createFromJSON(const std::string& file);
+    static Uploader* createFromJSON(TigerCapture* tigerCapture, const std::string& file);
 
     static std::string findVariable(const std::string& var, const nlohmann::json& json);
     static std::string parseVariables(std::string expression, const std::string& response);
 
-    Uploader();
+    Uploader(TigerCapture* tigerCapture);
 
     void setURL(std::string value);
     void addHeaderData(std::pair<std::string, std::string> data);

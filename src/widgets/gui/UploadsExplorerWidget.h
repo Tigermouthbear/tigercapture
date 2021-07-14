@@ -15,6 +15,7 @@ class UploadsExplorerWidget: public QWidget {
 public:
     explicit UploadsExplorerWidget(QWidget* parent, int width, int height);
 
+public slots:
     void updateUploads();
 
 private:

@@ -18,8 +18,6 @@ private:
     MainWindow* mainWindow = nullptr;
     SystemTray* systemTray = nullptr;
 
-    bool shouldUpdateExplorer = false;
-
     std::string resourcePath;
 
 public:
@@ -32,9 +30,6 @@ public:
     void setWindowClosed();
 
     SystemTray* getSystemTray();
-
-    void updateUploadsExplorer(bool val = true);
-    bool shouldUpdateUploadsExplorer() const;
 
     std::string getResource(const std::string& resource);
 

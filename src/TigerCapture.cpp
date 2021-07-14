@@ -4,12 +4,13 @@
 
 #include "TigerCapture.h"
 
+#include <string>
 #include <QtCore/QFile>
 #include <QtCore/QDir>
 #include <QtCore/QtCore>
 
 TigerCapture::TigerCapture() {
-    config = new Config(TC::Files::getConfigDirectory() + "/config.json");
+    config = new Config(this, (TC::Files::getConfigDirectory() + "/config.json").c_str());
     config->read();
 
     // find resource path and set system try icon
@@ -55,14 +56,6 @@ void TigerCapture::setWindowClosed() {
 
 SystemTray* TigerCapture::getSystemTray() {
     return systemTray;
-}
-
-void TigerCapture::updateUploadsExplorer(bool val) {
-    shouldUpdateExplorer = val;
-}
-
-bool TigerCapture::shouldUpdateUploadsExplorer() const {
-    return shouldUpdateExplorer;
 }
 
 std::string TigerCapture::getResource(const std::string& resource) {

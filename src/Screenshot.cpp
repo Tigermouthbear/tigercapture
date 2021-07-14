@@ -9,6 +9,7 @@
 #include <QtGui/QScreen>
 #include <QThread>
 #include <QtGui/QPainter>
+#include <thread>
 #include "TigerCapture.hpp"
 
 Screenshot::Screenshot(TigerCapture* tigerCapture) {
@@ -83,10 +84,10 @@ std::future<void>* Screenshot::save() {
             log << loc << ",\n";
             log.close();
             printf("Saved to: %s\n", loc.c_str());
-        }
 
-        // update explorer
-        tigerCapture->updateUploadsExplorer();
+            // update screenshot explorer
+            tigerCapture->getMainWindow()->updateExplorer();
+        }
 
         delete this;
     });

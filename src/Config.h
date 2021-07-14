@@ -9,9 +9,20 @@
 #include "json.hpp"
 #include "Uploader.h"
 
+class MainWindow;
+class Config;
+class UploadsExplorerWidget;
+class AreaScreenshotGrabber;
+class PinnedAreaGrabber;
+class Uploader;
+#include "TigerCapture.h"
+class TigerCapture;
+
 class Config {
 private:
-    std::string file;
+    TigerCapture* tigerCapture;
+
+    const char* file;
     nlohmann::json json;
 
     bool minimize{};
@@ -26,8 +37,10 @@ private:
 
     int delay{};
 
+    Uploader* createFromJSON(const std::string& file);
+
 public:
-    Config(const std::string& path);
+    Config(TigerCapture* tigerCapture, const char* path);
 
     void read();
     void write();

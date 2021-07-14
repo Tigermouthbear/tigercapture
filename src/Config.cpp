@@ -6,7 +6,8 @@
 
 #include "TigerCapture.hpp"
 
-Config::Config(const std::string& configPath) {
+Config::Config(TigerCapture* tigerCapture, const char* configPath) {
+    this->tigerCapture = tigerCapture;
     this->file = configPath;
 
     json = {
@@ -73,7 +74,7 @@ bool Config::setUploader(const std::string& value) {
         if(uploaderLoc == "Imgur") return true;
 
         // create imgur uploader
-        Uploader* imgurUploader = new Uploader();
+        Uploader* imgurUploader = new Uploader(tigerCapture);
         imgurUploader->setURL("https://api.imgur.com/3/image");
         imgurUploader->setFileFormName("image");
         imgurUploader->setResponseRegex("$json:data.link$");
@@ -87,7 +88,7 @@ bool Config::setUploader(const std::string& value) {
     }
 
 
-    Uploader* newUploader = Uploader::createFromJSON(TC::Files::getUploadersDirectory() + "/" + value);
+    Uploader* newUploader = Uploader::createFromJSON(tigerCapture, TC::Files::getUploadersDirectory() + "/" + value);
     if(newUploader == nullptr) return false;
 
     uploaderLoc = value;
@@ -123,5 +124,3 @@ int Config::getDelay() const {
 void Config::setDelay(int delayIn) {
     this->delay = delayIn;
 }
-
-

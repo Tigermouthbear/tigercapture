@@ -13,9 +13,11 @@
 #include <QtWidgets/QGridLayout>
 
 class MainWindow;
+class Config;
 class UploadsExplorerWidget;
 class AreaScreenshotGrabber;
 class PinnedAreaGrabber;
+class Uploader;
 #include "../../TigerCapture.h"
 class TigerCapture;
 
@@ -41,18 +43,21 @@ private:
 
 public:
     explicit MainWindow(TigerCapture* tigerCapture);
+    void updateExplorer();
+
+signals:
+    void updateExplorerSignal();
 
 public slots:
     void activateWindow();
 
 private slots:
+    void updateExplorerSlot();
     void handleFullScreenshot();
     void handleAreaScreenshot();
     void handlePinArea();
     void handleDragUpload();
     void handleConfig();
-
-    void queryExplorerUpdate();
 
 protected:
     void closeEvent(QCloseEvent* event) override;

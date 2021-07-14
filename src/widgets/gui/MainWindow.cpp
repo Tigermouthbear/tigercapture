@@ -48,12 +48,18 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
 
     // set size
     move(tigerCapture->getConfig()->getX() - x(), tigerCapture->getConfig()->getY() - y());
-    setFixedSize(450, 205);
+    //setFixedSize(450, 205);
+    setMinimumSize(450, 205);
 
-    // start timer for updates
-    auto* timer = new QTimer(this);
-    QObject::connect(timer, SIGNAL(timeout()), this, SLOT(queryExplorerUpdate()));
-    timer->start(1000);
+    QObject::connect(this, SIGNAL(updateExplorerSignal()), this, SLOT(updateExplorerSlot()), Qt::QueuedConnection);
+}
+
+void MainWindow::updateExplorer() {
+    emit updateExplorerSignal();
+}
+
+void MainWindow::updateExplorerSlot() {
+    uploadsExplorerWidget->updateUploads();
 }
 
 void MainWindow::activateWindow() {
@@ -105,11 +111,4 @@ void MainWindow::closeEvent(QCloseEvent* event) {
     tigerCapture->setWindowClosed();
 
     QMainWindow::closeEvent(event);
-}
-
-void MainWindow::queryExplorerUpdate() {
-    if(tigerCapture->shouldUpdateUploadsExplorer()) {
-        tigerCapture->updateUploadsExplorer(false);
-        uploadsExplorerWidget->updateUploads();
-    }
 }
