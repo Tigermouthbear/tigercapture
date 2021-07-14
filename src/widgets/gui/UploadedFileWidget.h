@@ -5,6 +5,7 @@
 #ifndef TIGERCAPTURE_UPLOADEDFILEWIDGET_H
 #define TIGERCAPTURE_UPLOADEDFILEWIDGET_H
 
+#include <QMimeDatabase>
 #include <QtWidgets/QToolButton>
 #include <QMenu>
 #include <QContextMenuEvent>
@@ -12,6 +13,8 @@
 class UploadedFileWidget: public QToolButton {
 Q_OBJECT
 private:
+    QMimeDatabase mime_database;
+
     std::string url;
     std::string loc;
 
