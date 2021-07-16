@@ -130,7 +130,7 @@ void MainWindow::handleDragUpload() {
 void MainWindow::handleConfig() {
     auto* configWidget = new ConfigWidget(tigerCapture);
     configWidget->move(x(), y() + QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight));
-    configWidget->show();
+    configWidget->exec();
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event) {

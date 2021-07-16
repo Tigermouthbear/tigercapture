@@ -11,10 +11,9 @@
 ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     this->tigerCapture = tigerCapture;
 
-    setAttribute(Qt::WA_DeleteOnClose);
-
     setWindowTitle("TigerCapture | Config");
-    setWindowFlags(Qt::WindowStaysOnTopHint);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(Qt::WindowStaysOnTopHint | Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
 
     // create layout
     auto* layout = new QGridLayout(this);
@@ -62,7 +61,6 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     if(tigerCapture->getConfig()->getUploaderLoc() == "Imgur") uploadersDropdown->setCurrentText("Imgur");
 
     layout->addWidget(uploadersDropdown, 4, 1);
-
 
     saveButton = new QPushButton("Save", this);
     layout->addWidget(saveButton, 5, 0, 1, 2, Qt::AlignHCenter);
