@@ -48,6 +48,10 @@ void TigerCapture::openWindow() {
         mainWindow = new MainWindow(this);
         mainWindow->show();
         mainWindowOpen = true;
+    } else {
+        mainWindow->show();
+        mainWindow->activateWindow();
+        mainWindow->raise();
     }
 }
 

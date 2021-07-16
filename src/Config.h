@@ -26,7 +26,7 @@ private:
     nlohmann::json json;
 
     bool minimize{};
-
+    bool above{};
     bool clipboard{};
 
     std::string uploaderLoc;
@@ -47,6 +47,9 @@ public:
 
     bool shouldMinimize() const;
     void setShouldMinimize(bool value);
+
+    bool shouldKeepAbove() const;
+    void setShouldKeepAbove(bool value);
 
     bool shouldClipboard() const;
     void setShouldClipboard(bool value);

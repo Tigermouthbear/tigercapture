@@ -12,6 +12,7 @@ Config::Config(TigerCapture* tigerCapture, const std::string& configPath) {
 
     json = {
             {"minimize",  true},
+            {"above",     true},
             {"clipboard", true},
             {"uploader",  ""},
             {"x",         0},
@@ -26,6 +27,7 @@ Config::Config(TigerCapture* tigerCapture, const std::string& configPath) {
 
 void Config::read() {
     minimize = json["minimize"];
+    above = json["above"];
     clipboard = json["clipboard"];
     setUploader(json["uploader"]);
     x = json["x"];
@@ -37,6 +39,7 @@ void Config::read() {
 
 void Config::write() {
     json["minimize"] = minimize;
+    json["above"] = above;
     json["clipboard"] = clipboard;
     json["uploader"] = uploaderLoc;
     json["x"] = x;
@@ -54,6 +57,13 @@ bool Config::shouldMinimize() const {
 
 void Config::setShouldMinimize(bool value) {
     minimize = value;
+}
+
+bool Config::shouldKeepAbove() const {
+    return above;
+}
+void Config::setShouldKeepAbove(bool value) {
+    above = value;
 }
 
 bool Config::shouldClipboard() const {

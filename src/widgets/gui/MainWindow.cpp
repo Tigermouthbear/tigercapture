@@ -14,7 +14,7 @@ MainWindow::MainWindow(TigerCapture* tigerCapture): QMainWindow() {
     this->tigerCapture = tigerCapture;
 
     setWindowTitle("TigerCapture");
-    setWindowFlags(Qt::WindowStaysOnTopHint);
+    if(tigerCapture->getConfig()->shouldKeepAbove()) setWindowFlags(Qt::WindowStaysOnTopHint);
     setMinimumSize(410, 205);
 
     // create layout

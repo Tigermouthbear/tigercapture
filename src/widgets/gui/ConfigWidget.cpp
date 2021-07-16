@@ -19,31 +19,37 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     auto* layout = new QGridLayout(this);
 
     // add elements
-    uploadersLabel = new QLabel("Close window on capture", this);
-    layout->addWidget(uploadersLabel, 1, 0);
+    label = new QLabel("Close window on capture", this);
+    layout->addWidget(label, 1, 0);
 
     shouldMinimizeCheckbox = new QCheckBox(this);
     shouldMinimizeCheckbox->setChecked(tigerCapture->getConfig()->shouldMinimize());
     layout->addWidget(shouldMinimizeCheckbox, 1, 1, 1, 1, Qt::AlignHCenter);
 
-    clipboardLabel = new QLabel("Copy image before uploading", this);
-    layout->addWidget(clipboardLabel, 2, 0);
+    label = new QLabel("Keep window on top", this);
+    layout->addWidget(label, 2, 0);
+
+    shouldKeepAboveCheckbox = new QCheckBox(this);
+    shouldKeepAboveCheckbox->setChecked(tigerCapture->getConfig()->shouldKeepAbove());
+    layout->addWidget(shouldKeepAboveCheckbox, 2, 1, 1, 1, Qt::AlignHCenter);
+
+    label = new QLabel("Copy image before uploading", this);
+    layout->addWidget(label, 3, 0);
 
     shouldClipboardCheckbox = new QCheckBox(this);
     shouldClipboardCheckbox->setChecked(tigerCapture->getConfig()->shouldClipboard());
-    layout->addWidget(shouldClipboardCheckbox, 2, 1, 1, 1, Qt::AlignHCenter);
+    layout->addWidget(shouldClipboardCheckbox, 3, 1, 1, 1, Qt::AlignHCenter);
 
-
-    uploadersLabel = new QLabel("Delay (ms)", this);
-    layout->addWidget(uploadersLabel, 3, 0);
+    label = new QLabel("Delay (ms)", this);
+    layout->addWidget(label, 4, 0);
 
     delayInput = new QLineEdit(this);
     delayInput->setText(std::to_string(tigerCapture->getConfig()->getDelay()).c_str());
     delayInput->setValidator(new QIntValidator(0, 20000, this));
-    layout->addWidget(delayInput, 3, 1, 1, 1, Qt::AlignHCenter);
+    layout->addWidget(delayInput, 4, 1, 1, 1, Qt::AlignHCenter);
 
-    uploadersLabel = new QLabel("File Uploader", this);
-    layout->addWidget(uploadersLabel, 4, 0);
+    label = new QLabel("File Uploader", this);
+    layout->addWidget(label, 5, 0);
 
     uploadersDropdown = new QComboBox(this);
     uploadersDropdown->addItem("None");
@@ -60,10 +66,10 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     uploadersDropdown->addItem("Imgur");
     if(tigerCapture->getConfig()->getUploaderLoc() == "Imgur") uploadersDropdown->setCurrentText("Imgur");
 
-    layout->addWidget(uploadersDropdown, 4, 1);
+    layout->addWidget(uploadersDropdown, 5, 1);
 
     saveButton = new QPushButton("Save", this);
-    layout->addWidget(saveButton, 5, 0, 1, 2, Qt::AlignHCenter);
+    layout->addWidget(saveButton, 6, 0, 1, 2, Qt::AlignHCenter);
     connect(saveButton, SIGNAL (released()), this, SLOT (save()));
 }
 
@@ -72,5 +78,13 @@ void ConfigWidget::save() {
     tigerCapture->getConfig()->setShouldMinimize(shouldMinimizeCheckbox->isChecked());
     tigerCapture->getConfig()->setShouldClipboard(shouldClipboardCheckbox->isChecked());
     if(!tigerCapture->getConfig()->setUploader(uploadersDropdown->currentText().toStdString())) uploadersDropdown->setCurrentText("None");
+
+    bool above = shouldKeepAboveCheckbox->isChecked();
+    if(above != tigerCapture->getConfig()->shouldKeepAbove()) {
+        tigerCapture->getConfig()->setShouldKeepAbove(above);
+        tigerCapture->getMainWindow()->close();
+        tigerCapture->openWindow();
+    }
+
     close();
 }
