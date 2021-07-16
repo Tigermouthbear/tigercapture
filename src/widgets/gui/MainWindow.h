@@ -41,6 +41,9 @@ private:
 
     UploadsExplorerWidget* uploadsExplorerWidget;
 
+    void addWidgets(bool compact, bool refresh = false);
+    bool isCompact(QSize size);
+
 public:
     explicit MainWindow(TigerCapture* tigerCapture);
     void updateExplorer();
@@ -60,6 +63,7 @@ private slots:
     void handleConfig();
 
 protected:
+    void resizeEvent(QResizeEvent* event) override;
     void closeEvent(QCloseEvent* event) override;
 };
 

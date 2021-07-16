@@ -22,7 +22,7 @@ class Config {
 private:
     TigerCapture* tigerCapture;
 
-    const char* file;
+    std::string file;
     nlohmann::json json;
 
     bool minimize{};
@@ -34,13 +34,13 @@ private:
 
     int x{};
     int y{};
+    int width{};
+    int height{};
 
     int delay{};
 
-    Uploader* createFromJSON(const std::string& file);
-
 public:
-    Config(TigerCapture* tigerCapture, const char* path);
+    Config(TigerCapture* tigerCapture, const std::string& configPath);
 
     void read();
     void write();
@@ -60,6 +60,12 @@ public:
 
     int getY() const;
     void setY(int y);
+
+    int getWidth() const;
+    void setWidth(int width);
+
+    int getHeight() const;
+    void setHeight(int height);
 
     int getDelay() const;
     void setDelay(int delayIn);

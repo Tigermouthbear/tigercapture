@@ -6,7 +6,7 @@
 
 #include "TigerCapture.hpp"
 
-Config::Config(TigerCapture* tigerCapture, const char* configPath) {
+Config::Config(TigerCapture* tigerCapture, const std::string& configPath) {
     this->tigerCapture = tigerCapture;
     this->file = configPath;
 
@@ -16,6 +16,8 @@ Config::Config(TigerCapture* tigerCapture, const char* configPath) {
             {"uploader",  ""},
             {"x",         0},
             {"y",         0},
+            {"width",     530},
+            {"height",    980},
             {"delay",     0}
     };
     nlohmann::json read = TC::Files::readJSON(file);
@@ -28,6 +30,8 @@ void Config::read() {
     setUploader(json["uploader"]);
     x = json["x"];
     y = json["y"];
+    width = json["width"];
+    height = json["height"];
     delay = json["delay"];
 }
 
@@ -37,6 +41,8 @@ void Config::write() {
     json["uploader"] = uploaderLoc;
     json["x"] = x;
     json["y"] = y;
+    json["width"] = width;
+    json["height"] = height;
     json["delay"] = delay;
 
     TC::Files::writeJSON(file, json);
@@ -115,6 +121,22 @@ int Config::getY() const {
 
 void Config::setY(int yIn) {
     y = yIn;
+}
+
+int Config::getWidth() const {
+    return width;
+}
+
+void Config::setWidth(int widthIn) {
+    width = widthIn;
+}
+
+int Config::getHeight() const {
+    return height;
+}
+
+void Config::setHeight(int heightIn) {
+    height = heightIn;
 }
 
 int Config::getDelay() const {

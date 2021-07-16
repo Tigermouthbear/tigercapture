@@ -15,6 +15,8 @@ UploadsExplorerWidget::UploadsExplorerWidget(QWidget* parent): QScrollArea(paren
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    layout->setAlignment(Qt::AlignTop);
+
     updateUploads();
 
     show();
@@ -29,11 +31,19 @@ void UploadsExplorerWidget::updateScrollArea() {
     }
 
     // add all widgets to scroll area
-    int columns = (this->width() / 100); columns = columns > 1 ? columns-1 : 1; // how many widgets are in one row
-    int num = uploadedFileWidgets.size() - 1;
-    for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
-        layout->addWidget(uploadedFileWidget, (int) (num / columns), num % columns);
-        num--;
+    if(compact) {
+        int num = uploadedFileWidgets.size() - 1;
+        for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
+            layout->addWidget(uploadedFileWidget, (int) (num / 2), num % 2);
+            num--;
+        }
+    } else {
+        int columns = (width() - layout->horizontalSpacing() - verticalScrollBar()->sizeHint().width()) / (116 + layout->horizontalSpacing()); columns = columns > 1 ? columns : 1; // how many widgets are in one row
+        int num = uploadedFileWidgets.size() - 1;
+        for(UploadedFileWidget* uploadedFileWidget: uploadedFileWidgets) {
+            layout->addWidget(uploadedFileWidget, (int) (num / columns), num % columns);
+            num--;
+        }
     }
 }
 
@@ -63,3 +73,6 @@ UploadsExplorerWidget::~UploadsExplorerWidget() {
         delete uploadedFileWidget;
 }
 
+void UploadsExplorerWidget::setCompact(bool compactIn) {
+    compact = compactIn;
+}

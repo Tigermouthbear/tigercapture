@@ -8,6 +8,7 @@
 #include <QWidget>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QScrollArea>
+#include <QtWidgets/QScrollBar>
 
 #include "UploadedFileWidget.h"
 
@@ -15,6 +16,8 @@ class UploadsExplorerWidget: public QScrollArea {
 public:
     explicit UploadsExplorerWidget(QWidget* parent);
     ~UploadsExplorerWidget();
+
+    void setCompact(bool compact);
 
 public slots:
     void updateUploads();
@@ -27,6 +30,7 @@ private:
 
     QWidget* central;
     QGridLayout* layout;
+    bool compact = false;
 
     void updateScrollArea();
 };

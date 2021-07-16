@@ -64,7 +64,7 @@ ConfigWidget::ConfigWidget(TigerCapture* tigerCapture): QDialog() {
     layout->addWidget(uploadersDropdown, 4, 1);
 
 
-    saveButton = new QPushButton("Save and Close", this);
+    saveButton = new QPushButton("Save", this);
     layout->addWidget(saveButton, 5, 0, 1, 2, Qt::AlignHCenter);
     connect(saveButton, SIGNAL (released()), this, SLOT (save()));
 }
