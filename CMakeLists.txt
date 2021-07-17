@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.12.4)
 project(tigercapture)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -lcurl -pthread")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -pthread")
 
 set(CMAKE_INSTALL_PREFIX /usr/bin)
 
 # Tell cmake where Qt is located
 set(Qt5_DIR "/usr/lib/cmake/Qt5/")
 
-# Tell cmake to find the modules Qt5Core and Qt5widgets
-find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
+# Tell cmake to find the modules Qt5Core, Qt5Widgets, and Qt5Network
+find_package(Qt5 COMPONENTS Core Widgets Network REQUIRED)
 
 # automoc!
 set(CMAKE_AUTOMOC ON)
@@ -49,7 +49,7 @@ install(FILES data/icons/hicolor/128x128/tigercapture.png DESTINATION /usr/share
 install(FILES data/icons/hicolor/256x256/tigercapture.png DESTINATION /usr/share/icons/hicolor/256x256/apps)
 
 
-target_link_libraries(tigercapture Qt5::Core Qt5::Widgets curl clip)
+target_link_libraries(tigercapture Qt5::Core Qt5::Widgets Qt5::Network clip)
 
 target_compile_definitions(tigercapture PRIVATE INSTALL_PREFIX="${CMAKE_INSTALL_PREFIX}")
 

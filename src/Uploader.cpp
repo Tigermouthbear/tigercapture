@@ -6,77 +6,59 @@
 
 #include <iostream>
 #include <QtCore/QString>
+#include <QtNetwork/QHttpMultiPart>
+#include <QtNetwork/QNetworkReply>
+#include <QEventLoop>
+#include <QFileInfo>
 #include <utility>
 
 #include "TigerCapture.hpp"
 
 Uploader::Uploader(TigerCapture* tigerCapture) {
     this->tigerCapture = tigerCapture;
-    curl_global_init(CURL_GLOBAL_ALL);
-}
-
-std::future<void>* Uploader::Upload(const std::string& path, void* extraData, void (* callback)(void*, const std::string&)) {
-    auto* out = new std::future<void>;
-    *out = std::async([=]() {
-        std::string res = Upload(path);
-        if(callback != nullptr) {
-            callback(extraData, res);
-        }
-    });
-    return out;
 }
 
 std::string Uploader::Upload(const std::string& path) {
-    CURL* curl = curl_easy_init();
-    std::string responseBuffer;
-    char errbuf[CURL_ERROR_SIZE];
-    errbuf[0] = 0;
-
+    QNetworkAccessManager* networkAccessManager = new QNetworkAccessManager();
+    QUrl qUrl(url.c_str());
+    QNetworkRequest request(qUrl);
+    QHttpMultiPart* multiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
     // add headers
-    struct curl_slist* headers = NULL;
-    headers = curl_slist_append(headers, "content-type: multipart/form-data;");
     if(headerData.size() > 0) {
         // loop all in array
         for(const std::pair<std::string, std::string>& data: headerData)
-            headers = curl_slist_append(headers, (data.first + ": " + data.second).c_str());
+            request.setRawHeader(QByteArray::fromStdString(data.first), data.second.c_str());
     }
 
-    // add them to request
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-
-    // add arguments
-    curl_mime* form = curl_mime_init(curl);
-    curl_mimepart* field = curl_mime_addpart(form);
-
-    // put file
-    curl_mime_name(field, fileFormName.c_str());
-    curl_mime_filedata(field, path.c_str());
+    // put file to form data
+    QFile* file = new QFile(path.c_str());
+    file->open(QIODevice::ReadOnly);
+    file->setParent(multiPart);
+    QFileInfo fileInfo(*file);
+    QHttpPart filePart;
+    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + QString::fromStdString(fileFormName) +"\"; filename=\"" + fileInfo.fileName() + "\""));
+    filePart.setHeader(QNetworkRequest::ContentTypeHeader, QVariant("application/octet-stream"));
+    filePart.setBodyDevice(file);
+    multiPart->append(filePart);
 
     // put other data
     for(const std::pair<std::string, std::string>& data: formData) {
-        field = curl_mime_addpart(form);
-        curl_mime_name(field, data.first.c_str());
-        curl_mime_data(field, data.second.c_str(), CURL_ZERO_TERMINATED);
+        QHttpPart part;
+        part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(("form-data; name=\"" + data.first +"\"").c_str()));
+        part.setBody(QByteArray::fromStdString(data.second));
+        multiPart->append(part);
     }
 
-    // add to request
-    curl_easy_setopt(curl, CURLOPT_MIMEPOST, form);
+    QEventLoop loop;
+    QNetworkReply* reply = networkAccessManager->post(request, multiPart);
+    multiPart->setParent(reply);
+    connect(reply, SIGNAL(finished()), &loop, SLOT(quit()));
+    loop.exec(); // wait for reply (this function shouldn't be called in the main thread)
 
-
-    // set post info
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &responseBuffer);
-    curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errbuf);
-
-    // post
-    CURLcode curLcode = curl_easy_perform(curl);
-
-    // parse response
-    std::string out;
-    if(curLcode == CURLE_OK) {
-        out = parseVariables(responseRegex, responseBuffer);
+    if(reply->error() == QNetworkReply::NoError) {
+        std::string response = reply->readAll().toStdString();
+        std::string out = parseVariables(responseRegex, response);
         printf("Uploaded to: %s\n", out.c_str());
 
         // save entry to log file
@@ -84,21 +66,21 @@ std::string Uploader::Upload(const std::string& path) {
         log << path << "," << out << "\n";
         log.close();
         printf("Saved to: %s\n", path.c_str());
+
+        // free network request's memory
+        reply->deleteLater();
+        networkAccessManager->deleteLater();
+
+        // update screenshot explorer
+        tigerCapture->getMainWindow()->updateExplorer();
+
+        return out;
     } else {
-        out = std::string();
-        printf("ERROR uploading screenshot to %s (%d: %s) (Response: %s)\n", url.c_str(), curLcode, errbuf,
-               responseBuffer.c_str());
+        printf("%s\n", reply->errorString().toStdString().c_str());
+        reply->deleteLater();
+        networkAccessManager->deleteLater();
+        return "";
     }
-
-    // free mem
-    curl_easy_cleanup(curl);
-    curl_slist_free_all(headers);
-    curl_mime_free(form);
-
-    // update screenshot explorer
-    tigerCapture->getMainWindow()->updateExplorer();
-
-    return out;
 }
 
 void Uploader::setURL(std::string value) {
@@ -164,12 +146,6 @@ std::string Uploader::parseVariables(std::string expression, const std::string& 
         --idx;
     }
     return expression;
-}
-
-// https://stackoverflow.com/questions/9786150/save-curl-content-result-into-a-string-in-c/9786295
-size_t Uploader::WriteCallback(void* contents, size_t size, size_t nmemb, void* userp) {
-    ((std::string*) userp)->append((char*) contents, size * nmemb);
-    return size * nmemb;
 }
 
 Uploader* Uploader::createFromJSON(TigerCapture* tigerCapture, const std::string& file) {

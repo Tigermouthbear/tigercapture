@@ -28,5 +28,5 @@ bool Singleton::operator()() {
 }
 
 Singleton::~Singleton() {
-    if(socket_fd != -1) shutdown(socket_fd, SHUT_RDWR);
+    if(socket_fd != -1) shutdown(socket_fd, 2/*SHUT_RDWR*/);
 }

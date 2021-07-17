@@ -5,11 +5,16 @@
 #ifndef TIGERCAPTURE_SINGLETON_H
 #define TIGERCAPTURE_SINGLETON_H
 
-
-#include <netinet/in.h>
 #include <string>
 #include <cstring>
 #include <stdexcept>
+
+#ifdef _WIN32
+#include <winsock2.h>
+#include <windows.h>
+#else
+#include <netinet/in.h>
+#endif
 
 // adapted from: https://stackoverflow.com/questions/5339200/how-to-create-a-single-instance-application-in-c-or-c
 class Singleton {

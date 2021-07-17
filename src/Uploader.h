@@ -2,15 +2,16 @@
 // Created by Tigermouthbear on 8/17/20.
 //
 
-#pragma once
-
 #ifndef TIGERCAPTURE_UPLOADER_H
 #define TIGERCAPTURE_UPLOADER_H
 
 #include <string>
-#include <curl/curl.h>
 #include <vector>
 #include <future>
+#include <QtNetwork/QNetworkAccessManager>
+#include <QtNetwork/QNetworkRequest>
+#include <QUrlQuery>
+#include <QUrl>
 #include "json.hpp"
 
 class MainWindow;
@@ -22,16 +23,13 @@ class Uploader;
 #include "TigerCapture.h"
 class TigerCapture;
 
-class Uploader {
-private:
-    TigerCapture* tigerCapture;
-
+class Uploader: QObject {
+Q_OBJECT
 public:
     const static int FILE_UPLOADER = 1;
     const static int IMAGE_UPLOADER = 2;
     const static int TEXT_UPLOADER = 4;
 
-    std::future<void>* Upload(const std::string& path, void* extraData, void (* callback)(void*, const std::string&));
     std::string Upload(const std::string& path);
 
     bool check(int type);
@@ -51,6 +49,7 @@ public:
     void setType(int value);
 
 private:
+    TigerCapture* tigerCapture;
     int type = 0;
 
     std::string url;
@@ -58,8 +57,6 @@ private:
     std::vector<std::pair<std::string, std::string>> formData;
     std::string fileFormName;
     std::string responseRegex;
-
-    static size_t WriteCallback(void* contents, size_t size, size_t nmemb, void* userp);
 };
 
 

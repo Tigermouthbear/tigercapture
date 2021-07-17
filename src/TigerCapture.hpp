@@ -9,7 +9,6 @@
 #include <iostream>
 #include <chrono>
 #include <unistd.h>
-#include <pwd.h>
 #include <ctime>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -19,6 +18,17 @@
 #include <QtGui/QPainter>
 #include "json.hpp"
 #include "../clip/clip.h"
+
+#ifdef _WIN32
+#include <windows.h>
+#include <shlobj.h>
+#include <sstream>
+#include <locale>
+#include <codecvt>
+#else
+#include <pwd.h>
+#include <filesystem>
+#endif
 
 namespace TC {
     //
@@ -59,20 +69,19 @@ namespace TC {
         static void copyToClipboard(const QPixmap& pixmap) {
             QImage image = pixmap.toImage();
 
-            clip::image_spec spec = {
-                    (unsigned long) image.width(),
-                    (unsigned long) image.height(),
-                    (unsigned long) image.depth(),
-                    (unsigned long) image.bytesPerLine(),
-                    0xff0000,
-                    0xff00,
-                    0xff,
-                    0xff000000,
-                    16,
-                    8,
-                    0,
-                    24,
-            };
+            struct clip::image_spec spec;
+            spec.width = image.width();
+            spec.height = image.height();
+            spec.bits_per_pixel = image.depth();
+            spec.bytes_per_row = image.bytesPerLine();
+            spec.red_mask = 0xff0000;
+            spec.green_mask = 0xff00;
+            spec.blue_mask = 0xff;
+            spec.alpha_mask = 0xff000000;
+            spec.red_shift = 16;
+            spec.green_shift = 8;
+            spec.blue_shift = 0;
+            spec.alpha_shift = 24;
 
             clip::image clip_image(image.bits(), spec);
             clip::set_image(clip_image);
@@ -94,27 +103,51 @@ namespace TC {
 
         static std::string createDirectoryIfNonexistant(const std::string& directory) {
             if(!exists(directory)) {
-                mode_t nMode = 0733;
-                #if defined(_WIN32)
-                _mkdir(directory.c_str());
-                #else
-                mkdir(directory.c_str(), nMode);
-                #endif
+#ifdef _WIN32
+                CreateDirectory(directory.c_str(), NULL);
+#else
+                std::filesystem::create_directories(directory);
+#endif
             }
             return directory;
         }
-
+#ifndef _WIN32
         static std::string getHomeDirectory() {
             struct passwd* pw = getpwuid(getuid());
             return std::string(pw->pw_dir);
         }
+#else
+        static std::string ws2s(const std::wstring& wstr) {
+            using convert_typeX = std::codecvt_utf8<wchar_t>;
+            std::wstring_convert<convert_typeX, wchar_t> converterX;
+            return converterX.to_bytes(wstr);
+        }
+#endif
 
         static std::string getConfigDirectory() {
+#ifdef _WIN32
+            wchar_t* localAppData = 0;
+            SHGetKnownFolderPath(FOLDERID_LocalAppData, 0, NULL, &localAppData);
+            std::wstringstream ss;
+            ss << localAppData << L"/TigerCapture";
+            CoTaskMemFree(static_cast<void*>(localAppData));
+            return ws2s(ss.str());
+#else
             return createDirectoryIfNonexistant(getHomeDirectory() + "/.config/TigerCapture");
+#endif
         }
 
         static std::string getLocalPicturesDirectory() {
+#ifdef _WIN32
+            wchar_t* picturesFolder = 0;
+            SHGetKnownFolderPath(FOLDERID_Pictures, 0, NULL, &picturesFolder);
+            std::wstringstream ss;
+            ss << picturesFolder << L"/";
+            CoTaskMemFree(static_cast<void*>(picturesFolder));
+            return ws2s(ss.str());
+#else
             return createDirectoryIfNonexistant(getHomeDirectory() + "/Pictures");
+#endif
         }
 
         static std::string getPicturesDirectory() {

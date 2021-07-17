@@ -18,7 +18,7 @@ TigerCapture::TigerCapture() {
     #if defined(Q_OS_LINUX) || defined(Q_OS_UNIX)
     std::string dirs[] = { std::string(INSTALL_PREFIX) + "/share/tigercapture", "/usr/share/tigercapture", "/usr/local/share/tigercapture"/*, applicationDirPath*/ };
     #elif defined(Q_OS_WIN)
-    std::string dirs[] = { applicationDirPath }
+    std::string dirs[] = { applicationDirPath };
     #endif
     bool exists = false;
     std::string icon;
@@ -92,4 +92,5 @@ void TigerCapture::dragUpload() {
 TigerCapture::~TigerCapture() {
     delete mainWindow;
     delete systemTray;
+    delete config;
 }

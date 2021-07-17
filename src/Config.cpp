@@ -95,14 +95,14 @@ bool Config::setUploader(const std::string& value) {
         imgurUploader->setFileFormName("image");
         imgurUploader->setResponseRegex("$json:data.link$");
         imgurUploader->setType(Uploader::IMAGE_UPLOADER);
-        imgurUploader->addHeaderData(std::pair("authorization", "Client-ID 123aea91ef7437d"));
+        imgurUploader->addHeaderData(std::pair<std::string, std::string>("authorization", "Client-ID 123aea91ef7437d"));
 
         // set it
         uploaderLoc = "Imgur";
         delete uploader;
         uploader = imgurUploader;
+        return true;
     }
-
 
     Uploader* newUploader = Uploader::createFromJSON(tigerCapture, TC::Files::getUploadersDirectory() + "/" + value);
     if(newUploader == nullptr) return false;
@@ -155,4 +155,8 @@ int Config::getDelay() const {
 
 void Config::setDelay(int delayIn) {
     this->delay = delayIn;
+}
+
+Config::~Config() {
+    delete uploader;
 }

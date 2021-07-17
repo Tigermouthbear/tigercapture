@@ -23,4 +23,3 @@ sudo make install
 
 #### Dependencies
 - Qt5
-- libcurl

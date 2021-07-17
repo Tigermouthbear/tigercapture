@@ -41,6 +41,7 @@ private:
 
 public:
     Config(TigerCapture* tigerCapture, const std::string& configPath);
+    ~Config();
 
     void read();
     void write();
