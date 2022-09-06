@@ -30,7 +30,7 @@ public:
     const static int IMAGE_UPLOADER = 2;
     const static int TEXT_UPLOADER = 4;
 
-    std::string Upload(const std::string& path);
+    std::string upload(const std::string& path);
 
     bool check(int type);
 

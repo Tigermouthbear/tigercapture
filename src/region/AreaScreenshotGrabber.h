@@ -15,15 +15,10 @@ private:
     TigerCapture* tigerCapture;
     Screenshot* screenshot;
 
-    std::future<void>* future = nullptr;
-
-    bool shouldQuit = false;
-    void quit();
-
 public:
     explicit AreaScreenshotGrabber(TigerCapture* tigerCapture);
 
-    void setQuitOnClose();
+    void open();
 
 protected:
     void onFinish() override;

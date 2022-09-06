@@ -30,10 +30,13 @@ TigerCapture::TigerCapture() {
             break;
         }
     }
+
     // create system tray when resource path is found
     if(exists) systemTray = new SystemTray(this, icon);
     else systemTray = new SystemTray(this);
     systemTray->show();
+
+    output = new OutputSource();
 }
 
 Config* TigerCapture::getConfig() {
@@ -60,28 +63,78 @@ void TigerCapture::setWindowClosed() {
     delete mainWindow;
 }
 
+void TigerCapture::setTakingScreenshot(bool value) {
+  this->takingScreenshot = value;
+}
+
 SystemTray* TigerCapture::getSystemTray() {
     return systemTray;
+}
+
+OutputSource* TigerCapture::getOutput() {
+    return output;
+}
+
+void TigerCapture::setOutput(OutputSource* value) {
+    delete output;
+    output = value;
 }
 
 std::string TigerCapture::getResource(const std::string& resource) {
     return resourcePath.append("/").append(resource);
 }
 
+static bool endsWith(const std::string& str, const std::string& suffix) {
+    return str.size() >= suffix.size() && 0 == str.compare(str.size()-suffix.size(), suffix.size(), suffix);
+}
+
+void TigerCapture::upload(std::string file) {
+    if(config->getUploader() == nullptr) {
+        output->write("No uploader selected! Please check your config.\n");
+        output->flush();
+        return;
+    }
+
+    // make sure it can upload
+    bool upload;
+    if(endsWith(file, ".txt")) {
+        upload = config->getUploader()->check(Uploader::TEXT_UPLOADER);
+    } else if(endsWith(file, ".png") || endsWith(file, ".jpg") || endsWith(file, ".jpeg") || endsWith(file, ".gif")) {
+        upload = config->getUploader()->check(Uploader::IMAGE_UPLOADER);
+    } else {
+        upload = config->getUploader()->check(Uploader::FILE_UPLOADER);
+    }
+    if(!upload) {
+        output->write("Current uploader does not accept this file type!\n");
+        output->flush();
+    }
+
+    // discard future, just let this run in the background
+    std::async([=]() {
+        // clear so user doesnt accidentally paste something else while waiting for the image to upload
+        TC::Clipboard::clearClipboard();
+
+        // actually upload
+        std::string res = config->getUploader()->upload(file);
+        if(res.empty()) return;
+
+        // copy response
+        TC::Clipboard::copyToClipboard(res);
+    });
+}
+
 void TigerCapture::fullScreenshot() {
     auto* screenshot = new Screenshot(this);
     screenshot->take();
-    auto future = screenshot->save();
+    screenshot->save();
 }
 
 void TigerCapture::areaScreenshot() {
-    auto* areaScreenshotGrabber = new AreaScreenshotGrabber(this);
-    areaScreenshotGrabber->show();
+    if(!this->takingScreenshot) (new AreaScreenshotGrabber(this))->open();
 }
 
 void TigerCapture::pinArea() {
-    auto* pinnedAreaGrabber = new PinnedAreaGrabber(this);
-    pinnedAreaGrabber->show();
+    if(!this->takingScreenshot) (new PinnedAreaGrabber(this))->open();
 }
 
 void TigerCapture::dragUpload() {
@@ -90,7 +143,8 @@ void TigerCapture::dragUpload() {
 }
 
 TigerCapture::~TigerCapture() {
-    delete mainWindow;
+    if(mainWindowOpen) delete mainWindow;
+    delete output;
     delete systemTray;
     delete config;
 }

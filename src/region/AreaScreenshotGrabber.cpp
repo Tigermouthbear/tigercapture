@@ -15,6 +15,11 @@ AreaScreenshotGrabber::AreaScreenshotGrabber(TigerCapture* tigerCapture): Region
     screenshot->take();
 }
 
+void AreaScreenshotGrabber::open() {
+    tigerCapture->setTakingScreenshot(true);
+    show();
+}
+
 // draw pre cropped screenshot
 void AreaScreenshotGrabber::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
@@ -31,21 +36,9 @@ void AreaScreenshotGrabber::onFinish() {
     auto selection = getSelection();
     if(hasDragged && selection != nullptr) {
         screenshot->crop(selection->x(), selection->y(), selection->width(), selection->height());
-        future = screenshot->save();
+        screenshot->save();
     }
     
     close();
-    if(shouldQuit) quit();
-}
-
-void AreaScreenshotGrabber::setQuitOnClose() {
-    shouldQuit = true;
-}
-
-void AreaScreenshotGrabber::quit() {
-    if(hasDragged && getSelection() != nullptr) {
-        while(future == nullptr) {  }
-        future->wait();
-    }
-    QApplication::exit();
+    tigerCapture->setTakingScreenshot(false);
 }

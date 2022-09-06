@@ -10,10 +10,13 @@
 
 class PinnedAreaGrabber: public RegionGrabber {
 private:
+    TigerCapture* tigerCapture;
     Screenshot* screenshot;
 
 public:
     explicit PinnedAreaGrabber(TigerCapture* tigerCapture);
+
+    void open();
 
 protected:
     void onFinish() override;

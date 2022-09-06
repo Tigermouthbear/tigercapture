@@ -18,7 +18,7 @@ Uploader::Uploader(TigerCapture* tigerCapture) {
     this->tigerCapture = tigerCapture;
 }
 
-std::string Uploader::Upload(const std::string& path) {
+std::string Uploader::upload(const std::string& path) {
     QNetworkAccessManager* networkAccessManager = new QNetworkAccessManager();
     QUrl qUrl(url.c_str());
     QNetworkRequest request(qUrl);
@@ -59,13 +59,19 @@ std::string Uploader::Upload(const std::string& path) {
     if(reply->error() == QNetworkReply::NoError) {
         std::string response = reply->readAll().toStdString();
         std::string out = parseVariables(responseRegex, response);
-        printf("Uploaded to: %s\n", out.c_str());
+
+        std::string fmt = "Uploaded to: " + out;
+        tigerCapture->getOutput()->write(fmt + "\n");
+        tigerCapture->getSystemTray()->showMessage("TigerCapture", fmt.c_str());
 
         // save entry to log file
         std::ofstream log(TC::Files::getUploadsLogFile(), std::ios_base::app | std::ios_base::out);
         log << path << "," << out << "\n";
         log.close();
-        printf("Saved to: %s\n", path.c_str());
+        tigerCapture->getOutput()->write("Saved to: " + path + "\n");
+
+        // flush output section
+        tigerCapture->getOutput()->flush();
 
         // free network request's memory
         reply->deleteLater();
@@ -76,7 +82,9 @@ std::string Uploader::Upload(const std::string& path) {
 
         return out;
     } else {
-        printf("%s\n", reply->errorString().toStdString().c_str());
+        tigerCapture->getOutput()->write(reply->errorString().toStdString() + "\n");
+        tigerCapture->getOutput()->flush();
+
         reply->deleteLater();
         networkAccessManager->deleteLater();
         return "";

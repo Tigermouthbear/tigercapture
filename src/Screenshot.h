@@ -31,7 +31,7 @@ public:
 
     void crop(int x, int y, int width, int height);
 
-    std::future<void>* save();
+    std::future<void> save();
 
     QImage image();
 };
